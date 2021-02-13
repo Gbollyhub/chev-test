@@ -1,0 +1,529 @@
+<template>
+  <div class="dashboard">
+    <div class="background-design"></div>
+    <!-- <Header></Header> -->
+    <Menu></Menu>
+    <div class="container">
+      <!-- <NavBar></NavBar> -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="main-dashboard">
+            <div class="dashboard-greeting">
+              <div class="overview-text">
+                <font-awesome-icon icon="exchange-alt" />
+                <div class="header-title">Registration</div>
+              </div>
+              <div class="date">
+                <font-awesome-icon icon="clock" />
+                <div class="date-item ml-2">{{ currentDateTime() }}</div>
+              </div>
+            </div>
+            <div class="line"></div>
+            <div class="row">
+              <div class="col-md-8">
+                <div class="overview-board">
+                  <div class="account-overview">
+                    <div class="account-overview-content">
+                      <div class="mt-2">
+                        <div class="header_background">Form Details</div>
+                      </div>
+                      <div style="position: relative; overflow-y: auto; height: 400px">
+                        <b-form
+                          ref="form"
+                          @submit="onSubmit"
+                          @reset="onReset"
+                          v-if="show"
+                        >
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="First Name"
+                            label-for="input-sm"
+                            invalid-feedback="Name is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.fname"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Middle Name"
+                            label-for="input-sm"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.mname"
+                              :state="nameState"
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Last Name"
+                            label-for="input-sm"
+                            invalid-feedback=" Last Name is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.lname"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Employee Number"
+                            label-for="input-sm"
+                            invalid-feedback="Employee No is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.EmployeeNo"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Title"
+                            label-for="input-sm"
+                            :state="nameState"
+                          >
+                            <b-form-select
+                              id="input-3"
+                              v-model="form.title"
+                              :options="titles"
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            id="input-group-3"
+                            label="Gender"
+                            label-for="input-3"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            invalid-feedback="Gendr is required"
+                            :state="nameState"
+                          >
+                            <b-form-select
+                              id="input-3"
+                              v-model="form.sex"
+                              :options="gender"
+                              required
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            id="input-group-3"
+                            label="Marital Status"
+                            label-for="input-3"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            invalid-feedback="Status is required"
+                            :state="nameState"
+                          >
+                            <b-form-select
+                              id="input-3"
+                              v-model="form.marital"
+                              :options="maritals"
+                              required
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Date Of Birth"
+                            label-for="example-datepicker"
+                            invalid-feedback="Date of Birth is required"
+                            :show-decade-nav="showDecadeNav"
+                            :state="nameState"
+                          >
+                            <b-form-datepicker
+                              id="example-datepicker"
+                              v-model="form.DoB"
+                              :state="nameState"
+                              required
+                            ></b-form-datepicker
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Email address"
+                            label-for="input-sm"
+                            invalid-feedback="Email is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.email"
+                              type="email"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Work Phone"
+                            label-for="input-sm"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.workPhone"
+                              :state="nameState"
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Mobile Number"
+                            label-for="input-sm"
+                            invalid-feedback="Mobile No is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.mobileNo"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Address 1"
+                            label-for="input-sm"
+                            invalid-feedback="Address is required"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.address1"
+                              :state="nameState"
+                              required
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Address 2"
+                            label-for="input-sm"
+                            :state="nameState"
+                          >
+                            <b-form-input
+                              id="name-input"
+                              v-model="form.address2"
+                              :state="nameState"
+                            ></b-form-input
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="State"
+                            label-for="input-sm"
+                            invalid-feedback="State is required"
+                            :state="nameState"
+                          >
+                            <b-form-select
+                              id="name-input"
+                              v-model="form.state"
+                              :options="states"
+                              :state="nameState"
+                              required
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+
+                          <b-form-group
+                            label-cols="4"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            label="Country"
+                            label-for="input-sm"
+                            invalid-feedback="Country is required"
+                            :state="nameState"
+                          >
+                            <b-form-select
+                              id="name-input"
+                              v-model="form.country"
+                              :options="countrys"
+                              :state="nameState"
+                              required
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+
+                          <!-- <b-form-group
+                      label-cols="4"
+                      id="input-group-3"
+                      label="Created By"
+                      label-for="input-3"
+                      label-cols-lg="2"
+                      label-size="sm"
+                      invalid-feedback="Creator is required"
+                      :state="nameState"
+                    >
+                      <b-form-select
+                        id="input-3"
+                        v-model="form.createdBy"
+                        :options="creators"
+                        required
+                      ></b-form-select
+                      ><br
+                    /></b-form-group> -->
+
+                          <b-form-group
+                            label-cols="4"
+                            id="input-group-3"
+                            label="Member Type"
+                            label-for="input-3"
+                            label-cols-lg="2"
+                            label-size="sm"
+                            invalid-feedback="Member is required"
+                          >
+                            <b-form-select
+                              id="input-3"
+                              v-model="form.MemberType"
+                              :options="members"
+                              required
+                            ></b-form-select
+                            ><br
+                          /></b-form-group>
+                          <div class="row justify-content-md-center">
+                            <b-button type="submit" variant="primary">Submit</b-button>
+                          </div>
+                        </b-form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="dashboard-right-side-bar">
+                  <div class="header_2">Profile</div>
+
+                  <RightSidebar></RightSidebar>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer></Footer>
+    </div>
+  </div>
+</template>
+
+<script>
+// @ is an alias to /src
+
+// import Header from "../../components/layout/headers/headerDashboard.vue";
+// import NavBar from "../../components/layout/headers/dashboardNav.vue";
+import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
+import Footer from "../../components/layout/footer/footer.vue";
+import Menu from "../../components/layout/headers/menus.vue";
+import axios from "axios";
+
+export default {
+  name: "Home",
+  components: {
+    // NavBar,
+    RightSidebar,
+    Footer,
+    Menu
+  },
+  data() {
+    return {
+      checked: false,
+      selectedLoan: "",
+      show: true,
+      notify: 0,
+      showDecadeNav: true,
+      form: {
+        fname: "",
+        mname: "",
+        lname: "",
+        title: null,
+        sex: null,
+        marital: null,
+        DoB: "",
+        email: "",
+        workPhone: "",
+        mobileNo: "",
+        address1: "",
+        address2: "",
+        state: null,
+        country: null,
+        createdBy: null,
+        LastModifiedBy: "",
+        EmployeeNo: "",
+        MemberType: null
+      },
+      titles: [{ text: "Select One", value: null }, "Mr.", "Mrs."],
+      maritals: [{ text: "Select One", value: null }, "Single", "Married"],
+      gender: [{ text: "Select One", value: null }, "Female", "Male"],
+      members: [
+        { text: "Select One", value: null },
+        { text: "Regular", value: 1 },
+        { text: "Retiree", value: 2 },
+        { text: "Expatriate", value: 3 }
+      ],
+      creators: [{ text: "Select One", value: null }, "Shola", "Temi", "Lolu"],
+      states: [
+        { text: "Select State", value: null },
+        { text: "Lagos", value: 1 },
+        { text: "FCT", value: 2 },
+        { text: "Ondo", value: 3 },
+        { text: "Imo", value: 4 }
+      ],
+      countrys: [
+        { text: "Select Country", value: null },
+        { text: "Nigeria", value: "Nigeria" },
+        { text: "Ghana", value: "Ghana" },
+        { text: "USA", value: "USA" }
+      ],
+    };
+  },
+  methods: {
+    currentDateTime() {
+      const current = new Date();
+      const date = current.toDateString(); //+'-'+(current.getMonth()+1)+'-'+current.getDate();
+      const time = current.getHours() + ":" + current.getMinutes(); // + ":" //+ current.getSeconds();
+      const dateTime = date + " " + time;
+
+      return dateTime;
+    },
+    makeToast(variant = null) {
+      this.notify++;
+      this.$bvToast.toast(`Member Added`, {
+        title: "Successful",
+        variant: variant,
+        solid: true,
+        autoHideDelay: 5000
+      });
+    },
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity();
+      this.nameState = valid;
+      return valid;
+    },
+    onReset(event) {
+      event.preventDefault();
+
+      this.nameState = null;
+      this.form.fname = "";
+      this.form.mname = "";
+      this.form.lname = "";
+      this.form.title = "";
+      this.form.sex = null;
+      this.form.marital = null;
+      this.form.DoB = "";
+      this.form.email = "";
+      this.form.workPhone = "";
+      this.form.mobileNo = "";
+      this.form.address1 = "";
+      this.form.address2 = "";
+      this.form.state = "";
+      this.form.country = "";
+      this.form.EmployeeNo = "";
+      this.form.MemberType = null;
+
+      this.show = false;
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+    async onSubmit(event) {
+      event.preventDefault();
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return;
+      }
+
+      let rawData = {
+        EmployeeNumber: this.form.EmployeeNo,
+        MemberType: this.form.MemberType,
+        Person: {
+          FirstName: this.form.fname,
+          LastName: this.form.lname,
+          MiddleName: this.form.mname,
+          Title: this.form.title,
+          Sex: this.form.sex,
+          MaritalStatus: this.form.marital,
+          DateOfBirth: this.form.DoB,
+          Email: this.form.email,
+          WorkPhone: this.form.workPhone,
+          MobileNumber: this.form.mobileNo,
+          Address1: this.form.address1,
+          Address2: this.form.address2,
+          StateId: this.form.state,
+          Country: this.form.country
+        }
+      };
+      rawData = JSON.stringify(rawData);
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/Members/Register`, rawData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+        })
+        .then((response) => {
+          this.rawData = response.data;
+          this.makeToast(`success`);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+  },
+};
+</script>
