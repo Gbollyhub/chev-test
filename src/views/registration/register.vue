@@ -27,321 +27,325 @@
                       <div class="mt-2">
                         <div class="header_background">Form Details</div>
                       </div>
-                      <div style="position: relative; overflow-y: auto; height: 400px">
-                        <b-form
-                          ref="form"
-                          @submit="onSubmit"
-                          @reset="onReset"
-                          v-if="show"
+                      <div class="row">
+                        <div class="col-md-11 mx-auto col-xs-12" style="position: relative; overflow-y: auto; height: 500px">
+                          <div>
+                            <b-form
+                              ref="form"
+                              @submit="onSubmit"
+                              @reset="onReset"
+                              v-if="show"
+                            >
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="First Name"
+                                label-for="input-sm"
+                                invalid-feedback="Name is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.fname"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Middle Name"
+                                label-for="input-sm"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.mname"
+                                  :state="nameState"
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Last Name"
+                                label-for="input-sm"
+                                invalid-feedback=" Last Name is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.lname"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Employee Number"
+                                label-for="input-sm"
+                                invalid-feedback="Employee No is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.EmployeeNo"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Title"
+                                label-for="input-sm"
+                                :state="nameState"
+                              >
+                                <b-form-select
+                                  id="input-3"
+                                  v-model="form.title"
+                                  :options="titles"
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                id="input-group-3"
+                                label="Gender"
+                                label-for="input-3"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                invalid-feedback="Gendr is required"
+                                :state="nameState"
+                              >
+                                <b-form-select
+                                  id="input-3"
+                                  v-model="form.sex"
+                                  :options="gender"
+                                  required
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                id="input-group-3"
+                                label="Marital Status"
+                                label-for="input-3"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                invalid-feedback="Status is required"
+                                :state="nameState"
+                              >
+                                <b-form-select
+                                  id="input-3"
+                                  v-model="form.marital"
+                                  :options="maritals"
+                                  required
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Date Of Birth"
+                                label-for="example-datepicker"
+                                invalid-feedback="Date of Birth is required"
+                                :show-decade-nav="showDecadeNav"
+                                :state="nameState"
+                              >
+                                <b-form-datepicker
+                                  id="example-datepicker"
+                                  v-model="form.DoB"
+                                  :state="nameState"
+                                  required
+                                ></b-form-datepicker
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Email address"
+                                label-for="input-sm"
+                                invalid-feedback="Email is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.email"
+                                  type="email"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Work Phone"
+                                label-for="input-sm"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.workPhone"
+                                  :state="nameState"
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Mobile Number"
+                                label-for="input-sm"
+                                invalid-feedback="Mobile No is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.mobileNo"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Address 1"
+                                label-for="input-sm"
+                                invalid-feedback="Address is required"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.address1"
+                                  :state="nameState"
+                                  required
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Address 2"
+                                label-for="input-sm"
+                                :state="nameState"
+                              >
+                                <b-form-input
+                                  id="name-input"
+                                  v-model="form.address2"
+                                  :state="nameState"
+                                ></b-form-input
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="State"
+                                label-for="input-sm"
+                                invalid-feedback="State is required"
+                                :state="nameState"
+                              >
+                                <b-form-select
+                                  id="name-input"
+                                  v-model="form.state"
+                                  :options="states"
+                                  :state="nameState"
+                                  required
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+
+                              <b-form-group
+                                label-cols="4"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                label="Country"
+                                label-for="input-sm"
+                                invalid-feedback="Country is required"
+                                :state="nameState"
+                              >
+                                <b-form-select
+                                  id="name-input"
+                                  v-model="form.country"
+                                  :options="countrys"
+                                  :state="nameState"
+                                  required
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+
+                              <!-- <b-form-group
+                          label-cols="4"
+                          id="input-group-3"
+                          label="Created By"
+                          label-for="input-3"
+                          label-cols-lg="2"
+                          label-size="sm"
+                          invalid-feedback="Creator is required"
+                          :state="nameState"
                         >
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="First Name"
-                            label-for="input-sm"
-                            invalid-feedback="Name is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.fname"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
+                          <b-form-select
+                            id="input-3"
+                            v-model="form.createdBy"
+                            :options="creators"
+                            required
+                          ></b-form-select
+                          ><br
+                        /></b-form-group> -->
 
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Middle Name"
-                            label-for="input-sm"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.mname"
-                              :state="nameState"
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Last Name"
-                            label-for="input-sm"
-                            invalid-feedback=" Last Name is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.lname"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Employee Number"
-                            label-for="input-sm"
-                            invalid-feedback="Employee No is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.EmployeeNo"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Title"
-                            label-for="input-sm"
-                            :state="nameState"
-                          >
-                            <b-form-select
-                              id="input-3"
-                              v-model="form.title"
-                              :options="titles"
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            id="input-group-3"
-                            label="Gender"
-                            label-for="input-3"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            invalid-feedback="Gendr is required"
-                            :state="nameState"
-                          >
-                            <b-form-select
-                              id="input-3"
-                              v-model="form.sex"
-                              :options="gender"
-                              required
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            id="input-group-3"
-                            label="Marital Status"
-                            label-for="input-3"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            invalid-feedback="Status is required"
-                            :state="nameState"
-                          >
-                            <b-form-select
-                              id="input-3"
-                              v-model="form.marital"
-                              :options="maritals"
-                              required
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Date Of Birth"
-                            label-for="example-datepicker"
-                            invalid-feedback="Date of Birth is required"
-                            :show-decade-nav="showDecadeNav"
-                            :state="nameState"
-                          >
-                            <b-form-datepicker
-                              id="example-datepicker"
-                              v-model="form.DoB"
-                              :state="nameState"
-                              required
-                            ></b-form-datepicker
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Email address"
-                            label-for="input-sm"
-                            invalid-feedback="Email is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.email"
-                              type="email"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Work Phone"
-                            label-for="input-sm"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.workPhone"
-                              :state="nameState"
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Mobile Number"
-                            label-for="input-sm"
-                            invalid-feedback="Mobile No is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.mobileNo"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Address 1"
-                            label-for="input-sm"
-                            invalid-feedback="Address is required"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.address1"
-                              :state="nameState"
-                              required
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Address 2"
-                            label-for="input-sm"
-                            :state="nameState"
-                          >
-                            <b-form-input
-                              id="name-input"
-                              v-model="form.address2"
-                              :state="nameState"
-                            ></b-form-input
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="State"
-                            label-for="input-sm"
-                            invalid-feedback="State is required"
-                            :state="nameState"
-                          >
-                            <b-form-select
-                              id="name-input"
-                              v-model="form.state"
-                              :options="states"
-                              :state="nameState"
-                              required
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-
-                          <b-form-group
-                            label-cols="4"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            label="Country"
-                            label-for="input-sm"
-                            invalid-feedback="Country is required"
-                            :state="nameState"
-                          >
-                            <b-form-select
-                              id="name-input"
-                              v-model="form.country"
-                              :options="countrys"
-                              :state="nameState"
-                              required
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-
-                          <!-- <b-form-group
-                      label-cols="4"
-                      id="input-group-3"
-                      label="Created By"
-                      label-for="input-3"
-                      label-cols-lg="2"
-                      label-size="sm"
-                      invalid-feedback="Creator is required"
-                      :state="nameState"
-                    >
-                      <b-form-select
-                        id="input-3"
-                        v-model="form.createdBy"
-                        :options="creators"
-                        required
-                      ></b-form-select
-                      ><br
-                    /></b-form-group> -->
-
-                          <b-form-group
-                            label-cols="4"
-                            id="input-group-3"
-                            label="Member Type"
-                            label-for="input-3"
-                            label-cols-lg="2"
-                            label-size="sm"
-                            invalid-feedback="Member is required"
-                          >
-                            <b-form-select
-                              id="input-3"
-                              v-model="form.MemberType"
-                              :options="members"
-                              required
-                            ></b-form-select
-                            ><br
-                          /></b-form-group>
-                          <div class="row justify-content-md-center">
-                            <b-button type="submit" variant="primary">Submit</b-button>
+                              <b-form-group
+                                label-cols="4"
+                                id="input-group-3"
+                                label="Member Type"
+                                label-for="input-3"
+                                label-cols-lg="2"
+                                label-size="sm"
+                                invalid-feedback="Member is required"
+                              >
+                                <b-form-select
+                                  id="input-3"
+                                  v-model="form.MemberType"
+                                  :options="members"
+                                  required
+                                ></b-form-select
+                                ><br
+                              /></b-form-group>
+                              <div class="row justify-content-md-center">
+                                <b-button type="submit" variant="primary">Submit</b-button>
+                              </div>
+                            </b-form>
                           </div>
-                        </b-form>
+                        </div>
                       </div>
                     </div>
                   </div>
