@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <Header></Header>
+    <!-- <Header></Header> -->
+    <Menu></Menu>
     <div class="container">
-      <NavBar></NavBar>
+      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -52,9 +53,15 @@
                               <template #cell(email)="data">                                
                                 {{ data.item.person.email }}
                               </template>
-                            <template #cell(show_details)="row">
+                            <!-- <template #cell(show_details)="row">
                                 <b-button variant="success" size="sm" @click="row.toggleDetails" class="mr-2">Update</b-button><br>
                                 <b-button variant="danger" size="sm" @click="row.Details" class="mr-2">Del</b-button>
+                            </template> -->
+                            <template #cell(show_details)="row">
+                              <b-button variant="light" size="sm" @click="row.toggleDetails" class="mr-2">
+                                <b-icon icon="pencil-square" class="primary" variant="primary"></b-icon> </b-button> <br/>
+                              <b-button variant="light" size="sm" @click="row.toggleDetails" class="mr-2">
+                                <b-icon icon="trash" class="danger" @click.native="row.Details" variant="danger"></b-icon></b-button>
                             </template>
                             </b-table>
                           </div>
@@ -82,8 +89,9 @@
 <script>
 // @ is an alias to /src
 
-import Header from "../../components/layout/headers/headerDashboard.vue";
-import NavBar from "../../components/layout/headers/dashboardNav.vue";
+// import Header from "../../components/layout/headers/headerDashboard.vue";
+// import NavBar from "../../components/layout/headers/dashboardNav.vue";
+import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
 
@@ -92,8 +100,9 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    Header,
-    NavBar,
+    // Header,
+    // NavBar,
+    Menu,
     RightSidebar,
     Footer
   },

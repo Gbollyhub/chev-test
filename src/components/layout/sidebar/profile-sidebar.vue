@@ -9,7 +9,7 @@
             alt=""
             srcset=""
           />
-          <p class="profile-name">Ademola Davids</p>
+          <p class="profile-name">{{member}}</p>
         </div>
         <div class="line"></div>
         <div class="profile-balances">
@@ -42,6 +42,47 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            // member: {                
+            //     fname: "",
+            //     mname: "",
+            //     lname: "",
+            //     title: null,
+            //     sex: null,
+            //     marital: null,
+            //     DoB: "",
+            //     email: "",
+            //     workPhone: "",
+            //     mobileNo: "",
+            //     address1: "",
+            //     address2: "",
+            //     state: null,
+            //     country: null,
+            //     createdBy: null,
+            //     LastModifiedBy: "",
+            //     EmployeeNo: "",
+            //     MemberType: null,
+            //     minSaving: 0
+            // }  
+        };
+  },
+
+  // mounted() {
+  //     this.member = localStorage.getItem('data');
+  // },
+  computed: {
+    currentmember: {
+      get() {
+        return this.$store.state.member;
+      }
+    }   
+  },
+  created() {
+    this.$store.dispatch('memberDetails');
+  }
+    
+};
 </script>
 <style></style>

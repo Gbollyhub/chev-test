@@ -82,18 +82,20 @@
                             <h1>Member Registration</h1>
                             <p class="mb-3">Authorized login only.</p>
                             <label for="signUpSelect">Sign up as:</label>
-                            <div class="login-inputs">
-                                <!-- <div class="memberid">
-                                    <div class="icon">
-                                        <img src="../assets/images/icons/user.svg">
-                                    </div>
-                                    <input type="text" placeholder="Member ID">
-                                </div> -->
+                            <b-form ref="form"
+                                    @submit="onSubmit"
+                                    v-if="show"
+                                    >
+                            <div class="login-inputs">                                
                                 <div class="memberid">
-                                    <select class="form-control" id="exampleFormControlSelect1">
-                                        <option value="retiree">Retiree Member (RM)</option>
-                                        <option value="staff">Staff Member (SM)</option>
-                                        <option value="expatriate">Expatriate Member (EM)</option>
+                                    <div class="icon">                                        
+                                        <b-icon icon="award-fill" aria-hidden="true"></b-icon>
+                                    </div>
+                                    <select class="form-control" v-model="form.UserType" id="exampleFormControlSelect1">
+                                        <option :value=null>Member</option>
+                                        <option value= 1>Regular Staff Member (RSM)</option>
+                                        <option value= 2>Retiree Member (RM)</option>
+                                        <option value= 3>Expatriate Member (EM)</option>
                                     </select>
                                     <div class="chevron-down">
                                         <img src="../assets/images/icons/chevron-down.svg">
@@ -101,12 +103,34 @@
                                 </div>
                                 <div class="password">
                                     <div class="icon">
-                                        <img src="../assets/images/icons/user.svg">
+                                        <!-- <img src="../assets/images/icons/user.svg"> -->
+                                        <b-icon icon="person-fill"></b-icon>
                                     </div>
-                                    <b-form-input type="text" placeholder="Member ID" />
+                                    <b-form-input type="text" v-model="form.EmployeeNo" aria-invalid="Member is required" placeholder="Employee Number" />
                                 </div>
+                                <div class="password">
+                                    <div class="icon">
+                                        <b-icon icon="envelope"></b-icon>
+                                    </div>
+                                    <b-form-input type="email" v-model="form.email" aria-invalid="Email is required" placeholder="Email Address" />
+                                </div>
+                                <div class="password">
+                                    <div class="icon">
+                                        <!-- <img src="../assets/images/icons/lock.svg">award-fill -->
+                                        <b-icon icon="lock-fill" aria-hidden="true"></b-icon>
+                                    </div>
+                                    
+                                    <b-form-input id="password" v-model="form.password"
+                                    type="password" :state="nameState" aria-invalid="Password is required" placeholder=" Create Password" /> 
+                                    
+                                        <!-- <b-form-invalid-feedback id="input-live-feedback">
+                                        Enter at least 8 charaters of: One capital letter, number and symbol
+                                        </b-form-invalid-feedback>     -->
+                                </div>
+                                
                             </div>
-                            <b-button class="login-btn">REGISTER NOW</b-button>
+                            <b-button type="submit" class="login-btn">REGISTER NOW</b-button>
+                            </b-form>
                         </div>
                     </div>
                 </div>
@@ -130,10 +154,78 @@
 </template>
 
 <script>
+
+import axios from "axios";
 export default {
-    mounted () {
+    data() {
+    return {
+        nameState: true,
+      show: true,      
+      notify: 0,
+      form: {
+        password: "",
+        EmployeeNo: "",
+        email: "",
+        UserType: null 
+      }    
+    };
+  },
+  mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
-    }
+    },
+    // computed: {
+    //   nameState() {
+    //     return this.password.length >= 8 ? true : false
+    //   }
+    // },
+    methods: {        
+        makeToast(variant = null) {
+            this.notify++;
+            this.$bvToast.toast(`Member Added`, {
+                title: "Successful",
+                variant: variant,
+                solid: true,
+                autoHideDelay: 5000
+            });
+        }, 
+        checkFormValidity() {
+        const valid = this.$refs.form.checkValidity();
+        this.nameState = valid;
+        return valid;
+        }, 
+    async onSubmit(event) {
+      event.preventDefault();
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return;
+      }
+      let rawData = {
+        Username: this.form.EmployeeNo,
+        Password: this.form.password,
+        Email: this.form.email,
+        UserType: parseInt(this.form.UserType),
+        ReturnUrl: `http://localhost:8080/register/${this.form.EmployeeNo}
+                    &${this.form.UserType}&${this.email}`    
+      };
+      rawData = JSON.stringify(rawData);
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/Users/Register`, rawData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+        })
+        .then((response) => {
+          this.rawData = response.data;
+          this.makeToast(`Success`);
+        //   window.history.length > this.$router.
+        //   push(`/register/${this.form.EmployeeNo}&${this.form.UserType}&${this.form.email}`);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    },
+  },
+    
 };
 </script>
 

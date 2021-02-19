@@ -14,8 +14,10 @@
 						<b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">History</b-dropdown-item>
 					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Loan Investment Savings" class="chevron-nav-link">
-						<b-dropdown-item to="/" class="chevron-nav-dropdown-link" >Fixed Deposit</b-dropdown-item>
-						<b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">Special Deposit</b-dropdown-item>
+						<b-dropdown-item to="/cash_addition" class="chevron-nav-dropdown-link" >Cash Addition</b-dropdown-item>
+						<b-dropdown-item to="/decrease_increase" class="chevron-nav-dropdown-link" >Decrease/Incease Savings</b-dropdown-item>
+
+						<!-- <b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">Special Deposit</b-dropdown-item> -->
 					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Account Settings" class="chevron-nav-link">
 						<b-dropdown-item to="/members" class="chevron-nav-link">Members</b-dropdown-item>

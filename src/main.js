@@ -9,10 +9,13 @@ import moment from "moment";
 import "./utils/fontawesome";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import Flutterwave from  'flutterwave-vue-v3'
 
 Vue.config.productionTip = false;
 
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+
+Vue.use(Flutterwave, { publicKey: 'FLWPUBK-0c829d67037c8c431685e19e78d58963-X' } )
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);

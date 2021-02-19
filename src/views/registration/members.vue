@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <Header></Header>
+    <!-- <Header></Header> -->
+    <Menu></Menu>
     <div class="container">
-      <NavBar></NavBar>
+      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -32,7 +33,7 @@
                               <span></span>
                               <b-button to="/register" variant="primary" class="float-sm-left">+</b-button>
                             </div>
-                            <b-table striped hover small :fields="fields" :items="items" responsive="sm">                              
+                            <b-table striped hover small :fields="fields" :items="items.data" responsive="sm">                              
                               <template #cell(index)="data">
                                 {{ data.index + 1 }}
                               </template>
@@ -77,8 +78,9 @@
 <script>
 // @ is an alias to /src
 
-import Header from "../../components/layout/headers/headerDashboard.vue";
-import NavBar from "../../components/layout/headers/dashboardNav.vue";
+// import Header from "../../components/layout/headers/headerDashboard.vue";
+// import NavBar from "../../components/layout/headers/dashboardNav.vue";
+import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
 
@@ -87,8 +89,9 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    Header,
-    NavBar,
+    // Header,
+    // NavBar,
+    Menu,
     RightSidebar,
     Footer
   },
@@ -120,7 +123,8 @@ export default {
      await axios
         .get( `${process.env.VUE_APP_API_URL}/Members/All`,{
           headers: {
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {

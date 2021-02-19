@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <Header></Header>
+    <!-- <Header></Header> -->
+    <Menu></Menu>
     <div class="container">
-      <NavBar></NavBar>
+      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -54,11 +55,13 @@
                       id="name-input"
                       type="number"
                       v-model="approver"
+                      @change="addInputs"
                     ></b-form-input
                     ><br
                   /></b-form-group></strong>
 
                   <div class="line"></div>
+
                   <div>
                     <b-table-simple striped hover>
                       <b-tr>
@@ -66,21 +69,52 @@
                           
                           <b-form-group id="input-3" label="Approvers">
                           </b-form-group>
-                          <div v-if="approver == 2">
+                          <div id="dept" v-if="approver" != 0>
                             <b-form-select
-                              id="input-3"
-                              v-model="department1"
-                              :options="departments"
-                            >
-                            </b-form-select>
+                        id="input-3"
+                        v-model="department"
+                        required
+                      >
+                      <b-form-select-option :value="null" disabled>
+                            -- Select Department -- 
+                          </b-form-select-option>
+                          <b-form-select-option 
+                          v-for="item in departments" 
+                          :value="item.id"
+                          :key="item.id">
+                            {{item.description}} 
+                        </b-form-select-option>
+                      
+                      </b-form-select
+                      >
+
+                          </div>
+                          <!-- <div v-if="approver == 2">
+                            <b-form-select
+                        id="input-3"
+                        v-model="department"
+                        required
+                      >
+                      <b-form-select-option :value="null" disabled>
+                            -- Select Department -- 
+                          </b-form-select-option>
+                          <b-form-select-option 
+                          v-for="item in departments" 
+                          :value="item.id"
+                          :key="item.id">
+                            {{item.description}} 
+                        </b-form-select-option>
+                      
+                      </b-form-select
+                      >
                             <b-form-select
                               id="input-3"
                               v-model="department2"
                               :options="departments"
                             >
                             </b-form-select>
-                          </div>
-                          <div v-if="approver == 3">
+                          </div>-- -->
+                          <!-- <div v-if="approver == 3">
                             <b-form-select
                               id="input-3"
                               v-model="department1"
@@ -99,9 +133,9 @@
                               :options="departments"
                             >
                             </b-form-select>
-                          </div>
+                          </div> -->
                           
-                          <div v-if="approver == 4">
+                          <!-- <div v-if="approver == 4">
                             <b-form-select
                               id="input-3"
                               v-model="department1"
@@ -126,12 +160,12 @@
                               :options="departments"
                             >
                             </b-form-select>
-                          </div>
+                          </div> -->
                         </b-th>
                         <b-th colspan="3">
                           <b-form-group id="input-3" label="Level">
                           </b-form-group>
-                          <div v-if="approver == 2">
+                          <!-- <div v-if="approver == 2">
                             <b-form-input
                               id="name-input"
                               v-model="level1"
@@ -140,8 +174,8 @@
                               id="name-input"
                               v-model="level2"
                             ></b-form-input>
-                          </div>
-                          <div v-if="approver == 3">
+                          </div> -->
+                          <!-- <div v-if="approver == 3">
                             <b-form-input
                               id="name-input"
                               v-model="level1"
@@ -172,28 +206,10 @@
                               id="name-input"
                               v-model="level4"
                             ></b-form-input>
-                          </div>
+                          </div> -->
                         </b-th>
-                      </b-tr>
+                      </b-tr>                      
                       
-                      <!-- <b-tr>
-                        <b-th colspan="3">
-                          <div v-if="approver > '3'">
-                            <b-form-select
-                              id="input-3"
-                              v-model="department2"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                          </div>
-                        </b-th>
-                        <b-th colspan="3">
-                          <b-form-input
-                            id="name-input"
-                            v-model="level"
-                          ></b-form-input>
-                        </b-th>
-                      </b-tr> -->
                     </b-table-simple>
                     <div class="form-buttons">
                       <b-button type="submit" variant="primary"
@@ -225,15 +241,20 @@
 <script>
 // @ is an alias to /src
 
-import Header from "../../components/layout/headers/headerDashboard.vue";
-import NavBar from "../../components/layout/headers/dashboardNav.vue";
+// import Header from "../../components/layout/headers/headerDashboard.vue";
+// import NavBar from "../../components/layout/headers/dashboardNav.vue";
+import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
+
+import axios from "axios";
+
 export default {
   name: "Home",
   components: {
-    Header,
-    NavBar,
+    // Header,
+    // NavBar,
+    Menu,
     RightSidebar,
     Footer
   },
@@ -242,6 +263,8 @@ export default {
       checked: false,
       selectedLoan: "",
       approver : "",
+      dept:"",
+      department: null,
       department1: null,
       department2: null,
       department3: null,
@@ -271,24 +294,12 @@ export default {
         "Vice President"
       ],
 
-      fields: ["Approvers", "Level"],
-      items: [
-        { age: 40, first_name: "Dickerson", last_name: "Macdonald" },
-        { age: 21, first_name: "Larsen", last_name: "Shaw" }
-      ],
-
-      loanTypes: [
-        { value: "1", text: "Long term loan" },
-        { value: "2", text: "Short term loan" },
-        { value: "3", text: "Executive term loan" },
-        { value: "4", text: "Target special loan" }
-      ],
-      exepctedLumpSumTypes: [
-        { value: "1", text: "Lump type 1" },
-        { value: "2", text: "Lump type 2" },
-        { value: "3", text: "Lump type 3" }
-      ]
+      fields: ["Approvers", "Level"],          
+      
     };
+  },
+  async created() {
+    await this.initDept();
   },
   methods: {
     currentDateTime() {
@@ -298,7 +309,49 @@ export default {
       const dateTime = date + " " + time;
 
       return dateTime;
-    }
+    },
+
+    async initDept() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/Department/All`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          }
+        })
+        .then(response => {
+          this.departments = response.data;
+        })
+        .catch(error => {
+          error.alert("Error");
+        });
+    },
+    addInputs(elm) {
+      var dept = document.querySelector('#dept');
+      dept.innerHTML = '';
+      for (var i = 0; i < parseInt(elm.value); i++) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = //'<input type="text" placeholder="textfield ' + i + '" />';
+                          `<b-form-select
+                        id="input-3"
+                        v-model="form.dept"                       
+                        required
+                      >
+                      <b-form-select-option :value="null" disabled>
+                            -- Select Department -- 
+                          </b-form-select-option>
+                          <b-form-select-option 
+                          v-for="item in departments" 
+                          :value="item.id"
+                          :key="item.id">
+                            {{item.description}} 
+                        </b-form-select-option>
+                      
+                      </b-form-select>`
+      dept.appendChild(wrapper);
+  }
+}
+
+
   }
 };
 </script>

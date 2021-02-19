@@ -1,9 +1,10 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <Header></Header>
+    <!-- <Header></Header> -->
+    <Menu></Menu>
     <div class="container">
-      <NavBar></NavBar>
+      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -129,8 +130,9 @@
 <script>
 // @ is an alias to /src
 
-import Header from "../../components/layout/headers/headerDashboard.vue";
-import NavBar from "../../components/layout/headers/dashboardNav.vue";
+// import Header from "../../components/layout/headers/headerDashboard.vue";
+// import NavBar from "../../components/layout/headers/dashboardNav.vue";
+import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
 
@@ -139,8 +141,9 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    Header,
-    NavBar,
+    // Header,
+    // NavBar,
+    Menu,
     RightSidebar,
     Footer
   },
