@@ -67,7 +67,7 @@ const routes = [
     component: Members
   },
   {
-    path: "/register/:EmployeeNo&:UserType&:email",
+    path: "/register",
     name: "register",
     component: Register
   },

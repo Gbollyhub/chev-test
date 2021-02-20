@@ -7,8 +7,12 @@
 			<b-collapse id="nav-collapse" is-nav>
 				<b-navbar-nav class="ml-auto">
 					<b-nav-item to="/" class="chevron-nav-link">Home</b-nav-item>
-					<b-nav-item to="/transfer" class="chevron-nav-link">Transfer</b-nav-item>
-					<b-nav-item to="/withdrawal" class="chevron-nav-link">Withdrawal</b-nav-item>
+					<!-- <b-nav-item to="/transfer" class="chevron-nav-link">Transfer</b-nav-item>
+					<b-nav-item to="/withdrawal" class="chevron-nav-link">Withdrawal</b-nav-item> -->
+					<b-nav-item-dropdown text="Transactions" class="chevron-nav-link">
+						<b-dropdown-item to="/transfer" class="chevron-nav-dropdown-link" >Transfer</b-dropdown-item>
+						<b-dropdown-item to="/withdrawal" class="chevron-nav-dropdown-link" >Withdrawal</b-dropdown-item>
+					</b-nav-item-dropdown>
 					<b-nav-item-dropdown text="Loan" class="chevron-nav-link">
 						<b-dropdown-item to="/loan" class="chevron-nav-dropdown-link" >Apply for Loan</b-dropdown-item>
 						<b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">History</b-dropdown-item>
@@ -32,3 +36,14 @@
 		</b-navbar>
 	</header>
 </template>
+
+<script>
+
+export default {  
+    mounted () {
+        document.title = "Chevron CEMCS Corporative"
+		document.images = "../../../assets/images/chevron-cemcs.png"
+    },
+};
+
+</script>

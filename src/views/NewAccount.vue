@@ -204,7 +204,7 @@ export default {
         Password: this.form.password,
         Email: this.form.email,
         UserType: parseInt(this.form.UserType),
-        ReturnUrl: `http://localhost:8080/register/${this.form.EmployeeNo}&${this.form.UserType}&${this.form.email}`    
+        ReturnUrl: 'http://localhost:8080/register'    
       };
       rawData = JSON.stringify(rawData);
       await axios

@@ -89,7 +89,7 @@
                               >
                                 <b-form-select
                                   id="input-3"
-                                  v-model="form.MemberType"
+                                  v-model="form.userType"
                                   :options="members"
                                   required
                                 ></b-form-select
@@ -105,8 +105,8 @@
                               >
                                 <b-form-input
                                   id="name-input"
-                                  v-model="form.EmployeeNo"
-                                  :disabled="form.EmployeeNo"
+                                  v-model="form.userName"
+                                  disabled
                                   :state="nameState"
                                   required
                                 ></b-form-input>
@@ -120,7 +120,7 @@
                               ><b-form-input 
                                 type="text" id="input-1" disabled                               
                                 v-model="savings.minimumSavingsAmount"
-                                :formatter="numberFormat" >
+                                :formatter="numberFormat">
                                 </b-form-input></b-form-group>
                               <b-form-group
                                 label-cols="4"
@@ -465,9 +465,10 @@ export default {
         document.title = "Register | Chevron CEMCS Corporate"
     },
   async created() {
-    this.form.EmployeeNo = await this.$route.params.EmployeeNo;
-    this.form.MemberType = await this.$route.params.UserType;
-    this.form.email = await this.$route.params.email;
+    // this.form.EmployeeNo = await this.$route.params.EmployeeNo;
+    // this.form.MemberType = await this.$route.params.UserType;
+    // this.form.email = await this.$route.params.email;
+    await this.loginDetails();
     await this.initMinSavings();
   },
   methods: {
@@ -574,7 +575,7 @@ export default {
         });
 
           let minSavings = {
-            MemberId: parseInt(this.form.MemberType),
+            MemberId: parseInt(this.form.userType),
             SavingsAmount: Number.parseInt(this.form.minSaving),
             Type: 1
           };
@@ -594,13 +595,29 @@ export default {
     },
     async initMinSavings() {        
      await axios
-        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.form.MemberType}`,{
+        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.form.userType}`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           }
         })
         .then(response => {
           this.savings = response.data;
+        })
+        .catch(error => {
+          error.alert("Error");
+        });
+    },
+
+    async loginDetails() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/Members/loginId`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.form = response.data;
         })
         .catch(error => {
           error.alert("Error");

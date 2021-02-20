@@ -113,6 +113,7 @@
                                 <b-form-input
                                   id="input-4"
                                   v-model="user.amount"
+                                  :formatter="numberFormat"
                                 ></b-form-input
                                 ></b-form-group>
                            </strong>
@@ -188,6 +189,11 @@ export default {
       await this.initUser();
   },
   methods: {
+
+    numberFormat(value) {
+        this.points = Number(value.replace(/\D/g, ''))
+        return value == '0.00' ? '' : this.points.toLocaleString();
+      },
       currentDateTime() {
       const current = new Date();
       const date = current.toDateString(); //+'-'+(current.getMonth()+1)+'-'+current.getDate();
