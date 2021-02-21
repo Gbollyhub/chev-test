@@ -51,6 +51,7 @@
                                     </div>
                                     <input type="text" placeholder="Member ID">
                                 </div> -->
+                                <FlashMessage :position='right'></FlashMessage>
                                 <div class="memberid">
                                     <div class="icon">
                                         <img src="../../assets/images/icons/user.svg">
@@ -63,7 +64,7 @@
                                         <img src="../../assets/images/icons/secure.svg">
                                     </div>
                                     <b-form-input type="password" 
-                                    v-model="user.password" placeholder="Password" />
+                                    v-model="user.Password" placeholder="Password" />
                                     <!-- <input type="text" placeholder="Password"> -->
                                 </div>
                             </div>
@@ -88,10 +89,25 @@ export default {
         };
   },
     methods: {
+
         login () {
         this.$store.dispatch('login', this.user)
        .then(() => this.$router.push('/portal'))
-       .catch(err => console.log(err))
+       .catch(err => { if (err.response.status == 400)
+            this.$bvToast.toast(err.response.data.message, {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            });
+            if (err.response.status == 401)
+            this.$bvToast.toast(err.response.data.message, {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })}
+        )
       },        
     }
 };

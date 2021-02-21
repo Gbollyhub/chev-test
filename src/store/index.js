@@ -31,12 +31,13 @@ export default new Vuex.Store({
     },
     setMember(state, data) {
       state.member =  data;
-    }
+    },
+    
 
   },
   actions: {
     login({commit}, user){
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve,reject) => {
         commit('auth_request')
         axios({url: `${process.env.VUE_APP_API_URL}/Users/login`, data: user, method: 'POST' })
         .then(resp => {
@@ -47,11 +48,12 @@ export default new Vuex.Store({
           commit('auth_success', token, user)
           resolve(resp)
         })
-        .catch(err => {
+        .catch(err => {  
           commit('auth_error')
           localStorage.removeItem('token')
           reject(err)
         })
+        
       })
     },
 

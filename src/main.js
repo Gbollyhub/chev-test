@@ -10,8 +10,13 @@ import "./utils/fontawesome";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import Flutterwave from  'flutterwave-vue-v3'
+import FlashMessage from "@smartweb/vue-flash-message";
 
 Vue.config.productionTip = false;
+
+
+
+Vue.use(FlashMessage);
 
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
