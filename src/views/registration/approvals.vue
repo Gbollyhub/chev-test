@@ -71,10 +71,10 @@
                           </b-form-group>
                           <div id="dept" v-if="approver" != 0>
                             <b-form-select
-                        id="input-3"
-                        v-model="department"
-                        required
-                      >
+                              id="input-3"
+                              v-model="department"
+                              required
+                            >
                       <b-form-select-option :value="null" disabled>
                             -- Select Department -- 
                           </b-form-select-option>

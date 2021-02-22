@@ -67,7 +67,7 @@ export default new Vuex.Store({
         })
         .then(response => {
           const data = response.data.data
-          // localStorage.setItem('data', data)
+          localStorage.setItem('member', data)
           commit('setMember', data);        
           resolve(response)
         })

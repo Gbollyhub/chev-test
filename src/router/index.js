@@ -20,6 +20,7 @@ import Login from "../views/Login.vue";
 
 import Employee from "../views/registration/employeeReg.vue";
 import mEmployee from "../views/registration/viewEmployee.vue";
+import mApproval from "../views/registration/view_approval.vue";
 
 import Approvals from "../views/registration/approvals.vue";
 
@@ -85,6 +86,11 @@ const routes = [
     path: "/view",
     name: "view",
     component: mEmployee
+  },
+  {
+    path: "/view_approval",
+    name: "viewApproval",
+    component: mApproval
   },
   {
     path: "/setup",

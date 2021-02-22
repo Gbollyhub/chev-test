@@ -9,7 +9,7 @@
             alt=""
             srcset=""
           />
-          <p class="profile-name">{{member}}</p>
+          <p class="profile-name">{{member.data}}</p>
         </div>
         <div class="line"></div>
         <div class="profile-balances">
@@ -45,39 +45,37 @@
 export default {
     data() {
         return {
-            // member: {                
-            //     fname: "",
-            //     mname: "",
-            //     lname: "",
-            //     title: null,
-            //     sex: null,
-            //     marital: null,
-            //     DoB: "",
-            //     email: "",
-            //     workPhone: "",
-            //     mobileNo: "",
-            //     address1: "",
-            //     address2: "",
-            //     state: null,
-            //     country: null,
-            //     createdBy: null,
-            //     LastModifiedBy: "",
-            //     EmployeeNo: "",
-            //     MemberType: null,
-            //     minSaving: 0
-            // }  
+            member: {                
+                fname: "",
+                mname: "",
+                lname: "",
+                title: null,
+                sex: null,
+                marital: null,
+                DoB: "",
+                email: "",
+                workPhone: "",
+                mobileNo: "",
+                address1: "",
+                address2: "",
+                state: null,
+                country: null,
+                createdBy: null,
+                LastModifiedBy: "",
+                EmployeeNo: "",
+                MemberType: null,
+                minSaving: 0
+            }  
         };
   },
 
   // mounted() {
   //     this.member = localStorage.getItem('data');
   // },
-  computed: {
-    currentmember: {
-      get() {
-        return this.$store.state.member;
-      }
-    }   
+  mounted() {
+    if (localStorage.member) {
+      this.member = localStorage.member;
+    }
   },
   created() {
     this.$store.dispatch('memberDetails');

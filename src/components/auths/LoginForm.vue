@@ -51,7 +51,6 @@
                                     </div>
                                     <input type="text" placeholder="Member ID">
                                 </div> -->
-                                <FlashMessage :position='right'></FlashMessage>
                                 <div class="memberid">
                                     <div class="icon">
                                         <img src="../../assets/images/icons/user.svg">
@@ -88,8 +87,12 @@ export default {
             }  
         };
   },
+//   computed: {
+//             showStatus(){
+//                 return this.listing[0].status;
+//             }
+//         },
     methods: {
-
         login () {
         this.$store.dispatch('login', this.user)
        .then(() => this.$router.push('/portal'))

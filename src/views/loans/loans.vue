@@ -66,10 +66,10 @@
                                       -- Select LoanType -- 
                                     </b-form-select-option>
                                     <b-form-select-option 
-                                    v-for="item in items.data" 
-                                    :value="item.loanType"
-                                    :key="item.id">
-                                      {{item.name}} 
+                                    v-for="item in items" 
+                                    :value="item.loan.id"
+                                    :key="item.loan.id">
+                                      {{item.loan.name}} 
                                   </b-form-select-option>
                                 </b-form-select >                      
                                 <br/>
@@ -133,7 +133,9 @@
                                     <b-col sm="8">
                                       <b-form-input
                                         :id="`AmountDesire`"
-                                        type="number"
+                                        type="text"
+                                        v-model="amount"                                                                                
+                                        :formatter="numberFormat"
                                       ></b-form-input>
                                     </b-col>
                                   </b-row>
@@ -150,7 +152,8 @@
                                     <b-col sm="8">
                                       <b-form-input
                                         :id="`Amount`"
-                                        type="number"
+                                        type="text"                                                                               
+                                        :formatter="numberFormat"
                                       ></b-form-input>
                                     </b-col>
                                   </b-row>
@@ -296,9 +299,6 @@
 
 <script>
 // @ is an alias to /src
-
-// import Header from "../../components/layout/headers/headerDashboard.vue";
-// import NavBar from "../../components/layout/headers/dashboardNav.vue";
 import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
@@ -309,8 +309,6 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    // Header,
-    // NavBar,
     Menu,
     RightSidebar,
     Footer
@@ -346,15 +344,20 @@ export default {
   async created() {
     await this.initialize();
   },
-  // API_URL = process.env.VUE_APP_API_URL,
   methods: {
+
+    numberFormat(value) {
+        this.points = Number(value.replace(/\D/g, ''))
+        return value == '0.00' ? '' : this.points.toLocaleString();
+      },
     
 
     async initialize() {        
      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Loans/All`,{
+        .get(`${process.env.VUE_APP_API_URL}/LoanCongfig/Member/Type`,{
           headers: {
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {
@@ -369,7 +372,8 @@ export default {
       await axios
           .get(`${process.env.VUE_APP_API_URL}/loantype/amount/${selectedLoan}`,{
             headers: {
-              "Content-Type": "application/json;charset=utf-8"
+              "Content-Type": "application/json;charset=utf-8",
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           })
           .then(response => {
