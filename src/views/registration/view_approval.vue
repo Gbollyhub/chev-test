@@ -37,13 +37,13 @@
                                   <b-col sm="4">
                                     <b-form-select
                                       v-model="selectedLoan"
+                                      @change="initapprove(selectedLoan)"
                                       :options="options"
                                     ></b-form-select>
                                   </b-col>
                                 </b-row>
                             </div>
-                            <div v-if="selectedLoan === 2">                           
-                                <b-table striped hover small :fields="fields" :items="active.data" responsive="sm">                              
+                                <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
                                     <template #cell(index)="data">
                                         {{ data.index + 1 }}
                                     </template>
@@ -55,48 +55,24 @@
                                         {{ data.item.employeeNumber }}
                                     </template>
                                     <template #cell(active)="data">
-                                        <span v-if="data.item.active">Pending Approval</span>
+                                        <span v-if="!data.item.approved">Not-Approved</span>
+                                        <span v-if="data.item.approved">Approved</span>
                                     </template>
                                     <template #cell(memberType)="data">
                                         <span v-if="data.item.memberType === 1">Regular Member</span>
                                         <span v-if="data.item.memberType === 2">Retiree Member</span>
                                         <span v-if="data.item.memberType === 3">Expatriate Member</span>
                                     </template>
-                                    <template #cell(show_details)="row">
-                                    <b-button variant="light" size="sm" @click="row.toggleDetails" class="mr-2">
-                                        <b-icon icon="pencil-square" class="primary" variant="primary"></b-icon> </b-button> <br/>
-                                    </template>
+                                    <template #cell(show_details)="data">
+                                        <span v-if="!data.item.approved">
+                                          <b-button variant="primary" @click="updatePending" class="float-sm-left">Approve</b-button>                                    
+                                        </span>
+                                        <span v-if="data.item.approved">
+                                          <b-button variant="primary" @click="updatePending" class="float-sm-left">Pending</b-button>                                    
+                                        </span>
+                                        </template>
                                 </b-table>
-                            </div>
-                            <div v-if="selectedLoan === 3">                           
-                                <b-table striped hover small :fields="fields" :items="inactive.data" responsive="sm">                              
-                                    <template #cell(index)="data">
-                                        {{ data.index + 1 }}
-                                    </template>
-                                    <template #cell(name)="data">
-                                        <b class="text-info">{{ data.item.person.lastName.toUpperCase() }}</b>,
-                                        <b>{{ data.item.person.firstName}}</b>
-                                    </template>
-                                    <template #cell(employeeNumber)="data">
-                                        {{ data.item.employeeNumber }}
-                                    </template>
-                                    <template #cell(active)="data">
-                                        <span v-if="!data.item.active">Not-Approved</span>
-                                    </template>
-                                    <template #cell(memberType)="data">
-                                        <span v-if="data.item.memberType === 1">Regular Member</span>
-                                        <span v-if="data.item.memberType === 2">Retiree Member</span>
-                                        <span v-if="data.item.memberType === 3">Expatriate Member</span>
-                                    </template>
-                                    <template #cell(show_details)>
-                                        <span></span>
-                                        <b-button variant="primary" @click="approve" class="float-sm-left">Approve</b-button>
-
-                                    <!-- <b-button variant="light" size="sm" @click="row.toggleDetails" class="mr-2">
-                                        <b-icon icon="pencil-square" class="primary" variant="primary"></b-icon> </b-button> <br/> -->
-                                    </template>
-                                </b-table>
-                            </div>
+                            <!-- </div> -->
                           </div>
                         </div>
                       </div>
@@ -133,8 +109,10 @@ export default {
   },
   data() {
     return {
-      active: [],      
-      inactive: [],      
+      approve: [],      
+      approveData: {
+        aprroved:Boolean
+      },      
       selectedLoan: null,  
       fields: [
         {key: 'index', label: 'S/N'},
@@ -146,14 +124,13 @@ export default {
       ],
       options: [
         {value: null, text: "Select Option"},
-        { value: 2, text: "Pending Approval" },
-        { value: 3, text: "Approved Members" }
+        { value: 0, text: "Pending Approval" },
+        { value: 1, text: "Approved Members" }
       ]
     };
   },
-  async created() {
-    await this.initactive();
-    await this.Inactive();
+  async created() {    
+    await this.getAll();
   },
   methods: {
     currentDateTime() {
@@ -164,8 +141,7 @@ export default {
 
       return dateTime;
     },
-
-    async initactive() {        
+    async getAll() {        
      await axios
         .get( `${process.env.VUE_APP_API_URL}/Members/All`,{
           headers: {
@@ -174,44 +150,49 @@ export default {
           }
         })
         .then(response => {
-          this.active = response.data;
+          this.approve = response.data;
         })
         .catch(error => {
           error.alert("Error");
         });
     }, 
-
-    async Inactive() {        
+    async initapprove(selectedLoan) {        
      await axios
-        .get( `${process.env.VUE_APP_API_URL}/Members/Inactive`,{
+        .get( `${process.env.VUE_APP_API_URL}/Members/Approved/${selectedLoan}`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {
-          this.inactive = response.data;
+          this.approve = response.data;
         })
         .catch(error => {
           error.alert("Error");
         });
     },
 
-    async approve() {        
+    async updatePending() { 
+      let rawData = {
+        approved : true
+      };
+      rawData = JSON.stringify(rawData);       
      await axios
-        .post( `${process.env.VUE_APP_API_URL}`,{
+        .post( `${process.env.VUE_APP_API_URL}/Members`, rawData,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {
-          this.active = response.data;
+          this.approve = response.data;
         })
         .catch(error => {
           error.alert("Error");
         });
-    }, 
+    },
+
+
   }
 
 };
