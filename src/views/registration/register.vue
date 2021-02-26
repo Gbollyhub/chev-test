@@ -115,7 +115,7 @@
                                 label-for="input-sm"
                                 label-cols-lg="3"
                                 label-size="sm"
-                                invalid-feedback="Date of Employment is required"
+                                invalid-feedback="Location is required"
                                 :state="location"
                               >
                                 <b-form-select
@@ -154,11 +154,11 @@
                                 label-cols-lg="3"
                                 label-size="sm"
                                 label-for="input-sm"> 
-                                <b-form-input 
+                                <!-- <b-form-input 
                                 type="text" id="input-1"                               
                                 v-model="savings.minimumSavingsAmount"
                                 :formatter="numberFormat">
-                                </b-form-input>
+                                </b-form-input> -->
                                  <span v-if="savings.minimumSavingsAmount === 50000">
                                 <code>Minimum Savings of ₦{{savings.minimumSavingsAmount | numberFormat}}
                                    (Fifty Thousand Naira Only)
@@ -192,7 +192,7 @@
                                 label-size="sm"
                                 label="First Name"
                                 label-for="input-sm"
-                                invalid-feedback="Name is required"
+                                :invalid-feedback="invalidFeedback"
                                 :state="Fname"
                               >
                                 <b-form-input
@@ -517,6 +517,11 @@ export default {
         { text: "Expatriate", value: 3, disabled: true }
       ],
       creators: [{ text: "Select One", value: null }, "Shola", "Temi", "Lolu"],
+      locations: [
+        { text: "Select Country", value: null },
+        { text: "Lagos", value: "Lagos" },
+        { text: "Escravos", value: "Escravos" },
+      ],
       states: [
         { text: "Select State", value: null },
         { text: "Lagos", value: 1 },
@@ -536,11 +541,11 @@ export default {
         document.title = "Register | Chevron CEMCS Corporate"
     },
     state() {
-        return this.name.length >= 4
+        return this.Fname.length >= 20
       },
       invalidFeedback() {
-        if (this.name.length > 0) {
-          return 'Enter at least 4 characters.'
+        if (this.Fname.length > 0) {
+          return 'Enter at least 20 characters.'
         }
         return 'Please enter something.'
       },
