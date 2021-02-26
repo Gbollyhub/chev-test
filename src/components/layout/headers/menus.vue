@@ -17,19 +17,19 @@
 						<b-dropdown-item to="/loan" class="chevron-nav-dropdown-link" >Apply for Loan</b-dropdown-item>
 						<b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">History</b-dropdown-item>
 					</b-nav-item-dropdown>
-					<b-nav-item-dropdown text="Loan Investment Savings" class="chevron-nav-link">
+					<b-nav-item-dropdown text="Savings" class="chevron-nav-link">
 						<b-dropdown-item to="/cash_addition" class="chevron-nav-dropdown-link" >Cash Addition</b-dropdown-item>
 						<b-dropdown-item to="/decrease_increase" class="chevron-nav-dropdown-link" >Decrease/Incease Savings</b-dropdown-item>
 
 						<!-- <b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">Special Deposit</b-dropdown-item> -->
 					</b-nav-item-dropdown>
-					<b-nav-item-dropdown text="Account Settings" class="chevron-nav-link">
+					<!-- <b-nav-item-dropdown text="Account Settings" class="chevron-nav-link">
 						<b-dropdown-item to="/members" class="chevron-nav-link">Members</b-dropdown-item>
 						<b-dropdown-item to="/Approvals" class="chevron-nav-dropdown-link">Approval Route</b-dropdown-item>
 						<b-dropdown-item to="/setup" class="chevron-nav-dropdown-link" >Create Loan</b-dropdown-item>
 						<b-dropdown-item to="/view" class="chevron-nav-dropdown-link">Employees</b-dropdown-item>
 						<b-dropdown-item to="/config" class="chevron-nav-dropdown-link">Loan Config</b-dropdown-item>        
-					</b-nav-item-dropdown>
+					</b-nav-item-dropdown> -->
 					<b-nav-item to="/register" class="chevron-nav-link"></b-nav-item>
 				</b-navbar-nav>
 			</b-collapse>

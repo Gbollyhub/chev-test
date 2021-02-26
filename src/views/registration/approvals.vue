@@ -15,7 +15,7 @@
               </div>
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{ currentDateTime() }}</div>
+                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -302,14 +302,6 @@ export default {
     await this.initDept();
   },
   methods: {
-    currentDateTime() {
-      const current = new Date();
-      const date = current.toDateString(); //+'-'+(current.getMonth()+1)+'-'+current.getDate();
-      const time = current.getHours() + ":" + current.getMinutes(); // + ":" //+ current.getSeconds();
-      const dateTime = date + " " + time;
-
-      return dateTime;
-    },
 
     async initDept() {        
      await axios

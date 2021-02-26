@@ -13,7 +13,7 @@
               </div>                               
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{ currentDateTime() }}</div>
+                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -133,14 +133,6 @@ export default {
     await this.getAll();
   },
   methods: {
-    currentDateTime() {
-      const current = new Date();
-      const date = current.toDateString();
-      const time = current.getHours() + ":" + current.getMinutes();
-      const dateTime = date + " " + time;
-
-      return dateTime;
-    },
     async getAll() {        
      await axios
         .get( `${process.env.VUE_APP_API_URL}/Members/All`,{

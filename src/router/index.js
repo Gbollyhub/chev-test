@@ -127,7 +127,7 @@ const routes = [
     component: NewAccount
   },
   {
-    path: "/payment/:fname&:lname&:email&:mobileNo",
+    path: "/payment",
     name: "payment",
     component: Payment
   },

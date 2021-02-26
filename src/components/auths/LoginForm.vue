@@ -56,14 +56,16 @@
                                         <img src="../../assets/images/icons/user.svg">
                                     </div>
                                     <b-form-input type="text"
-                                    v-model="user.Username" placeholder="Member Employee No." />
+                                    v-model="user.Username" required placeholder="Member Employee No." />
                                 </div>
                                 <div class="password">
                                     <div class="icon">
                                         <img src="../../assets/images/icons/secure.svg">
                                     </div>
-                                    <b-form-input type="password" 
-                                    v-model="user.Password" placeholder="Password" />
+                                    <b-form-input type="password" required
+                                    v-model="user.Password" placeholder="Password"
+                                    data-toggle="tooltip" data-placement="right" title="Combination of lowercase,uppercase 
+                                    symbol and number"/>
                                     <!-- <input type="text" placeholder="Password"> -->
                                 </div>
                             </div>
@@ -104,7 +106,12 @@ export default {
                 autoHideDelay: 5000
             });
             if (err.response.status == 401)
-            this.$bvToast.toast(err.response.data.message, {
+            this.$bvToast.toast('Unauthorized', {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            }); else this.$bvToast.toast('Access Denied' ,{
                 title: "Warning",
                 variant: "warning",
                 solid: true,

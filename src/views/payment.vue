@@ -56,10 +56,10 @@
                             redirect_url=""
                             class="login-btn"
                             style=""
-                            :meta="{consumer_id: '7898' ,consumer_mac: 'kjs9s8ss7dd' }"
-                            :customer="{ name: this.fname+','+this.lname,
-                            email: this.email, 
-                            phone_number: this.mobileNo}"
+                            :meta="{consumer_id: this.form.userName ,consumer_mac: 'kjs9s8ss7dd' }"
+                            :customer="{ name: this.form.fname+','+this.form.lname,
+                            email: this.form.email, 
+                            phone_number: this.form.mobileNo}"
                             :customizations="{  title: 'Registration Fee' ,
                             description: 'Chevron CEMCS Corporative Registration Fee'  ,
                             logo : 'https://flutterwave.com/images/logo-colored.svg' }"
@@ -85,22 +85,28 @@
 
 <script>
 
+import axios from "axios";
+
 export default {
   name: 'Home',
   data () {
       return{
-        fname :"",
-        lname: "",
-        email:"",
-        mobileNo:""
+          form:{
+            fname :"",
+            lname: "",
+            email:"",
+            mobileNo:""
+          }
       }
   },
   async created() {
-    this.fname = await this.$route.params.fname;
-    this.lname = await this.$route.params.lname;
-    this.email = await this.$route.params.email;
-    this.mobileNo = await this.$route.params.mobileNo;
-    await this.initMinSavings();
+    
+    await this.loginDetails();
+    // this.fname = await this.$route.params.fname;
+    // this.lname = await this.$route.params.lname;
+    // this.email = await this.$route.params.email;
+    // this.mobileNo = await this.$route.params.mobileNo;
+    // await this.initMinSavings();
   },
   methods: {
     makePaymentCallback(response) {
@@ -112,7 +118,23 @@ export default {
     generateReference(){
       let date = new Date()
       return date.getTime().toString();
-    }
+    },
+
+    async loginDetails() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/Members/loginId`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.form = response.data;
+        })
+        .catch(error => {
+          error.alert("Error");
+        });
+    },
   }
 }
 </script>

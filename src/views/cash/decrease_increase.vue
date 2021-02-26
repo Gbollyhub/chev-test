@@ -15,7 +15,7 @@
               </div>
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{ currentDateTime() }}</div>
+                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -194,14 +194,6 @@ export default {
         this.points = Number(value.replace(/\D/g, ''))
         return value == '0.00' ? '' : this.points.toLocaleString();
       },
-      currentDateTime() {
-      const current = new Date();
-      const date = current.toDateString(); //+'-'+(current.getMonth()+1)+'-'+current.getDate();
-      const time = current.getHours() + ":" + current.getMinutes(); // + ":" //+ current.getSeconds();
-      const dateTime = date + " " + time;
-
-      return dateTime;
-    },
 
     makeToast(variant = null) {
       this.notify++;
@@ -226,8 +218,7 @@ export default {
       await axios
         .post(`${process.env.VUE_APP_API_URL}/SavingDepositTransactions`, rawData, {
           headers: {
-            "Content-Type": "application/json;charset=utf-8",
-             Authorization: `Bearer ${this.token}`
+            "Content-Type": "application/json;charset=utf-8"
           },
         })
         .then((response) => {

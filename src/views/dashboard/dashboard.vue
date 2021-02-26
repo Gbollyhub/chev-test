@@ -3,7 +3,6 @@
     <div class="background-design"></div>
     <Menu></Menu>
     <div class="container">
-      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -14,7 +13,7 @@
               </div>
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">19 December, 2020</div>
+                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -39,7 +38,7 @@
                               </div>
                               <div class="saving-text">
                                 <p class="saving-balance-title">Savings</p>
-                                <p class="saving-balance-amount">N100,000</p>
+                                <p class="saving-balance-amount">N0:00</p>
                                 <p class="saving-balance-balance">Balance</p>
                               </div>
                             </div>
@@ -55,7 +54,7 @@
                               </div>
                               <div class="saving-text">
                                 <p class="loan-balance-title">Loans</p>
-                                <p class="loan-balance-amount">N100,000</p>
+                                <p class="loan-balance-amount">N0:00</p>
                                 <p class="loan-balance-balance">Balance</p>
                               </div>
                             </div>
@@ -77,7 +76,7 @@
                         >
                           <div>
                             <div class="trans-amount">
-                              &#8358; {{ trans.amount }}
+                              <!-- &#8358; {{ trans.amount }} -->
                             </div>
                           </div>
                           <div class="trans-details">
@@ -110,8 +109,10 @@
 // @ is an alias to /src
 
 import Menu from "../../components/layout/headers/menus.vue"
-import RightSidebar from "../../components/layout/sidebar/right-sidebar.vue";
+import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
+import axios from 'axios';
+
 
 export default {
   name: "Home",
@@ -123,12 +124,30 @@ export default {
   data() {
     return {
       transactionHistory: [
-        { amount: "2,000", type: "Loan", date: "20-12-2020 9:00pm" },
-        { amount: "4,500", type: "withdraw", date: "20-12-2020 9:00pm" },
-        { amount: "10,000", type: "Transfer", date: "20-12-2020 9:00pm" },
-        { amount: "21,000", type: "Saving", date: "20-12-2020 9:00pm" }
+        { amount: "0", type: "Loan", date: `20-12-2020 9:00pm` },
+        { amount: "0", type: "withdraw", date: "20-12-2020 9:00pm" },
+        { amount: "0", type: "Transfer", date: "20-12-2020 9:00pm" },
+        { amount: "0", type: "Saving", date: "20-12-2020 9:00pm" }
       ]
     };
+  },
+  methods: {
+
+    async initUser() {
+      await axios
+        .get(`${process.env.VUE_APP_API_URL}`, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            // Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((response) => {
+          this.user = response.data;
+        })
+        .catch((error) => {
+          error.alert('Error');
+        });
+    },
   }
 };
 </script>

@@ -9,7 +9,12 @@
             alt=""
             srcset=""
           />
-          <p class="profile-name">{{member.data}}</p>
+          <p class="profile-name"><strong><code>{{user.data.employeeNumber}}</code></strong>
+          </p>
+          <p class="profile-name"><strong>
+            {{user.data.person.lastName+", " +user.data.person.firstName+" " 
+                              +user.data.person.middleName}}</strong>
+          </p>
         </div>
         <div class="line"></div>
         <div class="profile-balances">
@@ -32,7 +37,7 @@
         </div>
         <div id="last-login">
           <div class="last-login">Your last login:</div>
-          <div class="last-login-time">21-Dec-2020 5:03:42 PM</div>
+          <div class="last-login-time">21-Feb-2021 5:03:42 PM</div>
         </div>
       </div>
       <!-- <div id="ads">
@@ -41,44 +46,54 @@
     </div>
   </div>
 </template>
+
+
 <script>
+
+import axios from "axios";
+
 export default {
     data() {
         return {
-            member: {                
-                fname: "",
-                mname: "",
-                lname: "",
-                title: null,
-                sex: null,
-                marital: null,
-                DoB: "",
-                email: "",
-                workPhone: "",
-                mobileNo: "",
-                address1: "",
-                address2: "",
-                state: null,
-                country: null,
-                createdBy: null,
-                LastModifiedBy: "",
-                EmployeeNo: "",
-                MemberType: null,
-                minSaving: 0
-            }  
+          user:[]
         };
   },
 
   // mounted() {
   //     this.member = localStorage.getItem('data');
   // },
-  mounted() {
-    if (localStorage.member) {
-      this.member = localStorage.member;
-    }
+  // mounted() {
+  //   if (localStorage.member) {
+  //     this.member = localStorage.member;
+  //   }
+  // },
+  // computed: {
+  //   getmember: {
+  //     get () {
+  //       return this.$store.state.member;
+  //     }      
+  //   }
+  // },
+  async created() {
+      await this.initUser();
   },
-  created() {
-    this.$store.dispatch('memberDetails');
+  methods: {
+
+    async initUser() {
+      await axios
+        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then((response) => {
+          this.user = response.data;
+        })
+        .catch((error) => {
+          error.alert('Error');
+        });
+    },
   }
     
 };

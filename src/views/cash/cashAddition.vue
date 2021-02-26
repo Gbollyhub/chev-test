@@ -15,7 +15,7 @@
               </div>
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{ currentDateTime() }}</div>
+                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -75,12 +75,9 @@
                             label="Effective Date"
                             label-for="example-datepicker"
                           >
-                            <b-form-datepicker
-                              id="example-datepicker"
-                              v-model="user.effectiveDate"
-                              required
-                            ></b-form-datepicker
-                          ></b-form-group>
+                            <date-picker class='input-group date down' :state="effectiveDate"
+                                 v-model="form.effectiveDate" :config="options"></date-picker>
+                          </b-form-group>
                           <b-form-group
                             label-cols="2"
                             label-cols-lg="3"
@@ -161,6 +158,12 @@ export default {
     return {
       show: true,
       notify: 0,
+      options: {
+          format: 'DD/MM/YYYY',
+          useCurrent: false,
+          showClear: true,
+          showClose: true,
+        },
       user: {
         employeeNumber: '',
         name: '',
@@ -183,15 +186,7 @@ export default {
         this.points = Number(value.replace(/\D/g, ''))
         return value == '0.00' ? '' : this.points.toLocaleString();
       },
-    currentDateTime() {
-      const current = new Date();
-      const date = current.toDateString(); //+'-'+(current.getMonth()+1)+'-'+current.getDate();
-      const time = current.getHours() + ':' + current.getMinutes(); // + ":" //+ current.getSeconds();
-      const dateTime = date + ' ' + time;
-
-      return dateTime;
-    },
-
+      
     makeToast(variant = null) {
       this.notify++;
       this.$bvToast.toast(`Cash Addition Added`, {
@@ -216,8 +211,7 @@ export default {
           rawData,
           {
             headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              Authorization: `Bearer ${this.token}`,
+              'Content-Type': 'application/json;charset=utf-8'
             },
           }
         )

@@ -10,31 +10,8 @@ export default new Vuex.Store({
     status: '',
     token: localStorage.getItem('token') || '',
     user : {},
-    // data:{},
-    // member:{}
-  },
-  mutations: {
-    auth_request(state){
-      state.status = 'loading'
-    },
-    auth_success(state, token, user){
-      state.status = 'success'
-      state.token = token
-      state.user = user
-    },
-    auth_error(state){
-      state.status = 'error'
-    },
-    logout(state){
-      state.status = ''
-      state.token = ''
-    },
-    setMember(state, data) {
-      state.member =  data;
-    },
-    
-
-  },
+    member: {}
+  },  
   actions: {
     login({commit}, user){
       return new Promise((resolve,reject) => {
@@ -60,15 +37,17 @@ export default new Vuex.Store({
     memberDetails(commit){
       return new Promise((resolve, reject) => {
         axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET',
+        withCredentials: true,
           headers: {
             "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Cookie': document.cookie
           }
         })
-        .then(response => {
-          const data = response.data.data
-          localStorage.setItem('member', data)
-          commit('setMember', data);        
+        .then(response => { 
+          // localStorage.setItem('mem', response.data)
+          commit('setMember', response.data);
+          console.log(response.data);        
           resolve(response)
         })
         .catch(err => {
@@ -105,6 +84,27 @@ export default new Vuex.Store({
         resolve()
       })
     },
+  },
+  mutations: {
+    auth_request(state){
+      state.status = 'loading'
+    },
+    auth_success(state, token, user){
+      state.status = 'success'
+      state.token = token
+      state.user = user
+    },
+    auth_error(state){
+      state.status = 'error'
+    },
+    logout(state){
+      state.status = ''
+      state.token = ''
+    },
+    setMember(state, data) {
+      state.member =  data;
+    },   
+
   },
   getters : {
     isLoggedIn: state => !!state.token,

@@ -91,9 +91,10 @@
                                     <div class="icon">                                        
                                         <b-icon icon="award-fill" aria-hidden="true"></b-icon>
                                     </div>
-                                    <select class="form-control" v-model="form.UserType" id="exampleFormControlSelect1">
-                                        <option :value=null>Member</option>
-                                        <option value= 1>Regular Staff Member (RSM)</option>
+                                    <select class="form-control" v-model="form.UserType" 
+                                    id="exampleFormControlSelect1" required>
+                                        <option :value=null>Select Membership Type</option>
+                                        <option value= 1>Regular Member (RSM)</option>
                                         <option value= 2>Retiree Member (RM)</option>
                                         <option value= 3>Expatriate Member (EM)</option>
                                     </select>
@@ -106,13 +107,16 @@
                                         <!-- <img src="../assets/images/icons/user.svg"> -->
                                         <b-icon icon="person-fill"></b-icon>
                                     </div>
-                                    <b-form-input type="text" v-model="form.EmployeeNo" aria-invalid="Member is required" placeholder="Employee Number" />
+                                    <b-form-input type="number" v-model="form.EmployeeNo" 
+                                    aria-invalid="Employee Number is required" required placeholder="Employee Number" />
                                 </div>
                                 <div class="password">
                                     <div class="icon">
                                         <b-icon icon="envelope"></b-icon>
                                     </div>
-                                    <b-form-input type="email" v-model="form.email" aria-invalid="Email is required" placeholder="Email Address" />
+                                    <b-form-input type="email" v-model="form.email" :state="nameState2"
+                                    aria-invalid="Email is required"
+                                    required placeholder="Email Address" />
                                 </div>
                                 <div class="password">
                                     <div class="icon">
@@ -120,12 +124,12 @@
                                         <b-icon icon="lock-fill" aria-hidden="true"></b-icon>
                                     </div>
                                     
-                                    <b-form-input id="password" v-model="form.password"
-                                    type="password" :state="nameState" aria-invalid="Password is required" placeholder=" Create Password" /> 
-                                    
-                                        <!-- <b-form-invalid-feedback id="input-live-feedback">
-                                        Enter at least 8 charaters of: One capital letter, number and symbol
-                                        </b-form-invalid-feedback>     -->
+                                    <b-form-input id="input-live" v-model="form.password"
+                                    type="password" :state="nameState1" required
+                                    aria-invalid="Password is required" placeholder=" Create Password"></b-form-input>                                    
+                                    <b-form-invalid-feedback id="input-live-feedback">
+                                    At least an UpperCase, Number and Symbol
+                                    </b-form-invalid-feedback>
                                 </div>
                                 
                             </div>
@@ -167,17 +171,18 @@ export default {
         EmployeeNo: "",
         email: "",
         UserType: null 
-      }    
+      },
+      reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
     };
   },
   mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
     },
-    // computed: {
-    //   nameState() {
-    //     return this.password.length >= 8 ? true : false
-    //   }
-    // },
+    computed: {
+      nameState1() {
+        return this.form.password.length >= 8 ? true : false
+      }
+    },
     methods: {        
         makeToast(variant = null) {
             this.notify++;
@@ -187,7 +192,10 @@ export default {
                 solid: true,
                 autoHideDelay: 5000
             });
-        }, 
+        },
+        isEmailValid() {
+      return (this.form.email == "")? "" : (this.reg.test(this.form.email)) ? 'has-success' : 'has-error';
+    },
         checkFormValidity() {
         const valid = this.$refs.form.checkValidity();
         this.nameState = valid;
@@ -219,9 +227,21 @@ export default {
         //   window.history.length > this.$router.
         //   push(`/register/${this.form.EmployeeNo}&${this.form.UserType}&${this.form.email}`);
         })
-        .catch((error) => {
-          alert(error);
-        });
+        .catch(err => { if (err.response.status == 400)
+            this.$bvToast.toast("Kindly Fill the form", {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            });
+            if (err.response.status == 401)
+            this.$bvToast.toast(err, {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })}
+        )
     },
   },
     
