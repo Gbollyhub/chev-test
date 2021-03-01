@@ -5,7 +5,7 @@
 			<b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
 			<b-collapse id="nav-collapse" is-nav>
-				<b-navbar-nav class="ml-auto">
+				<b-navbar-nav class="ml-auto">					
 					<b-nav-item to="/" class="chevron-nav-link">Home</b-nav-item>
 					<!-- <b-nav-item to="/transfer" class="chevron-nav-link">Transfer</b-nav-item>
 					<b-nav-item to="/withdrawal" class="chevron-nav-link">Withdrawal</b-nav-item> -->
@@ -20,8 +20,6 @@
 					<b-nav-item-dropdown text="Savings" class="chevron-nav-link">
 						<b-dropdown-item to="/cash_addition" class="chevron-nav-dropdown-link" >Cash Addition</b-dropdown-item>
 						<b-dropdown-item to="/decrease_increase" class="chevron-nav-dropdown-link" >Decrease/Incease Savings</b-dropdown-item>
-
-						<!-- <b-dropdown-item to="/loan_history" class="chevron-nav-dropdown-link">Special Deposit</b-dropdown-item> -->
 					</b-nav-item-dropdown>
 					<!-- <b-nav-item-dropdown text="Account Settings" class="chevron-nav-link">
 						<b-dropdown-item to="/members" class="chevron-nav-link">Members</b-dropdown-item>
@@ -30,7 +28,7 @@
 						<b-dropdown-item to="/view" class="chevron-nav-dropdown-link">Employees</b-dropdown-item>
 						<b-dropdown-item to="/config" class="chevron-nav-dropdown-link">Loan Config</b-dropdown-item>        
 					</b-nav-item-dropdown> -->
-					<b-nav-item to="/register" class="chevron-nav-link"></b-nav-item>
+					<b-nav-item @click="logout" class="chevron-nav-link">logout</b-nav-item>
 				</b-navbar-nav>
 			</b-collapse>
 		</b-navbar>
@@ -39,11 +37,20 @@
 
 <script>
 
-export default {  
+export default {
     mounted () {
         document.title = "Chevron CEMCS Corporative"
 		document.images = "../../../assets/images/chevron-cemcs.png"
     },
+	// computed : {
+    //   isLoggedIn : function(){ return this.$store.getters.isAuthenticated}
+    // },
+	methods: {
+        async logout (){
+        await this.$store.dispatch('logout')
+		.then(() => this.$router.push('/login'))        
+      }        
+    }
 };
 
 </script>

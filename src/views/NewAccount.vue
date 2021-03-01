@@ -122,15 +122,23 @@
                                     <div class="icon">
                                         <!-- <img src="../assets/images/icons/lock.svg">award-fill -->
                                         <b-icon icon="lock-fill" aria-hidden="true"></b-icon>
-                                    </div>
-                                    
+                                    </div>                                    
                                     <b-form-input id="input-live" v-model="form.password"
-                                    type="password" :state="nameState1" required
-                                    aria-invalid="Password is required" placeholder=" Create Password"></b-form-input>                                    
-                                    <b-form-invalid-feedback id="input-live-feedback">
+                                    type="password" :state="password" required
+                                    placeholder=" Create Password"></b-form-input>
+                                                                     
+                                    <!-- <b-form-invalid-feedback id="input-live-feedback">
                                     At least an UpperCase, Number and Symbol
-                                    </b-form-invalid-feedback>
+                                    </b-form-invalid-feedback> -->
+                                    <!-- description="We'll never share your email with anyone else." -->
                                 </div>
+                                <div v-if="form.password !== ''">
+                                        <small id="passwordHelp" class="form-text text-muted">Password should contain
+            <span :class="has_lowercase ? 'has_required' : ''">one lowercase letter</span>, 
+            <span :class="has_uppercase ? 'has_required' : ''">one uppercase letter</span>, 
+            <span :class="has_number ? 'has_required' : ''">One number</span>, and 
+            <span :class="has_special ? 'has_required' : ''">one special character.</span></small>
+                                    </div> 
                                 
                             </div>
                             <b-button type="submit" class="login-btn">REGISTER NOW</b-button>
@@ -164,22 +172,34 @@ export default {
     data() {
     return {
         nameState: true,
-      show: true,      
-      notify: 0,
-      form: {
-        password: "",
-        EmployeeNo: "",
-        email: "",
-        UserType: null 
-      },
-      reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
+        show: true,      
+        notify: 0,
+        has_number: false,
+        has_lowercsae: false,
+        has_uppercase: false,
+        has_special: false,
+        form: {
+            password: "",
+            EmployeeNo: "",
+            email: "",
+            UserType: null 
+        },
+        reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
     };
   },
   mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
     },
+    watch:{
+        password(){
+            this.has_number    = /\d/.test(this.password);
+            this.has_lowercase = /[a-z]/.test(this.password);
+            this.has_uppercase = /[A-Z]/.test(this.password);
+            this.has_special   = /[!@#%*+=._-]/.test(this.password);
+        }
+    },
     computed: {
-      nameState1() {
+      password() {
         return this.form.password.length >= 8 ? true : false
       }
     },
@@ -223,9 +243,7 @@ export default {
         })
         .then((response) => {
           this.rawData = response.data;
-          this.makeToast(`Success`);
-        //   window.history.length > this.$router.
-        //   push(`/register/${this.form.EmployeeNo}&${this.form.UserType}&${this.form.email}`);
+          this.makeToast(`success`);
         })
         .catch(err => { if (err.response.status == 400)
             this.$bvToast.toast("Kindly Fill the form", {
@@ -240,7 +258,14 @@ export default {
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-            })}
+            });
+            if (err.response.status == 500)
+            this.$bvToast.toast(err.response.data.message, {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+        })}
         )
     },
   },

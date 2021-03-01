@@ -40,8 +40,7 @@ export default new Vuex.Store({
         withCredentials: true,
           headers: {
             "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Cookie': document.cookie
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => { 

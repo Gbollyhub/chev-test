@@ -1,10 +1,8 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <!-- <Header></Header> -->
     <Menu></Menu>
     <div class="container">
-      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -76,7 +74,7 @@
                             label-for="example-datepicker"
                           >
                             <date-picker class='input-group date down' :state="effectiveDate"
-                                 v-model="form.effectiveDate" :config="options"></date-picker>
+                                 v-model="user.effectiveDate" :config="options"></date-picker>
                           </b-form-group>
                           <b-form-group
                             label-cols="2"

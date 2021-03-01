@@ -32,19 +32,6 @@
                           <div class="col-md-12">
                             <div>
                               <b-form class="form">
-                                <!-- <b-row class="my-1 form-row mb-3 ">
-                                  <b-col sm="4">
-                                    <label class="pt-1 form-label" :for="select"
-                                      >Loan Type <code>*</code></label
-                                    >
-                                  </b-col>
-                                  <b-col sm="8">
-                                    <b-form-select
-                                      v-model="selectedLoan"
-                                      :options="loanTypes"
-                                    ></b-form-select>
-                                  </b-col>
-                                </b-row> -->
                                 <b-form-group
                                 class="pt-1 form-label"
                                 label-cols="4"
@@ -61,35 +48,21 @@
                                   @change="getConfig(selectedLoan)"
                                   :state="nameState"
                                   required
-                                >                     
+                                >                                               
                                   <b-form-select-option :value="null" disabled>
                                       -- Select LoanType -- 
                                     </b-form-select-option>
                                     <b-form-select-option 
                                     v-for="item in items" 
-                                    :value="item.loan.loanType"
+                                    :value="item.loanId"
                                     :key="item.loan.id">
                                       {{item.loan.name}} 
                                   </b-form-select-option>
                                 </b-form-select >                      
                                 <br/>
                                 </b-form-group>
-
-                                <div v-if="selectedLoan === 1">
+                                <div v-if="mType === 1">
                                   <b-row class="my-1 form-row mb-3 ">
-                                    <!-- <b-col sm="4">
-                                      <label
-                                        class="pt-1 form-label"
-                                        :for="ExepctedLumpSum"
-                                        >Expected Lump Sum Type
-                                        <code>*</code></label
-                                      >
-                                    </b-col>
-                                    <b-col sm="8">
-                                      <b-form-input
-                                        v-model="details.lumpSumSavingsAmount"
-                                      ></b-form-input>
-                                    </b-col> -->
                                     <b-col sm="4">
                                     <label class="pt-1 form-label" :for="lumpSum"
                                       >Expected Lump Sum Type <code>*</code></label
@@ -128,10 +101,13 @@
                                     <b-col sm="8">
                                       <b-form-input
                                         :id="`AmountExpected`"
-                                        v-model="minMonthlyRepayPeriod"
+                                        v-model="amountExpected"
                                         :formatter="numberFormat"
                                         type="text"
                                       ></b-form-input>
+                                      <span v-if="amountExpected != ''"><code>
+            {{parseFloat(this.amountExpected.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                                      </code></span>
                                     </b-col>
                                   </b-row>
                                   <b-row class="my-1 form-row mb-3">
@@ -146,13 +122,16 @@
                                       <b-form-input
                                         :id="`AmountDesire`"
                                         type="text"
-                                        v-model="amount"                                                                                
+                                        v-model="amountDesire"                                                                                
                                         :formatter="numberFormat"
                                       ></b-form-input>
+                                      <span v-if="amountDesire != ''"><code>
+            {{parseFloat(this.amountDesire.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                                      </code></span>
                                     </b-col>
                                   </b-row>
                                 </div>
-                                <div v-if="selectedLoan  >= 2">
+                                <div v-if="mType  >= 2">
                                   <b-row class="my-1 form-row mb-3">
                                     <b-col sm="4">
                                       <label
@@ -160,15 +139,21 @@
                                         :for="Amount"
                                         >Loan Amount <code>*</code></label
                                       >
-                                    </b-col>
+                                    </b-col>                                    
                                     <b-col sm="8">
                                       <b-form-input
                                         :id="`Amount`"
-                                        v-model="loanAmount"
+                                        v-model.lazy="loanAmount"
+                                        :max="maxLoanAmount" :min="minLoanAmount"
+                                        @blur="AmountValidation"
                                         type="text"                                                                               
                                         :formatter="numberFormat"
                                       ></b-form-input>
+                                      <span v-if="loanAmount != ''"><code>
+            {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                                      </code></span>
                                     </b-col>
+                                    
                                   </b-row>
                                   <b-row class="my-1 form-row mb-3">
                                     <b-col sm="4">
@@ -192,6 +177,7 @@
                                       ></b-form-input>
                                     </b-col>
                                   </b-row>
+                                  
                                   <b-row class="my-1 form-row mb-3">
                                     <b-col sm="4">
                                       <label
@@ -199,24 +185,19 @@
                                         :for="Amount"
                                         >Payment period (months)
                                         <code>*</code></label
-                                      >
-                                    </b-col>
+                                      > 
+                                    </b-col>                                                                       
                                     <b-col sm="8">
                                       <b-form-input
                                         :id="`payment period`"
-                                        v-model.lazy="$v.minMonthlyRepayPeriod.$model"
-                                        type="number" :min="24" :max="60"
-                                        :maxlength="2"
-                                        aria-valuemax="60"
-                                        :state="RePayPeriod"
+                                        v-model.lazy="minMonthlyRepayPeriod"
+                                        :max="this.MaxRepayPeriod" :min="this.MinRepayPeriod"
+                                        type="number"
+                                        @blur="RepaymentValidation" 
                                       ></b-form-input>
-                                      <code><span v-if="!$v.minMonthlyRepayPeriod.between">
-                            Repayment Period Must be between {{$v.minMonthlyRepayPeriod.$params.between.min}} Months
-                              and {{$v.minMonthlyRepayPeriod.$params.between.max}} Months
-                                      </span></code>
-
                                     </b-col>
                                   </b-row>
+
                                   <b-row class="my-1 form-row mb-3">
                                     <b-col sm="4">
                                       <label class="pt-1 form-label" :for="Rate"
@@ -234,8 +215,7 @@
                                   </b-row>
                                 </div>
 
-                                <div v-if="selectedLoan === 2">
-                                  
+                                <div v-if="mType === 2">                                  
                                   <div class="header_2">Guarantors</div>
                                   <b-row class="my-1 form-row mb-3">
                                     <b-col sm="4">
@@ -267,7 +247,7 @@
                                         type="text"
                                       ></b-form-input>
                                     </b-col>
-                                  </b-row>
+                                  </b-row>                                 
 
                                   
                                   <b-row class="my-1 form-row mb-3">
@@ -300,6 +280,39 @@
                                       ></b-form-input>
                                     </b-col>
                                   </b-row>
+
+                                  <b-row class="my-1 form-row mb-3">
+                                    <b-col sm="4">
+                                      <label
+                                        class="pt-1 form-label"                                       
+                                        >Employee Number 3<code>*</code></label
+                                      >
+                                    </b-col>
+                                    <b-col sm="8">
+                                      <b-form-input
+                                        :id="`Employee Number`"
+                                        v-model="garantorEmpNo3"
+                                        type="number"
+                                      ></b-form-input>
+                                    </b-col>
+                                  </b-row>
+                                  <b-row class="my-1 form-row mb-3">
+                                    <b-col sm="4">
+                                      <label
+                                        class="pt-1 form-label"
+                                        :for="Amount"
+                                        >Name <code>*</code></label
+                                      >
+                                    </b-col>
+                                    <b-col sm="8">
+                                      <b-form-input
+                                        :id="`name`"
+                                        v-model="garantorName3"
+                                        type="text"
+                                      ></b-form-input>
+                                    </b-col>
+                                  </b-row>
+
 
                                 </div>
 
@@ -337,8 +350,7 @@
                                 <b-row class="my-1 form-row mb-3">
                                   <b-col sm="4">
                                     <label
-                                      class="pt-1 form-label"
-                                      
+                                      class="pt-1 form-label"                                      
                                       >Beneficiary Name <code>*</code></label
                                     >
                                   </b-col>
@@ -385,7 +397,7 @@
 import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
-import { required, maxLength, between } from 'vuelidate/lib/validators';
+// import { required, maxLength, between } from 'vuelidate/lib/validators';
 
 import axios from "axios";
 import moment, { parseTwoDigitYear } from 'moment'
@@ -400,12 +412,16 @@ export default {
   },
   data() {
     return {
+      // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
       checked: false,
       selectedLoan: "",
+      errors: [],
+      id:0,
       Loanid:"",
         name:{data:""},
-      // loanType : "",
       loanAmount:"",
+      amountDesire:"",
+      amountExpected: "",
       expectedLumpSum:null,
       minMonthlyRepayPeriod:"",
       garantorEmpNo : "",
@@ -418,9 +434,13 @@ export default {
         accountNumber:"",
       bankcode:"",
       },
+      mType : "",
       items: [],
       details: [],
-      loan:[],
+      mLoan:[],
+      loan:{
+        loanType: ""
+      },
       accountTypes: [
         { value: 1, text: "Special Deposit " },
         { value: 2, text: "Fixed Deposit " }
@@ -461,43 +481,90 @@ export default {
       ], 
     };
   },
-  validations: {
-    minMonthlyRepayPeriod: {
-      required,
-      maxLength: maxLength(2),
-      between: between(24, 60)
-    },
-  },
-  computed: {
-      RePayPeriod() {
-        if (this.minMonthlyRepayPeriod.length == 0) {
-          return ""
-        }
-        return this.minMonthlyRepayPeriod.length == 2 ? true : false
-      },
-      // invalidFeedback() {
-      //   if (this.name.length > 0) {
-      //     return 'Enter at least 2 characters.'
-      //   }
-      //   return 'Please enter something.'
-      // },
-    },
+  // computed: {
+  //   invalidFeedback() {
+  //     let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
+  //     let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
+  //     let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
+  //     let mAmountDesire = expectedAmount * 0.75
+
+  //     if (this.mType == 3 || this.mType == 2) {
+  //       if(amount < this.minLoanAmount && this.minLoanAmount != 0){
+  //             return (`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
+  //       }
+  //       if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
+  //             return (`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
+  //       }
+  //       if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
+  //         return (`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
+          
+  //       }
+  //       if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MinRepayPeriod) {
+  //         return (`Incorrect Repayment Period for ${this.details.loan.name} Loan`)        
+
+  //       }
+  //     }
+  //     if (this.mType == 1) {
+  //       if (desireAmount > mAmountDesire) {
+  //         return (`Sorry, Maximum loan value is ${mAmountDesire}`)
+  //       }  
+  //     }
+  //     return 'Please Enter the correct input value'
+  //   }
+    
+  //   },
   async created() {
     await this.initialize();
   },
   methods: {
-
-      
-    // handleBlur(e) {
-    //   this.verifyAcc()
-      // console.log('blur', e.target.value)
-    // },
-
+    
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
         return value == '0.00' ? '' : this.points.toLocaleString();
       },
-    
+      errorToast(toaster,variant = null, msg,append = false) {
+      this.notify++;
+      this.$bvToast.toast(msg, {
+        title: 'Input Error',
+        variant: variant,
+        toaster: toaster,
+        solid: true,
+        autoHideDelay: 5000,
+        appendToast: append
+      });
+    },
+
+    AmountValidation() {
+      let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
+      let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
+      let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
+      let mAmountDesire = expectedAmount * 0.75
+
+      if (this.mType == 3 || this.mType == 2) {
+        if(amount < this.minLoanAmount && this.minLoanAmount != 0){
+              return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
+        }
+        if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
+              return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
+        }
+      }
+      if (this.mType == 1) {
+        if (desireAmount > mAmountDesire) {
+          return this.errorToast('b-toaster-top-full','danger',`Sorry, Maximum loan value is ${mAmountDesire}`)
+        }  
+      }
+    },
+
+    RepaymentValidation() {
+      if (this.mType == 3 || this.mType == 2) {
+        if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
+          return this.errorToast('b-toaster-top-full','danger',`Value Less than Minimum Repayment Period for ${this.details.loan.name} Loan`) 
+        }
+        if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MaxRepayPeriod) {
+          return this.errorToast('b-toaster-top-full','danger',`Value more than Maximum Repayment Period for ${this.details.loan.name} Loan`) 
+        }
+      }
+    },
 
     async initialize() {        
      await axios
@@ -520,34 +587,12 @@ export default {
         });
     }, 
 
-    async initialize2() {        
-     await axios
-        .get(`${process.env.VUE_APP_API_URL}/LoanCongfig/Member/Type`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.items = response.data;
-        })
-        .catch(error => {
-          this.$bvToast.toast(error, {
-                title: "Error",
-                variant: "danger",
-                solid: true,
-                autoHideDelay: 5000
-            });
-        });
-    },
-
+    
   async verifyAcc() {     
-
           let verifyData = {            
             destbankcode: this.form.bankcode,
             recipientaccount: this.form.accountNumber,
           }; 
-
           verifyData = JSON.stringify(verifyData);           
               await axios
         .post(`${process.env.VUE_APP_API_URL}/flutterwave/account/name`,verifyData, {
@@ -556,10 +601,7 @@ export default {
           }
         })
         .then(response => {
-          this.name = response.data;
-          // this.form.bankcode,
-          // this.form.accountNumber,
-          
+          this.name = response.data;          
         })
         .catch(error => {
           this.$bvToast.toast(error, {
@@ -568,10 +610,8 @@ export default {
                 solid: true,
                 autoHideDelay: 5000
             });
-        });
-            
-     
-    },
+        });    
+    },    
 
     async getConfig(selectedLoan) {        
       await axios
@@ -583,6 +623,12 @@ export default {
           })
           .then(response => {
             this.details = response.data;
+            this.mType = response.data.loan.loanType;
+            this.mLoanCode = response.data.loan.loanCode;
+            this.minLoanAmount = response.data.minLoanAmount;
+            this.maxLoanAmount = response.data.maxLoanAmount;
+            this.MinRepayPeriod = response.data.minMonthlyRepayPeriod;
+            this.MaxRepayPeriod = response.data.maxMonthlyRepayPeriod
           })
           .catch(error => {
             this.$bvToast.toast(error, {
@@ -603,7 +649,7 @@ export default {
             }
           })
           .then(response => {
-            this.loanId = response.data;
+            this.mLoan = response.data;
           })
           .catch(error => {
             this.$bvToast.toast(error, {
@@ -616,6 +662,35 @@ export default {
     },
 
     async saveLoan() {
+      // let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
+      // let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
+      // let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
+      // let mAmountDesire = expectedAmount * 0.75
+
+      // if (this.mType == 3 || this.mType == 2) {
+      //   if(amount < this.minLoanAmount && this.minLoanAmount != 0){
+      //         return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
+      //   }
+      //   if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
+      //         return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
+      //   }
+      //   if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
+      //     return this.errorToast('b-toaster-top-full','danger',`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
+          
+      //   }
+      //   if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MinRepayPeriod) {
+      //     return this.errorToast('b-toaster-top-full','danger',`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
+
+      //   }
+      // }
+      // if (this.mType == 1) {
+      //   if (desireAmount > mAmountDesire) {
+      //     return this.errorToast('b-toaster-top-full','danger',`Sorry, Maximum loan value is ${mAmountDesire}`)
+      //   }  
+      // }
+      
+
+
       let rawData = {
         LoanId : this.details.LoanId,
         MemberId: this.details.MemberId,
@@ -636,7 +711,7 @@ export default {
           {
             headers: {
               'Content-Type': 'application/json;charset=utf-8',
-              Authorization: `Bearer ${this.token}`,
+              Authorization: `Bearer ${localStorage.getItem('token')}`
             },
           }
         )

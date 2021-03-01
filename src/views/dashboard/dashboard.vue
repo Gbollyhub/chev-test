@@ -131,6 +131,11 @@ export default {
       ]
     };
   },
+ 
+ created: {
+   
+ },
+
   methods: {
 
     async initUser() {
@@ -138,7 +143,7 @@ export default {
         .get(`${process.env.VUE_APP_API_URL}`, {
           headers: {
             'Content-Type': 'application/json;charset=utf-8',
-            // Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((response) => {

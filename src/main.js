@@ -14,7 +14,7 @@ import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 import Flutterwave from  'flutterwave-vue-v3'
 import FlashMessage from "@smartweb/vue-flash-message";
 import datePicker from 'vue-bootstrap-datetimepicker';
-import converter from 'num-words';
+import converter from 'number-to-words';
   
 Vue.use(datePicker);
 Vue.config.productionTip = false;
@@ -40,7 +40,13 @@ Vue.filter('NumbersToWords', value => {
   if (!value) {
     return '';
   }
-  return converter(value);
+  return converter.toWords(value);
+})
+
+Vue.filter('capitalize', function (value) {
+  if (!value) return ''
+  value = value.toString()
+  return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
 Vue.filter("humanize", date => moment(date).format("MMMM Do YYYY, h:mm a"));
@@ -57,9 +63,8 @@ Vue.filter('numberFormat', num => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 });
 
-// Vue.filter('fdate', function(date: Date) {
-//   return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY');
-// });
+
+
 
 new Vue({
   router,

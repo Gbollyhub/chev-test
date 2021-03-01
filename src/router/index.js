@@ -35,7 +35,8 @@ const routes = [
   {
     path: "/portal",
     name: "Dashboard",
-    component: Dashboard
+    component: Dashboard,    
+    // meta: {requiresAuth: true},
   },
   {
     path: "/transfer",
@@ -55,6 +56,7 @@ const routes = [
   {
     path: "/cash_addition",
     name: "cash_addition",
+    beforeEnter : guardMyroute,
     component: Cash_addition
   },
   {
@@ -65,12 +67,15 @@ const routes = [
   {
     path: "/members",
     name: "members",
+    beforeEnter : guardMyroute,
     component: Members
   },
-  {
+  {    
     path: "/register",
     name: "register",
-    component: Register
+    beforeEnter : guardMyroute,
+    component: Register,
+    // meta: { guest: true },
   },
   {
     path: "/reg",
@@ -80,27 +85,29 @@ const routes = [
   {
     path: "/employee",
     name: "employee",
-    component: Employee
+    beforeEnter : guardMyroute,
+    component: Employee,
   },
   {
     path: "/view",
     name: "view",
-    component: mEmployee
+    component: mEmployee,
   },
   {
     path: "/view_approval",
     name: "viewApproval",
-    component: mApproval
+    beforeEnter : guardMyroute,
+    component: mApproval,
   },
   {
     path: "/setup",
     name: "setup",
-    component: Setup
+    component: Setup,
   },
   {
     path: "/config",
     name: "config",
-    component: Config
+    component: Config,
   },{
     path: "/loan2",
     name: "loan2",
@@ -114,12 +121,14 @@ const routes = [
   {
     path: "/loan",
     name: "Loan",
+    beforeEnter : guardMyroute,
     component: Loan
   },
   {
     path: "/login",
     name: "Login",
-    component: Login
+    component: Login,
+    // meta: { guest: true },
   },
   {
     path: "/new-account",
@@ -129,6 +138,7 @@ const routes = [
   {
     path: "/payment",
     name: "payment",
+    beforeEnter : guardMyroute,
     component: Payment
   },
   {
@@ -147,5 +157,47 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 });
+
+function guardMyroute(to, from, next) {
+  var isLoggedIn = false;
+  //this is just an example. You will have to find a better or
+  // centralised way to handle you localstorage data handling
+  if (localStorage.getItem('token')) {
+    isLoggedIn = true;
+  } else {
+    isLoggedIn = false;
+    alert('Unauthorized Access');
+  }
+  if (isLoggedIn) {
+    next(); // allow to enter route
+  } else {
+    next('/login'); // go to '/login';
+  }
+}
+
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//     if (this.$store.getters.isLoggedIn) {
+//       next();
+//       return;
+//     }
+//     next("/login");
+//   } else {
+//     next();
+//   }
+// });
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some((record) => record.meta.guest)) {
+//     if (this.$store.getters.isLoggedIn) {
+//       next("/register");
+//       return;
+//     }
+//     next();
+//   } else {
+//     next();
+//   }
+// });
 
 export default router;

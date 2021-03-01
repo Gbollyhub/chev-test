@@ -185,7 +185,8 @@
                                   required
                                 ></b-form-input></b-input-group>
                                 </b-form-group>
-                                <!-- {{form.minSaving|NumbersToWords}} -->
+                                {{form.minSaving|NumbersToWords}}                                
+                                <!-- {{parseFloat(this.form.minSaving.replace(/,/g, ''))|NumbersToWords}} -->
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
@@ -232,20 +233,6 @@
                                   required
                                 ></b-form-input
                                 ></b-form-group>
-                              <!-- <b-form-group
-                                label-cols="4"
-                                label-cols-lg="3"
-                                label-size="sm"
-                                label="Title"
-                                label-for="input-sm"
-                                :state="nameState"
-                              >
-                                <b-form-select
-                                  id="input-3"
-                                  v-model="form.title"
-                                  :options="titles"
-                                ></b-form-select
-                                ></b-form-group> -->
                               <b-form-group
                                 label-cols="4"
                                 id="input-group-3"
@@ -386,7 +373,8 @@
                                   id="name-input"
                                   v-model="form.address2"
                                 ></b-form-input
-                                ></b-form-group>
+                                >
+                                </b-form-group>
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
@@ -494,6 +482,7 @@ export default {
         DoB: new Date(),
         email: "",
         Personalemail:"",
+        Location: "",
         workPhone: "",
         mobileNo: "",
         address1: "",
@@ -571,7 +560,7 @@ export default {
         solid: true,
         autoHideDelay: 5000
       });
-    },
+    },     
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
       this.nameState = valid;
@@ -613,12 +602,12 @@ export default {
       let rawData = {
         EmployeeNumber: this.form.userName,
         MemberType: parseInt(this.form.userType),
+        EmploymentDate: this.form.empDate,
+        Location: this.form.Location,
         Person: {
           FirstName: this.form.fname,
           LastName: this.form.lname,
           MiddleName: this.form.mname,
-          EmploymentDate: this.form.empDate,
-
           // Title: this.form.title,
           Sex: this.form.sex,
           MaritalStatus: this.form.marital,
