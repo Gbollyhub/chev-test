@@ -206,7 +206,7 @@ export default {
     methods: {        
         makeToast(variant = null) {
             this.notify++;
-            this.$bvToast.toast(`Member Added`, {
+            this.$bvToast.toast(`Check your Email for confirmation link`, {
                 title: "Successful",
                 variant: variant,
                 solid: true,
@@ -232,7 +232,7 @@ export default {
         Password: this.form.password,
         Email: this.form.email,
         UserType: parseInt(this.form.UserType),
-        ReturnUrl: 'http://localhost:8080/register'    
+        ReturnUrl: 'http://localhost:8080/confirmation'    
       };
       rawData = JSON.stringify(rawData);
       await axios

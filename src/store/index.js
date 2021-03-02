@@ -10,7 +10,8 @@ export default new Vuex.Store({
     status: '',
     token: localStorage.getItem('token') || '',
     user : {},
-    member: {}
+    member: {},
+    memberId : ''
   },  
   actions: {
     login({commit}, user){
@@ -34,19 +35,14 @@ export default new Vuex.Store({
       })
     },
 
-    memberDetails(commit){
+    memberDetails(){
       return new Promise((resolve, reject) => {
-        axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET',
-        withCredentials: true,
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => { 
-          // localStorage.setItem('mem', response.data)
-          commit('setMember', response.data);
-          console.log(response.data);        
+        axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET'})
+        .then(response => {         
+          const member = response.data
+          const memberId = response.data.success
+          localStorage.setItem('memberId', memberId)
+          console.log(member);    
           resolve(response)
         })
         .catch(err => {
@@ -100,14 +96,21 @@ export default new Vuex.Store({
       state.status = ''
       state.token = ''
     },
-    setMember(state, data) {
-      state.member =  data;
-    },   
+    setMember(state, member) {
+      state.member =  member.data;
+    },
+    setShowAlert(state, value) {
+      state.showAlert = value
+    },
 
   },
   getters : {
     isLoggedIn: state => !!state.token,
+    member: state => state.member,
     authStatus: state => state.status,
+    variant: state => state.variant,
+    message: state => state.message,
+    showAlert: state => state.showAlert
 
   }, 
 

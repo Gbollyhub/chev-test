@@ -18,6 +18,8 @@ import NewAccount from "../views/NewAccount.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/Login.vue";
 
+import Confirmation from "../views/confirmation.vue";
+
 import Employee from "../views/registration/employeeReg.vue";
 import mEmployee from "../views/registration/viewEmployee.vue";
 import mApproval from "../views/registration/view_approval.vue";
@@ -31,6 +33,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/confirmation",
+    name: "Confirmation",
+    component: Confirmation
   },
   {
     path: "/portal",
@@ -73,7 +80,7 @@ const routes = [
   {    
     path: "/register",
     name: "register",
-    beforeEnter : guardMyroute,
+    beforeEnter : guardRegRoute,
     component: Register,
     // meta: { guest: true },
   },
@@ -160,13 +167,10 @@ const router = new VueRouter({
 
 function guardMyroute(to, from, next) {
   var isLoggedIn = false;
-  //this is just an example. You will have to find a better or
-  // centralised way to handle you localstorage data handling
   if (localStorage.getItem('token')) {
     isLoggedIn = true;
   } else {
     isLoggedIn = false;
-    alert('Unauthorized Access');
   }
   if (isLoggedIn) {
     next(); // allow to enter route
@@ -175,6 +179,19 @@ function guardMyroute(to, from, next) {
   }
 }
 
+function guardRegRoute(to, from, next) {
+  var isLoggedIn = true;
+  if (localStorage.getItem('token')) {
+    isLoggedIn = true;
+  } else {
+    isLoggedIn = false;
+  }
+  if (isLoggedIn) {
+    next('/portal'); // allow to enter route
+  } else {
+    next('/login'); // go to '/login';
+  }
+}
 
 // router.beforeEach((to, from, next) => {
 //   if (to.matched.some((record) => record.meta.requiresAuth)) {

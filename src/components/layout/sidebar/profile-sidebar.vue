@@ -68,13 +68,15 @@ export default {
   //   }
   // },
   // computed: {
-  //   getmember: {
+  //   member: {
   //     get () {
   //       return this.$store.state.member;
   //     }      
   //   }
   // },
-  async created() {
+  async created() {    
+          // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+          // this.$store.dispatch('memberDetails');
       await this.initUser();
   },
   methods: {

@@ -31,6 +31,20 @@
                         <div class="row">
                           <div class="col-md-12">
                             <div>
+                              <div v-if="errors != ''">
+                                <!-- <b-alert show variant="danger" fade dismissible >
+                                  {{this.errors}}
+                                </b-alert> -->
+                                <b-alert
+                                  variant="danger"
+                                  dismissible
+                                  fade
+                                  :show="showDismissibleAlert"
+                                  @dismissed="showDismissibleAlert=false"
+                                >
+                                  {{this.errors}}
+                                </b-alert>
+                              </div>
                               <b-form class="form">
                                 <b-form-group
                                 class="pt-1 form-label"
@@ -414,8 +428,11 @@ export default {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
       checked: false,
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      showDismissibleAlert: false,
       selectedLoan: "",
-      errors: [],
+      errors: "",
       id:0,
       Loanid:"",
         name:{data:""},
@@ -469,7 +486,7 @@ export default {
       ], 
       Months: [
         { name: "March", value: 3 },
-        // { value: 4, text: "April" },
+        // { value: 4, name: "April" },
         // { value: 5, text: "May" },
         // { value: 6, text: "June"},
         // { value: 7, text: "July" },
@@ -481,41 +498,21 @@ export default {
       ], 
     };
   },
-  // computed: {
-  //   invalidFeedback() {
-  //     let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
-  //     let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
-  //     let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
-  //     let mAmountDesire = expectedAmount * 0.75
-
-  //     if (this.mType == 3 || this.mType == 2) {
-  //       if(amount < this.minLoanAmount && this.minLoanAmount != 0){
-  //             return (`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
-  //       }
-  //       if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
-  //             return (`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
-  //       }
-  //       if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
-  //         return (`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
-          
-  //       }
-  //       if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MinRepayPeriod) {
-  //         return (`Incorrect Repayment Period for ${this.details.loan.name} Loan`)        
-
-  //       }
-  //     }
-  //     if (this.mType == 1) {
-  //       if (desireAmount > mAmountDesire) {
-  //         return (`Sorry, Maximum loan value is ${mAmountDesire}`)
-  //       }  
-  //     }
-  //     return 'Please Enter the correct input value'
-  //   }
-    
-  //   },
   async created() {
     await this.initialize();
   },
+
+  computed: {
+    showAlert: {
+      get() {
+       return  this.$store.getters["alert/showAlert"]
+      },
+      set(value) {
+        // MODIFY THIS MUTATION
+        return this.$store.commit("setShowAlert", value)
+      }
+    }
+},
   methods: {
     
     numberFormat(value) {
@@ -533,8 +530,11 @@ export default {
         appendToast: append
       });
     },
+    
 
-    AmountValidation() {
+    AmountValidation() {     
+      
+      this.showDismissibleAlert = !this.showDismissibleAlert;
       let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
       let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
       let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
@@ -542,28 +542,33 @@ export default {
 
       if (this.mType == 3 || this.mType == 2) {
         if(amount < this.minLoanAmount && this.minLoanAmount != 0){
-              return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
+              return this.errors = `Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`
         }
         if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
-              return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
+              return this.errors = `Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`
         }
-      }
+      } 
       if (this.mType == 1) {
         if (desireAmount > mAmountDesire) {
-          return this.errorToast('b-toaster-top-full','danger',`Sorry, Maximum loan value is ${mAmountDesire}`)
+          return this.errors = `Sorry, Maximum loan value is ${mAmountDesire}`
         }  
       }
+      return this.errors = "";
     },
 
     RepaymentValidation() {
+      
+      // this.dismissCountDown = this.dismissSecs
+      this.showDismissibleAlert = !this.showDismissibleAlert;
       if (this.mType == 3 || this.mType == 2) {
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
-          return this.errorToast('b-toaster-top-full','danger',`Value Less than Minimum Repayment Period for ${this.details.loan.name} Loan`) 
+          return this.errors = `Value Less than Minimum Repayment Period for ${this.details.loan.name} Loan` 
         }
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MaxRepayPeriod) {
-          return this.errorToast('b-toaster-top-full','danger',`Value more than Maximum Repayment Period for ${this.details.loan.name} Loan`) 
+          return this.errors = `Value more than Maximum Repayment Period for ${this.details.loan.name} Loan`
         }
       }
+
     },
 
     async initialize() {        
@@ -662,34 +667,6 @@ export default {
     },
 
     async saveLoan() {
-      // let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
-      // let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
-      // let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
-      // let mAmountDesire = expectedAmount * 0.75
-
-      // if (this.mType == 3 || this.mType == 2) {
-      //   if(amount < this.minLoanAmount && this.minLoanAmount != 0){
-      //         return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`)
-      //   }
-      //   if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
-      //         return this.errorToast('b-toaster-top-full','danger',`Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`)
-      //   }
-      //   if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
-      //     return this.errorToast('b-toaster-top-full','danger',`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
-          
-      //   }
-      //   if (this.minMonthlyRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MinRepayPeriod) {
-      //     return this.errorToast('b-toaster-top-full','danger',`Incorrect Repayment Period for ${this.details.loan.name} Loan`)              
-
-      //   }
-      // }
-      // if (this.mType == 1) {
-      //   if (desireAmount > mAmountDesire) {
-      //     return this.errorToast('b-toaster-top-full','danger',`Sorry, Maximum loan value is ${mAmountDesire}`)
-      //   }  
-      // }
-      
-
 
       let rawData = {
         LoanId : this.details.LoanId,
