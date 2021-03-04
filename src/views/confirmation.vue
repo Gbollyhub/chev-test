@@ -10,7 +10,7 @@
           </p>
         </div>           
         <div class="profile-image">
-            <span><a href="http://localhost:8080/login">Click here to complete your CEMCS Registration</a></span>
+            <span><a href="http://localhost:8080/register">Click here to complete your CEMCS Registration</a></span>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@ export default {
         return {
 
         };
-    },    
+    },  
 };
 </script>
 <style></style>

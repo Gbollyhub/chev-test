@@ -45,12 +45,6 @@
                             <h1>Account Login</h1>
                             <p class="mb-3">Authorized login only.</p>
                             <div class="login-inputs">
-                                <!-- <div class="memberid">
-                                    <div class="icon">
-                                        <img src="../assets/images/icons/user.svg">
-                                    </div>
-                                    <input type="text" placeholder="Member ID">
-                                </div> -->
                                 <div class="memberid">
                                     <div class="icon">
                                         <img src="../../assets/images/icons/user.svg">
@@ -66,10 +60,9 @@
                                     v-model="user.Password" placeholder="Password"
                                     data-toggle="tooltip" data-placement="right" title="Combination of lowercase,uppercase 
                                     symbol and number"/>
-                                    <!-- <input type="text" placeholder="Password"> -->
                                 </div>
                             </div>
-                            <b-button type="submit" @click="login" class="login-btn">LOGIN</b-button>
+                                <b-button type="submit" @click="login" class="login-btn">LOGIN</b-button>
                             <div class="d-flex justify-content-end">
                                 <a href="#">Forgot Password?</a>
                             </div>
@@ -81,19 +74,15 @@
 </template>
 <script>
 export default {
-    data() {
-        return {
-            user: {                
-                Username: "",
-                Password: ""
-            }  
-        };
+data() {
+    return {
+        user: {                
+            Username: "",
+            Password: ""
+        },            
+        member: ""
+    };
   },
-//   computed: {
-//             showStatus(){
-//                 return this.listing[0].status;
-//             }
-//         },
     methods: {
         login () {
         this.$store.dispatch('login', this.user)
@@ -106,19 +95,19 @@ export default {
                 autoHideDelay: 5000
             });
             if (err.response.status == 401)
-            this.$bvToast.toast('Unauthorized', {
+            this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-            }); else this.$bvToast.toast('Access Denied' ,{
+            }); else this.$bvToast.toast(err ,{
                 title: "Warning",
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
             })}
         )
-      },        
+      },
     }
 };
 </script>

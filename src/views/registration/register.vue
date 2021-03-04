@@ -88,7 +88,7 @@
                               >
                                 <b-form-select
                                   id="input-3"
-                                  v-model="form.userType"
+                                  v-model="form.MemberType"
                                   :options="members"
                                   disabled
                                 ></b-form-select
@@ -102,7 +102,7 @@
                               >
                                 <b-form-input
                                   id="name-input"
-                                  v-model="form.userName"
+                                  v-model="form.EmployeeNo"
                                   disabled
                                   required
                                 ></b-form-input>
@@ -116,11 +116,11 @@
                                 label-cols-lg="3"
                                 label-size="sm"
                                 invalid-feedback="Location is required"
-                                :state="location"
+                                :state="nameState"
                               >
                                 <b-form-select
                                   id="input-3"
-                                  :state="location"
+                                  :state="nameState"
                                   v-model="form.location"
                                   required
                                   :options="locations"
@@ -134,7 +134,7 @@
                                 label="Date Of Employment"
                                 label-for="example-datepicker"
                                 invalid-feedback="Date of Employment is required"
-                                :state="DoEmp"
+                                :state="nameState"
                               >
                             
                                 <!-- <b-form-datepicker
@@ -144,7 +144,7 @@
                                   required
                                 ></b-form-datepicker> -->
 
-                                <date-picker class='input-group date down' :state="DoEmp"
+                                <date-picker class='input-group date down' :state="nameState"
                                  v-model="form.empDate" :config="options"></date-picker>
                                 </b-form-group>
 
@@ -154,18 +154,9 @@
                                 label-cols-lg="3"
                                 label-size="sm"
                                 label-for="input-sm"> 
-                                <!-- <b-form-input 
-                                type="text" id="input-1"                               
-                                v-model="savings.minimumSavingsAmount"
-                                :formatter="numberFormat">
-                                </b-form-input> -->
-                                 <span v-if="savings.minimumSavingsAmount === 50000">
+                                <span v-if="savings.minimumSavingsAmount !==''">
                                 <code>Minimum Savings of ₦{{savings.minimumSavingsAmount | numberFormat}}
-                                   (Fifty Thousand Naira Only)
-                                </code></span>
-                                <span v-if="savings.minimumSavingsAmount === 10000">
-                                <code>Minimum Savings of ₦{{savings.minimumSavingsAmount | numberFormat}}
-                                   (Ten Thousand Naira Only)
+                                   ({{savings.minimumSavingsAmount | NumbersToWords | capitalize}}) Naira Only
                                 </code></span>
                                 </b-form-group>
                               <b-form-group
@@ -175,31 +166,38 @@
                                 label="Auth Deduction"
                                 label-for="input-sm"
                                 invalid-feedback="Deduction is required"
-                                :state="autDed"
-                              ><b-input-group class="mt-3">
+                                :state="nameState"
+                              >
                                 <b-form-input
                                   id="input-1"
                                   v-model="form.minSaving"
                                   :formatter="numberFormat"
-                                  :state="autDed"
+                                  :state="nameState"
                                   required
-                                ></b-form-input></b-input-group>
+                                ></b-form-input>
                                 </b-form-group>
-                                {{form.minSaving|NumbersToWords}}                                
-                                <!-- {{parseFloat(this.form.minSaving.replace(/,/g, ''))|NumbersToWords}} -->
+                                <b-form-group
+                                label-cols="4"
+                                label-cols-lg="3"
+                                label-size="sm"
+                                label-for="input-sm"> 
+                                 <span v-if="form.minSaving!= ''"><code>
+    {{parseFloat(this.form.minSaving.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    </code></span>
+                                </b-form-group>
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
                                 label-size="sm"
                                 label="First Name"
                                 label-for="input-sm"
-                                :invalid-feedback="invalidFeedback"
-                                :state="Fname"
+                                invalid-feedback="First Name is required"
+                                :state="nameState"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.fname"
-                                  :state="Fname"
+                                  :state="nameState"
                                   required
                                 ></b-form-input
                                 ></b-form-group>
@@ -209,12 +207,12 @@
                                 label-size="sm"
                                 label="Middle Name"
                                 label-for="input-sm"
-                                :state="mName"
+                                :state="nameState"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.mname"
-                                  :state="mName"
+                                  :state="nameState"
                                 ></b-form-input
                                 ></b-form-group>
                               <b-form-group
@@ -224,12 +222,12 @@
                                 label="Last Name"
                                 label-for="input-sm"
                                 invalid-feedback=" Last Name is required"
-                                :state="Lname"
+                                :state="nameState"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.lname"
-                                  :state="Lname"
+                                  :state="nameState"
                                   required
                                 ></b-form-input
                                 ></b-form-group>
@@ -241,13 +239,13 @@
                                 label-cols-lg="3"
                                 label-size="sm"
                                 invalid-feedback="Gendr is required"
-                                :state="gender"
+                                :state="nameState"
                               >
                                 <b-form-select
                                   id="input-3"
                                   v-model="form.sex"
                                   :options="gender"
-                                  :state="gender"
+                                  :state="nameState"
                                   required
                                 ></b-form-select
                                 ></b-form-group>
@@ -259,12 +257,12 @@
                                 label-cols-lg="3"
                                 label-size="sm"
                                 invalid-feedback="Status is required"
-                                :state="status"
+                                :state="nameState"
                               >
                                 <b-form-select
                                   id="input-3"
                                   v-model="form.marital"
-                                :state="status"
+                                :state="nameState"
                                   :options="maritals"
                                   required
                                 ></b-form-select
@@ -275,7 +273,7 @@
                                 label-size="sm"
                                 label="Date Of Birth"
                                 label-for="example-datepicker"
-                                :state="DoB"
+                                :state="nameState"
                               >
                                 <!-- <b-form-datepicker
                                   id="example-datepicker"
@@ -284,25 +282,23 @@
                                   required
                                 ></b-form-datepicker > -->
                                 <date-picker class='input-group date down'
-                                :state="DoB"
+                                :state="nameState"
                                  v-model="form.DoB"  :config="options"></date-picker>
                                 </b-form-group>
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
                                 label-size="sm"
-                                :class="isEmailValid"
                                 label="Work Email address"
                                 label-for="input-sm"
-                                valid-feedback="Thank you!"
                                 invalid-feedback="Email Address is required"
-                                :state="email">
+                                :state="nameState">
                                 <span class="input-group-addon" id="basic-addon1"><span class="fa fa-envelope"></span></span>
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.email"
                                   type="email" disabled
-                                  :state="email"
+                                  :state="nameState"
                                   required
                                 ></b-form-input
                                 ></b-form-group>
@@ -325,12 +321,12 @@
                                 label-size="sm"
                                 label="Phone Extention"
                                 label-for="input-sm"
-                                :state="Ext"
+                                :state="nameState"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.workPhone"
-                                  :state="Ext"
+                                  :state="nameState"
                                 ></b-form-input
                                 ></b-form-group>
 
@@ -353,12 +349,12 @@
                                 label="Address 1"
                                 label-for="input-sm"
                                 invalid-feedback="Address is required"
-                                :state="address"
+                                :state="nameState"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.address1"
-                                  :state="address"
+                                  :state="nameState"
                                   required
                                 ></b-form-input
                                 ></b-form-group>
@@ -382,13 +378,13 @@
                                 label="State"
                                 label-for="input-sm"
                                 invalid-feedback="State is required"
-                                :state="state"
+                                :state="nameState"
                               >
                                 <b-form-select
                                   id="name-input"
                                   v-model="form.state"
                                   :options="states"
-                                  :state="state"
+                                  :state="nameState"
                                   required
                                 ></b-form-select
                                 ></b-form-group>
@@ -399,13 +395,13 @@
                                 label="Country"
                                 label-for="input-sm"
                                 invalid-feedback="Country is required"
-                                :state="country"
+                                :state="nameState"
                               >
                                 <b-form-select
                                   id="name-input"
                                   v-model="form.country"
                                   :options="countrys"
-                                  :state="country"
+                                  :state="nameState"
                                   required
                                 ></b-form-select
                                 ></b-form-group>
@@ -440,21 +436,14 @@
 
 <script>
 // @ is an alias to /src
-
-// import Header from "../../components/layout/headers/headerDashboard.vue";
-// import NavBar from "../../components/layout/headers/dashboardNav.vue";
-// import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
-// import Menu from "../../components/layout/headers/menus.vue";
 import axios from "axios";
+import { invalid } from 'moment';
 
 export default {
   name: "Home",
   components: {
-    // NavBar,
-    // RightSidebar,
     Footer,
-    // Menu
   },
   data() {
     return {
@@ -465,6 +454,7 @@ export default {
           showClear: true,
           showClose: true,
         },
+        nameState:"",
       selectedLoan: "",
       show: true,
       notify: 0,
@@ -480,7 +470,7 @@ export default {
         marital: null,
         empDate : new Date(),
         DoB: new Date(),
-        email: "",
+        email: localStorage.getItem('email'),
         Personalemail:"",
         Location: "",
         workPhone: "",
@@ -490,9 +480,9 @@ export default {
         state: null,
         country: null,
         createdBy: null,
-        LastModifiedBy: "",
-        EmployeeNo: "",
-        MemberType: null,
+        LastModifiedBy: "",    
+        EmployeeNo: localStorage.getItem('empNum'),
+        MemberType: localStorage.getItem('memType'),
         minSaving: 0,
         userName:"",
         userType:""
@@ -529,20 +519,7 @@ export default {
   mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
     },
-    state() {
-        return this.Fname.length >= 20
-      },
-      invalidFeedback() {
-        if (this.Fname.length > 0) {
-          return 'Enter at least 20 characters.'
-        }
-        return 'Please enter something.'
-      },
   async created() {
-    // this.form.EmployeeNo = await this.$route.params.EmployeeNo;
-    // this.form.MemberType = await this.$route.params.UserType;
-    // this.form.email = await this.$route.params.email;
-    await this.loginDetails();
     await this.initMinSavings();
   },
   methods: {
@@ -596,24 +573,23 @@ export default {
       event.preventDefault();
       // Exit when the form isn't valid
       if (!this.checkFormValidity()) {
-        return;
+        return invalid;
       }
 
       let rawData = {
-        EmployeeNumber: this.form.userName,
-        MemberType: parseInt(this.form.userType),
+        EmployeeNumber: this.form.EmployeeNo,
+        MemberType: parseInt(this.form.MemberType),
         EmploymentDate: this.form.empDate,
-        Location: this.form.Location,
+        Location: this.form.location,
         Person: {
           FirstName: this.form.fname,
           LastName: this.form.lname,
           MiddleName: this.form.mname,
-          // Title: this.form.title,
           Sex: this.form.sex,
           MaritalStatus: this.form.marital,
           DateOfBirth: this.form.DoB,
           Email: this.form.email,
-          Personalemail:this.Personalemail,
+          Personalemail:this.form.Personalemail,
           WorkPhone: this.form.workPhone,
           MobileNumber: this.form.mobileNo,
           Address1: this.form.address1,
@@ -639,11 +615,16 @@ export default {
           }
         })
         .catch((error) => {
-          alert(error);
+          this.$bvToast.toast(error ,{
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })
         });
 
           let minSavings = {
-            MemberId: parseInt(this.form.userType),
+            MemberId: parseInt(this.form.MemberType),
             SavingsAmount: Number.parseInt(this.form.minSaving),
             Type: 1
           };
@@ -658,12 +639,17 @@ export default {
           this.rawData = response.data;
         })
         .catch((error) => {
-          alert(error);
+          this.$bvToast.toast(error ,{
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })
         });
     },
     async initMinSavings() {        
      await axios
-        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.form.userType}`,{
+        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.form.MemberType}`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -673,25 +659,15 @@ export default {
           this.savings = response.data;
         })
         .catch(error => {
-          error.alert("Error");
+         this.$bvToast.toast(error ,{
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })
         });
     },
-
-    async loginDetails() {        
-     await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/loginId`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.form = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    },
+    
   },
 };
 </script>

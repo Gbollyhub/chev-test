@@ -9,6 +9,8 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
+    empNum: '',
+    email: '',
     user : {},
     member: {},
     memberId : ''
@@ -26,7 +28,7 @@ export default new Vuex.Store({
           commit('auth_success', token, user)
           resolve(resp)
         })
-        .catch(err => {  
+        .catch(err => {
           commit('auth_error')
           localStorage.removeItem('token')
           reject(err)
@@ -51,30 +53,41 @@ export default new Vuex.Store({
       })
     },
     
-    // register({commit}, user){
-    //   return new Promise((resolve, reject) => {
-    //     commit('auth_request')
-    //     axios({url: 'http://localhost:8080/new-account', data: user, method: 'POST' })
-    //     .then(resp => {
-    //       const token = resp.data.token
-    //       const user = resp.data.user
-    //       localStorage.setItem('token', token)
-    //       axios.defaults.headers.common['Authorization'] = token
-    //       commit('auth_success', token, user)
-    //       resolve(resp)
-    //     })
-    //     .catch(err => {
-    //       commit('auth_error', err)
-    //       localStorage.removeItem('token')
-    //       reject(err)
-    //     })
-    //   })
-    // },
+    createAccout({commit}, Newuser){
+      return new Promise((resolve, reject) => {
+        commit('auth_request')
+        axios({url: `${process.env.VUE_APP_API_URL}/Users/Register`, data: Newuser, method: 'POST' })
+        .then(resp => {
+          const token = resp.data.token
+          const memType = resp.data.userType
+          const empNum = resp.data.userName
+          const email = resp.data.email
+          localStorage.setItem('token', token)
+          localStorage.setItem('memType', memType)
+          localStorage.setItem('empNum', empNum)
+          localStorage.setItem('email', email)
+          axios.defaults.headers.common['Authorization'] = token
+          commit('auth_success', token, empNum,email,memType)
+          resolve(resp)
+        })
+        .catch(err => {
+          commit('auth_error', err)
+          localStorage.removeItem('token')
+          localStorage.removeItem('memType')
+          localStorage.removeItem('empNum')
+          localStorage.removeItem('email')
+          reject(err)
+        })
+      })
+    },
     
     logout({commit}){
       return new Promise((resolve) => {
         commit('logout')
-        localStorage.removeItem('token')
+        localStorage.removeItem('token')        
+        localStorage.removeItem('memType')
+        localStorage.removeItem('empNum')
+        localStorage.removeItem('email')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })

@@ -7,6 +7,7 @@ import Transfer_ from "../views/tranfer/transfer_.vue";
 import Withdrawal from "../views/withdrawal/withdrawal.vue";
 import Members from "../views/registration/members.vue";
 import Loan from "../views/loans/loans.vue";
+import Plan from "../views/loans/viewSchedule.vue";
 import Setup from "../views/loanSetUp/setup.vue";
 import Config from "../views/loanSetUp/config.vue";
 import PriCon from "../views/loanSetUp/pry_con_setup.vue";
@@ -15,6 +16,7 @@ import Cash_addition from "../views/cash/cashAddition.vue";
 import Dec_Inc from "../views/cash/decrease_increase.vue";
 import Register1 from "../views/registration/reg.vue";
 import NewAccount from "../views/NewAccount.vue";
+import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/Login.vue";
 
@@ -132,8 +134,15 @@ const routes = [
     component: Loan
   },
   {
+    path: "/repayment_plan",
+    name: "Plan",
+    beforeEnter : guardMyroute,
+    component: Plan
+  },
+  {
     path: "/login",
     name: "Login",
+    public: true,
     component: Login,
     // meta: { guest: true },
   },
@@ -141,6 +150,11 @@ const routes = [
     path: "/new-account",
     name: "NewAccount",
     component: NewAccount
+  },
+  {
+    path: "/guarantor",
+    name: "Gurantor",
+    component: Guarantor
   },
   {
     path: "/payment",
@@ -180,16 +194,24 @@ function guardMyroute(to, from, next) {
 }
 
 function guardRegRoute(to, from, next) {
-  var isLoggedIn = true;
-  if (localStorage.getItem('token')) {
-    isLoggedIn = true;
-  } else {
-    isLoggedIn = false;
-  }
-  if (isLoggedIn) {
-    next('/portal'); // allow to enter route
-  } else {
-    next('/login'); // go to '/login';
+  var createAcct = true;
+  try {
+    if (localStorage.getItem('empNum')) {
+      createAcct = true;
+    } else {
+      createAcct = false;
+    }
+    if (!createAcct) {
+      next('/register'); // go to '/register';
+    }else {
+      next('/login');
+    }    
+  } catch (e) {
+    next({
+      name:"login",
+      query:{ redirectFrom: to.fullPath}
+    })
+    
   }
 }
 

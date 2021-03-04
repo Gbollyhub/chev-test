@@ -58,15 +58,6 @@ export default {
           user:[]
         };
   },
-
-  // mounted() {
-  //     this.member = localStorage.getItem('data');
-  // },
-  // mounted() {
-  //   if (localStorage.member) {
-  //     this.member = localStorage.member;
-  //   }
-  // },
   // computed: {
   //   member: {
   //     get () {

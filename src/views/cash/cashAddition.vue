@@ -157,7 +157,7 @@ export default {
       show: true,
       notify: 0,
       options: {
-          format: 'DD/MM/YYYY',
+          format: 'YYYY-MM-DD',
           useCurrent: false,
           showClear: true,
           showClose: true,
@@ -198,7 +198,7 @@ export default {
       let rawData = {
         TransactionDate: this.user.effectiveDate,
         MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.user.amount),
+        DepositAmount: parseInt(this.user.amount.replace(/,/g, '')),
         SavingsType: parseInt(this.user.account),
         TransactionTypeId: 3,
       };

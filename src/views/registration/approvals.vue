@@ -1,10 +1,8 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <!-- <Header></Header> -->
     <Menu></Menu>
     <div class="container">
-      <!-- <NavBar></NavBar> -->
       <div class="row">
         <div class="col-md-12">
           <div class="main-dashboard">
@@ -75,7 +73,7 @@
                               v-model="department"
                               required
                             >
-                      <b-form-select-option :value="null" disabled>
+                          <b-form-select-option :value="null" disabled>
                             -- Select Department -- 
                           </b-form-select-option>
                           <b-form-select-option 
@@ -85,8 +83,7 @@
                             {{item.description}} 
                         </b-form-select-option>
                       
-                      </b-form-select
-                      >
+                        </b-form-select>
 
                           </div>
                           <!-- <div v-if="approver == 2">
