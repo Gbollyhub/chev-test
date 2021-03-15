@@ -13,7 +13,9 @@ export default new Vuex.Store({
     email: '',
     user : {},
     member: {},
-    memberId : ''
+    memberId : '',
+    Allmember:{},
+    memberNum:{}
   },  
   actions: {
     login({commit}, user){
@@ -23,7 +25,9 @@ export default new Vuex.Store({
         .then(resp => {
           const token = resp.data.token
           const user = resp.data.user
+          const userType = resp.data.userType
           localStorage.setItem('token', token)
+          localStorage.setItem('userType', userType)
           axios.defaults.headers.common['Authorization'] = token
           commit('auth_success', token, user)
           resolve(resp)
@@ -41,10 +45,27 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET'})
         .then(response => {         
+          // const member = response.data JSON.parse(localStorage.getItem("LoanPlan"));
           const member = response.data
-          const memberId = response.data.success
+          const memberId = response.data.id
           localStorage.setItem('memberId', memberId)
-          console.log(member);    
+          this.commit('setMember', member, memberId)
+          console.log(memberId);    
+          resolve(response)
+        })
+        .catch(err => {
+              reject(err)
+        });      
+      })
+    },
+
+    getAllMembers(){
+      return new Promise((resolve, reject) => {
+        axios({url: `${process.env.VUE_APP_API_URL}/Members/All`, method: 'GET'})
+        .then(response => {
+          const Allmember = response.data
+          const memberNum = response.data.data.employeeNumber
+          this.commit('AllMembers', Allmember,memberNum)  
           resolve(response)
         })
         .catch(err => {
@@ -88,11 +109,29 @@ export default new Vuex.Store({
         localStorage.removeItem('memType')
         localStorage.removeItem('empNum')
         localStorage.removeItem('email')
+        localStorage.removeItem('memberId')
+        localStorage.removeItem('LoanPlan')
+        localStorage.removeItem('userType')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
     },
+
+    states(){
+      return new Promise((resolve, reject) => {
+        axios({url: `${process.env.VUE_APP_API_URL}/States/All`, method: 'GET'})
+        .then(response => {         
+          const state = response.data
+          console.log(state);    
+          resolve(response)
+        })
+        .catch(err => {
+              reject(err)
+        });      
+      })
+    },
   },
+
   mutations: {
     auth_request(state){
       state.status = 'loading'
@@ -109,8 +148,13 @@ export default new Vuex.Store({
       state.status = ''
       state.token = ''
     },
-    setMember(state, member) {
-      state.member =  member.data;
+    setMember(state, member, memberId) {
+      state.member =  member;
+      state.memberId =  memberId;
+    },
+    AllMembers(state, Allmember, memberNum) {
+      state.Allmember =  Allmember.data;
+      state.memberNum =  memberNum.data;
     },
     setShowAlert(state, value) {
       state.showAlert = value
@@ -119,7 +163,7 @@ export default new Vuex.Store({
   },
   getters : {
     isLoggedIn: state => !!state.token,
-    member: state => state.member,
+    member: state => state.memberId,
     authStatus: state => state.status,
     variant: state => state.variant,
     message: state => state.message,

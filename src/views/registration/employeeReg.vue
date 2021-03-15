@@ -398,13 +398,13 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                   <div class="dashboard-right-side-bar">
                   <div class="header_2">Profile</div>
                       
                       <RightSidebar></RightSidebar>
                   </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -420,7 +420,7 @@
 // import Header from "../../components/layout/headers/headerDashboard.vue";
 // import NavBar from "../../components/layout/headers/dashboardNav.vue";
 import Menu from "../../components/layout/headers/menus.vue";
-import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
+// import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
 
 import axios from "axios";
@@ -430,7 +430,7 @@ export default {
     // Header,
     // NavBar,
     Menu,
-    RightSidebar,
+    // RightSidebar,
     Footer
   },
   data() {
@@ -439,7 +439,6 @@ export default {
       show: true,
       notify:0,
       showDecadeNav: true,
-
       form: {
         JobTitle:"",
         fname: "",
@@ -465,14 +464,15 @@ export default {
         EmployeeNo: "",
         EmployeeType: null
       },
+      states:[],
+      departments:[],
       titles: [{ text: "Select Title", value: null }, "Mr.", "Mrs."],
       maritals: [{ text: "Select Marital Status", value: null }, "Single", "Married"],
       gender: [{ text: "Select Sex", value: null }, "Female", "Male"],
       members: [
         { text: "Select One", value: null },
-        { text: "Regular", value: 1 },
-        { text: "Retiree", value: 2 },
-        { text: "Expatriate", value: 3 }
+        { text: "Full-Time", value: 1 },
+        { text: "Part-Time", value: 2 }
       ],
       creators: [{ text: "Select One", value: null }, "Shola", "Temi", "Lolu"],     
       
@@ -543,6 +543,16 @@ export default {
       if (!this.checkFormValidity()) {
         return;
       }
+
+      let empData = {
+        Username: this.form.email,
+        Password: "Admin@01",
+        Email: this.form.email,
+        EmailConfirmed: true,
+        UserType: 3   
+      };
+      this.$store.dispatch('createAccout', empData)
+      .then(() =>{  this.makeToast(`success`);    })
 
       let rawData = {
           JobTitle :this.form.JobTitle,

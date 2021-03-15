@@ -29,14 +29,11 @@
             label-size="sm"
             label="Loan Type"
             label-for="sm"
-            invalid-feedback="Loan is required"
-            :state="nameState"
             >
             <b-form-select
                 id="loantype"
                 v-model="selectedLoan"
                 @change="getConfig(selectedLoan)"
-                :state="nameState"
                 required
             >                                               
                 <b-form-select-option :value="null" disabled>
@@ -65,7 +62,7 @@
                 ></b-form-select>
                 </b-col>
                 </b-row>
-                <b-row class="my-1 form-row mb-3">
+                <!-- <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
@@ -77,6 +74,28 @@
                     <b-form-input
                     :id="`DateExpected`"
                     type="date"
+                    ></b-form-input>
+                </b-col>
+                </b-row> -->
+                <b-row class="my-1 form-row mb-3">
+                <b-col sm="4">
+                    <label
+                    class="pt-1 form-label"
+                    :for="DateExpected"
+                    >Date Expected MM/YY <code>*</code></label
+                    >
+                </b-col>
+                <b-col sm="3">
+                    <b-form-select
+                    v-model="ExpMonth" disabled
+                    :options="Months"
+                    value-field="value"
+                    text-field="name"
+                ></b-form-select></b-col>
+                    <b-col sm="3"><b-form-input
+                    :id="`DateExpected`"
+                    v-model="ExpYear" disabled
+                    type="text"
                     ></b-form-input>
                 </b-col>
                 </b-row>
@@ -105,7 +124,7 @@
                     <label
                     class="pt-1 form-label"
                     :for="AmountDesire"
-                    >Amount Desire <code>*</code></label
+                    >Amount Desired <code>*</code></label
                     >
                 </b-col>
                 <b-col sm="8">
@@ -126,7 +145,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="Amount"
                     >Loan Amount <code>*</code></label
                     >
                 </b-col>                                    
@@ -136,6 +154,7 @@
                     v-model.lazy.trim="loanAmount"
                     :max="maxLoanAmount" :min="minLoanAmount"
                     @blur="AmountValidation"
+                    @change="getGuarantor"
                     type="text"                                                                               
                     :formatter="numberFormat"
                     ></b-form-input>
@@ -155,7 +174,7 @@
                 </b-col>
                 <b-col sm="3">
                     <b-form-select
-                    v-model="effectiveMonth" disabled
+                    v-model="this.effectiveMonth" disabled
                     :options="Months"
                     value-field="value"
                     text-field="name"
@@ -172,8 +191,7 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="Amount"
-                    >Payment period (months)
+                    >Repayment Period (months)
                     <code>*</code></label
                     > 
                 </b-col>                                                                       
@@ -205,107 +223,67 @@
                 </b-row>
             </div>
 
-            <div v-if="mType === 2">                                  
-                <div class="header_2">Guarantors</div>
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"                                       
-                    >Employee Number 1<code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`Employee Number`"
-                    v-model="garantorEmpNo1"
-                    type="number"
-                    ></b-form-input>
-                </b-col>
-                </b-row>
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="Amount"
-                    >Name <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`name`"
-                    v-model="garantorName1"
-                    type="text"
-                    ></b-form-input>
-                </b-col>
-                </b-row>                                 
-
+            <div v-if="mType === 2 && loanAmount.length >= 9" >              
+              <div class="header_2">Guarantors</div>
+              
+              <span v-if="guarant.data !== 0">
                 
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label">Employee Number 2 <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`Employee Number`"
-                    v-model="garantorEmpNo2"
-                    type="number"
-                    ></b-form-input>
-                </b-col>
-                </b-row>
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="Amount"
-                    >Name <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`name`"
-                    v-model="garantorName2"
-                    type="text"
-                    ></b-form-input>
-                </b-col>
-                </b-row>
-
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"                                       
-                    >Employee Number 3<code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`Employee Number`"
-                    v-model="garantorEmpNo3"
-                    type="number"
-                    ></b-form-input>
-                </b-col>
-                </b-row>
-                <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="Amount"
-                    >Name <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`name`"
-                    v-model="garantorName3"
-                    type="text"
-                    ></b-form-input>
-                </b-col>
-                </b-row>
-
-
+                <div class="content" id='#gt' v-for="n in guarant.data" :key="n">          
+                  <b-row class="my-1 form-row mb-3">
+                  <b-col sm="4">
+                      <label
+                      class="pt-1 form-label"                                       
+                      >Employee Number<code>*</code></label
+                      >
+                  </b-col>
+                  <!-- {{ this.guarantorNumber }} -->
+                  <b-col sm="8">
+                      <b-form-input
+                      :id="`guarantorNumber${n}`"
+                      v-model.lazy.trim="grant.guarantorNumber[n]"
+                      @blur="getGuarantorInfo(grant.guarantorNumber[n])"
+                      type="number"
+                      ></b-form-input>
+                  </b-col>
+                  </b-row>
+                  <b-row class="my-1 form-row mb-3">
+                  <b-col sm="4">
+                      <label
+                      class="pt-1 form-label"
+                      >Name <code>*</code></label>
+                  </b-col>
+                  <b-col sm="8">
+                      <b-form-input
+                      :id="`name-${n}`"
+                      v-model="Info.person.firstName"
+                      type="text"
+                      ></b-form-input>
+                  </b-col>
+                  </b-row>
+                  
+                  <b-row class="my-1 form-row mb-3">
+                  <b-col sm="4">
+                      <label
+                      class="pt-1 form-label"
+                      >Email Address  <code>*</code></label>
+                  </b-col>
+                  <b-col sm="8">
+                      <b-form-input
+                      :id="`name-${n}`"
+                      v-model="Info.person.email[n]"
+                      type="text"
+                      @blur="addGrant(grant.guarantorNumber[n],Info.person.firstName[n],Info.person.email[n])"
+                      ></b-form-input>
+                  </b-col>
+                  </b-row>
+                </div>
+              </span>
+              <span v-if="guarant.data === 0">
+                <div>
+                  <strong> Not Enough Years of Experience for Loan the Request</strong><br/>
+                </div>
+              </span>
             </div>
-
             <div class="header_2">Method Of Collection</div>
             <b-row class="my-1 form-row mb-3 ">
                 <b-col sm="4">
@@ -317,7 +295,6 @@
                 <b-form-select
                     v-model="form.bankcode"
                     :options="banks"
-                    :for="Amount"
                 ></b-form-select>
                 </b-col>
             </b-row>
@@ -330,11 +307,17 @@
                 <b-col sm="8">
                 <b-form-input
                     id="`Account Number`"
-                    :for="Amount"
                     v-model="form.accountNumber"
+                    :max="10"
                     @blur="verifyAcc"
                     type="number"
+                    :state="accNum"
+                    aria-describedby="input-live-help input-live-feedback"
+                    trim
                 ></b-form-input>
+                <b-form-invalid-feedback id="input-live-feedback">
+                  Account Number must be 10 digits
+                </b-form-invalid-feedback>
                 </b-col>
             </b-row>
             <b-row class="my-1 form-row mb-3">
@@ -354,6 +337,7 @@
                 </b-col>
             </b-row>
             </b-form>
+            {{grantData}}
             <div class="form-buttons">
             <b-button class="form-btn">Reset</b-button>
             <b-button class="form-btn" @click="saveLoan">Submit</b-button>
@@ -370,6 +354,7 @@ import moment from 'moment'
 
 
 export default {
+  el:'#gt',
   name: "Home",
   components: {
   },
@@ -388,6 +373,7 @@ export default {
       MemberId:"",
       InterestRate:"",
         name:{data:""},
+        guarant: {data:0},
       loanAmount:"",
       amountDesire:"",
       amountExpected: "",
@@ -397,12 +383,27 @@ export default {
       garantorName : "",
       accountName : "",      
       beneficiary : "",
-      effectiveMonth: 3,
+      effectiveMonth: "",
       effectiveYear: moment(new Date().toLocaleString()).format("YYYY"),
       form: {
         accountNumber:"",
         bankcode:"",
       },
+      grant: 
+        {
+          guarantorNumber :{},
+          guarantorName : {},
+          guarantorEmail : {},      
+       },
+       Info: {
+          EmployeeNumber:"",
+          person:  {
+          firstName : {},
+          email : {},      
+       }
+       },
+       grantData:[],
+       LoanGuarantors:[],
       mType : "",
       items: [],
       details: [],
@@ -437,23 +438,53 @@ export default {
         { value: 4, text: "Annual Productivity Bonus"}
       ], 
       Months: [
-        { name: "March", value: 3 },
-        // { value: 4, name: "April" },
-        // { value: 5, text: "May" },
-        // { value: 6, text: "June"},
-        // { value: 7, text: "July" },
-        // { value: 8, text: "August" },
-        // { value: 9, text: "September" },
-        // { value: 10, text: "October"},
-        // { value: 11, text: "November" },
-        // { value: 12, text: "December"}
-      ], 
+        { name: "January", value: 0 },
+        { name: "February", value: 1 },
+        { name: "March", value: 2 },
+        { value: 3, name: "April" },
+        { value: 4, name: "May" },
+        { value: 5, name: "June"},
+        { value: 6, name: "July" },
+        { value: 7, name: "August" },
+        { value: 8, name: "September" },
+        { value: 9, name: "October"},
+        { value: 10, name: "November" },
+        { value: 11, name: "December"}
+      ],
+       
     };
   },
   async created() {
     await this.initialize();
+    this.effectiveDate();
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    this.$store.dispatch('getAllMembers')
   },
+  computed: {
+      accNum() {
+        return this.form.accountNumber.length == 10 ? true : false
+      },
+      getAllmembers () {
+          return this.$store.state.Allmember
+      },
+      memNumbers () {
+          return this.$store.state.memberNum
+      }
+    },
   methods: {
+
+    effectiveDate () {
+      const current = new Date();
+      const currentDate = current.getDate();
+      if (currentDate < 15) {
+        return this.effectiveMonth = current.getMonth();
+      }
+      else {
+       return  this.effectiveMonth = current.getMonth() +1;
+      }
+      
+      
+    },
     
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
@@ -530,9 +561,90 @@ export default {
                 autoHideDelay: 5000
             });
         });
-    }, 
-
+    },
     
+    //.............................................Start................................
+    async getGuarantor() {
+      let guarantor = {            
+            MemberId: parseInt(localStorage.getItem('memberId')),
+            LoanId: this.details.loanId,
+            LoanAmount: parseInt(this.loanAmount.replace(/,/g, ''))
+          }; 
+          guarantor = JSON.stringify(guarantor);           
+              await axios      
+     await axios
+        .post(`${process.env.VUE_APP_API_URL}/LoanConfig/Guarantors/count`, guarantor, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.guarant = response.data;
+        })
+        .catch(error => {
+          this.$bvToast.toast(error, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+        });
+    },
+
+    addGrant(gNo,gName,gMail){
+      let index = null
+      console.log(this.grantData.length)
+      for (let i = 0; i < this.grantData.length; i++) {
+              console.log("Lenght is " + this.grantData.length)
+              console.log("gData is " + JSON.stringify(this.grantData[i]))
+              console.log("Gno is " + gNo)
+        if (this.grantData[i].EmployeeNumber === gNo) {
+          index = i
+          break
+        }
+      }if (index === 0) {
+        return
+      }
+      
+      // this.grantData.splice(index, 1)
+
+      this.grantData.push({
+        EmployeeNumber : gNo,
+        GuarantorName: gName,
+        GuarantorEmail: gMail
+      });
+    },
+
+     async getGuarantorInfo(gNo) {
+      let guarantor = {            
+            EmployeeNumber: gNo
+          }; 
+          guarantor = JSON.stringify(guarantor);           
+              await axios      
+     await axios
+        .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.Info = response.data.data;
+        })
+        .catch(error => {
+          this.$bvToast.toast(error.message, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+        });
+    },
+
+
+
+    //..........................................End Guarantor Info.............................
   async verifyAcc() {     
           let verifyData = {            
             destbankcode: this.form.bankcode,
@@ -608,6 +720,9 @@ export default {
 
     async saveLoan() {
 
+      this.AmountValidation()
+      this.RepaymentValidation()
+
       let rawData = {
         LoanId : this.details.loanId,
         MemberId: this.details.memberTypeId,
@@ -620,9 +735,8 @@ export default {
         MethodOfCollection: 2,
         AccountNumber: this.form.accountNumber,
         AccountName: this.name.data,
-        Action: 1,
-        FormAction: 1
-      };
+        LoanGuarantors: this.grantData
+      }
       rawData = JSON.stringify(rawData);
       await axios
         .post(
@@ -639,6 +753,8 @@ export default {
           this.errors = response.message      
           this.result = response.data;
           this.$emit("setParamResp", this.result);
+          localStorage.setItem("LoanPlan",JSON.stringify(this.result));
+          this.$router.push('/repayment_plan');
         })
         .catch(error => {
             this.$bvToast.toast(error, {

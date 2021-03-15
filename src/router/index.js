@@ -20,6 +20,8 @@ import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/Login.vue";
 
+import store from "../store";
+
 import Confirmation from "../views/confirmation.vue";
 
 import Employee from "../views/registration/employeeReg.vue";
@@ -45,7 +47,7 @@ const routes = [
     path: "/portal",
     name: "Dashboard",
     component: Dashboard,    
-    // meta: {requiresAuth: true},
+    meta: {requiresAuth: true},
   },
   {
     path: "/transfer",
@@ -65,8 +67,8 @@ const routes = [
   {
     path: "/cash_addition",
     name: "cash_addition",
-    beforeEnter : guardMyroute,
-    component: Cash_addition
+    component: Cash_addition,
+    meta: {requiresAuth: true},
   },
   {
     path: "/decrease_increase",
@@ -76,15 +78,14 @@ const routes = [
   {
     path: "/members",
     name: "members",
-    beforeEnter : guardMyroute,
     component: Members
   },
   {    
     path: "/register",
     name: "register",
-    beforeEnter : guardRegRoute,
+    // beforeEnter : guardMyroute,
     component: Register,
-    // meta: { guest: true },
+    meta: {requiresAuth: true},
   },
   {
     path: "/reg",
@@ -94,7 +95,6 @@ const routes = [
   {
     path: "/employee",
     name: "employee",
-    beforeEnter : guardMyroute,
     component: Employee,
   },
   {
@@ -105,7 +105,6 @@ const routes = [
   {
     path: "/view_approval",
     name: "viewApproval",
-    beforeEnter : guardMyroute,
     component: mApproval,
   },
   {
@@ -130,21 +129,19 @@ const routes = [
   {
     path: "/loan",
     name: "Loan",
-    beforeEnter : guardMyroute,
-    component: Loan
+    component: Loan,
+    meta: {requiresAuth: true},
   },
   {
     path: "/repayment_plan",
     name: "Plan",
-    beforeEnter : guardMyroute,
     component: Plan
   },
   {
     path: "/login",
     name: "Login",
-    public: true,
     component: Login,
-    // meta: { guest: true },
+    meta: { guest: true },
   },
   {
     path: "/new-account",
@@ -159,7 +156,6 @@ const routes = [
   {
     path: "/payment",
     name: "payment",
-    beforeEnter : guardMyroute,
     component: Payment
   },
   {
@@ -179,64 +175,47 @@ const router = new VueRouter({
   routes
 });
 
-function guardMyroute(to, from, next) {
-  var isLoggedIn = false;
-  if (localStorage.getItem('token')) {
-    isLoggedIn = true;
-  } else {
-    isLoggedIn = false;
-  }
-  if (isLoggedIn) {
-    next(); // allow to enter route
-  } else {
-    next('/login'); // go to '/login';
-  }
-}
 
-function guardRegRoute(to, from, next) {
-  var createAcct = true;
-  try {
-    if (localStorage.getItem('empNum')) {
-      createAcct = true;
-    } else {
-      createAcct = false;
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn && !store.getters.memberId) {
+      next();
+      return;
+    }else if (to.name !== 'Login') {            
+        return next({
+          path: "/login?path="+to.name
+        });    
     }
-    if (!createAcct) {
-      next('/register'); // go to '/register';
-    }else {
-      next('/login');
-    }    
-  } catch (e) {
-    next({
-      name:"login",
-      query:{ redirectFrom: to.fullPath}
-    })
-    
+    next("/login");
+  } else {    
+    next();
   }
-}
+});
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
-//     if (this.$store.getters.isLoggedIn) {
-//       next();
-//       return;
-//     }
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.guest)) {
+    if (store.getters.isLoggedIn) {
+      next("/portal");
+      return;
+    }
+    next();
+  } else {
+    next();
+  }
+});
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some((record) => record.meta.guest)) {
-//     if (this.$store.getters.isLoggedIn) {
-//       next("/register");
-//       return;
-//     }
-//     next();
+// function guardMyroute(to, from, next) {
+//   var isRegistered = false;
+//   if (localStorage.getItem('token') && localStorage.getItem('memberId')) {
+//     isRegistered = true;
 //   } else {
-//     next();
+//     isRegistered = false;
 //   }
-// });
+//   if (isRegistered) {
+//     next('portal'); // allow to enter route
+//   } else {
+//     next(); // go to '/login';
+//   }
+// }
 
 export default router;

@@ -88,7 +88,7 @@
                               >
                                 <b-form-select
                                   id="input-3"
-                                  v-model="form.MemberType"
+                                  v-model="login.userTypeCategory"
                                   :options="members"
                                   disabled
                                 ></b-form-select
@@ -102,7 +102,7 @@
                               >
                                 <b-form-input
                                   id="name-input"
-                                  v-model="form.EmployeeNo"
+                                  v-model="login.userName"
                                   disabled
                                   required
                                 ></b-form-input>
@@ -122,8 +122,8 @@
                                   id="input-3"
                                   :state="nameState"
                                   v-model="form.location"
-                                  required
                                   :options="locations"
+                                  required
                                 ></b-form-select
                                 ></b-form-group>
 
@@ -146,7 +146,7 @@
 
                                 <date-picker class='input-group date down' :state="nameState"
                                  v-model="form.empDate" :config="options"></date-picker>
-                                </b-form-group>
+                                </b-form-group> {{this.form.empDate}}
 
 
                               <b-form-group
@@ -163,16 +163,16 @@
                                 label-cols="4"
                                 label-cols-lg="3"
                                 label-size="sm"
-                                label="Auth Deduction"
+                                label="Monthly Deduction"
                                 label-for="input-sm"
-                                invalid-feedback="Deduction is required"
-                                :state="nameState"
+                                invalid-feedback="Monthly Deduction is required"
+                                :state="mDeduct"
                               >
                                 <b-form-input
                                   id="input-1"
                                   v-model="form.minSaving"
                                   :formatter="numberFormat"
-                                  :state="nameState"
+                                  :state="mDeduct"
                                   required
                                 ></b-form-input>
                                 </b-form-group>
@@ -189,15 +189,16 @@
                                 label-cols="4"
                                 label-cols-lg="3"
                                 label-size="sm"
+                                id="input-group-3"
                                 label="First Name"
                                 label-for="input-sm"
                                 invalid-feedback="First Name is required"
-                                :state="nameState"
+                                :state="fname"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.fname"
-                                  :state="nameState"
+                                  :state="fname"
                                   required
                                 ></b-form-input
                                 ></b-form-group>
@@ -217,6 +218,7 @@
                                 ></b-form-group>
                               <b-form-group
                                 label-cols="4"
+                                id="input-group-3"
                                 label-cols-lg="3"
                                 label-size="sm"
                                 label="Last Name"
@@ -238,7 +240,7 @@
                                 label-for="input-sm"
                                 label-cols-lg="3"
                                 label-size="sm"
-                                invalid-feedback="Gendr is required"
+                                invalid-feedback="Gender is required"
                                 :state="nameState"
                               >
                                 <b-form-select
@@ -296,7 +298,7 @@
                                 <span class="input-group-addon" id="basic-addon1"><span class="fa fa-envelope"></span></span>
                                 <b-form-input
                                   id="name-input"
-                                  v-model="form.email"
+                                  v-model="login.email"
                                   type="email" disabled
                                   :state="nameState"
                                   required
@@ -395,14 +397,13 @@
                                 label="Country"
                                 label-for="input-sm"
                                 invalid-feedback="Country is required"
-                                :state="nameState"
+                                :state="state"
                               >
                                 <b-form-select
                                   id="name-input"
                                   v-model="form.country"
                                   :options="countrys"
-                                  :state="nameState"
-                                  required
+                                  :state="state"
                                 ></b-form-select
                                 ></b-form-group>
                             </strong>
@@ -438,7 +439,7 @@
 // @ is an alias to /src
 import Footer from "../../components/layout/footer/footer.vue";
 import axios from "axios";
-import { invalid } from 'moment';
+// import moment from 'moment';
 
 export default {
   name: "Home",
@@ -449,12 +450,13 @@ export default {
     return {
       checked: false,
         options: {
-          format: 'DD/MM/YYYY',
+          format: 'YYYY-MM-DD',
           useCurrent: false,
           showClear: true,
           showClose: true,
         },
-        nameState:"",
+      nameState:null,
+      state:null,
       selectedLoan: "",
       show: true,
       notify: 0,
@@ -467,12 +469,12 @@ export default {
         lname: "",
         title: null,
         sex: null,
-        marital: null,
-        empDate : new Date(),
+        marital: null,        
         DoB: new Date(),
-        email: localStorage.getItem('email'),
+        empDate : new Date(),
+        email: "",
         Personalemail:"",
-        Location: "",
+        location: null,
         workPhone: "",
         mobileNo: "",
         address1: "",
@@ -481,13 +483,15 @@ export default {
         country: null,
         createdBy: null,
         LastModifiedBy: "",    
-        EmployeeNo: localStorage.getItem('empNum'),
-        MemberType: localStorage.getItem('memType'),
+        EmployeeNo: "",
+        MemberType: "",
         minSaving: 0,
-        userName:"",
-        userType:""
       },
-      titles: [{ text: "Select One", value: null }, "Mr.", "Mrs."],
+      login: {        
+        userName:"",
+        userType:0,
+        userTypeCategory:0
+      },
       maritals: [{ text: "Select Status", value: null }, "Single", "Married"],
       gender: [{ text: "Select Gender", value: null }, "Female", "Male"],
       members: [
@@ -495,9 +499,8 @@ export default {
         { text: "Retiree", value: 2, disabled: true },
         { text: "Expatriate", value: 3, disabled: true }
       ],
-      creators: [{ text: "Select One", value: null }, "Shola", "Temi", "Lolu"],
       locations: [
-        { text: "Select Country", value: null },
+        { text: "Select Location", value: null },
         { text: "Lagos", value: "Lagos" },
         { text: "Escravos", value: "Escravos" },
       ],
@@ -519,7 +522,19 @@ export default {
   mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
     },
+    computed: {
+      mDeduct() {
+        return this.form.minSaving.length >= 5
+      },
+      invalidFeedback() {
+        if (this.name.length > 0) {
+          return 'Enter at least 5 figures.'
+        }
+        return 'Please enter something.'
+      }
+    },
   async created() {
+    await this.loginDetails();
     await this.initMinSavings();
   },
   methods: {
@@ -529,6 +544,27 @@ export default {
         return value =='0.00' ? '' : this.points.toLocaleString();
       },
     
+    async loginDetails() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/Members/loginId`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.login = response.data;
+        })
+        .catch((error) => {
+          this.$bvToast.toast(error.message ,{
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            })
+        });
+    },
+
     makeToast(variant = null) {
       this.notify++;
       this.$bvToast.toast(`Member Added`, {
@@ -573,14 +609,15 @@ export default {
       event.preventDefault();
       // Exit when the form isn't valid
       if (!this.checkFormValidity()) {
-        return invalid;
+        return;
       }
 
       let rawData = {
-        EmployeeNumber: this.form.EmployeeNo,
-        MemberType: parseInt(this.form.MemberType),
+        EmployeeNumber: this.login.userName,
+        MemberType: parseInt(this.login.userTypeCategory),
         EmploymentDate: this.form.empDate,
         Location: this.form.location,
+        SavingsAmount: parseInt(this.form.minSaving.replace(/,/g, '')),
         Person: {
           FirstName: this.form.fname,
           LastName: this.form.lname,
@@ -588,7 +625,7 @@ export default {
           Sex: this.form.sex,
           MaritalStatus: this.form.marital,
           DateOfBirth: this.form.DoB,
-          Email: this.form.email,
+          Email: this.login.email,
           Personalemail:this.form.Personalemail,
           WorkPhone: this.form.workPhone,
           MobileNumber: this.form.mobileNo,
@@ -613,33 +650,10 @@ export default {
             window.history.length > this.$router.
             push(`/payment`);
           }
+           this.$router.push(`/login`);
         })
         .catch((error) => {
-          this.$bvToast.toast(error ,{
-                title: "Warning",
-                variant: "warning",
-                solid: true,
-                autoHideDelay: 5000
-            })
-        });
-
-          let minSavings = {
-            MemberId: parseInt(this.form.MemberType),
-            SavingsAmount: Number.parseInt(this.form.minSaving),
-            Type: 1
-          };
-          rawData = JSON.stringify(minSavings);
-        await axios
-        .post(`${process.env.VUE_APP_API_URL}/MemberSavings/All`, minSavings, {
-          headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          },
-        })
-        .then((response) => {
-          this.rawData = response.data;
-        })
-        .catch((error) => {
-          this.$bvToast.toast(error ,{
+          this.$bvToast.toast(error.message ,{
                 title: "Warning",
                 variant: "warning",
                 solid: true,
@@ -649,7 +663,7 @@ export default {
     },
     async initMinSavings() {        
      await axios
-        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.form.MemberType}`,{
+        .get(`${process.env.VUE_APP_API_URL}/MinSavings/${this.login.userTypeCategory}`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`,

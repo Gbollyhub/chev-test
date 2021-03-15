@@ -42,7 +42,7 @@
                                 <div class="icon">                                        
                                     <b-icon icon="award-fill" aria-hidden="true"></b-icon>
                                 </div>
-                                <select class="form-control" v-model="form.UserType" 
+                                <select class="form-control" v-model="form.UserTypeCategory" 
                                 id="exampleFormControlSelect1" required>
                                     <option :value=null>Select Membership Type</option>
                                     <option value= 1>Regular Member (RSM)</option>
@@ -64,7 +64,7 @@
                                 <div class="icon">
                                     <b-icon icon="envelope"></b-icon>
                                 </div>
-                                <b-form-input type="email" v-model="form.email" :state="nameState2"
+                                <b-form-input type="email" v-model="form.email"
                                 aria-invalid="Email is required"
                                 required placeholder="Email Address" />
                             </div>
@@ -81,11 +81,11 @@
                                 <!-- description="We'll never share your email with anyone else." -->
                             </div>
                             <div v-if="form.password !== ''">
-                                    <small id="passwordHelp" class="form-text text-muted">Password should contain
+                                    <code><small id="passwordHelp" class="form-text text-muted">Password should contain
         <span :class="has_lowercase ? 'has_required' : ''">one lowercase letter</span>, 
         <span :class="has_uppercase ? 'has_required' : ''">one uppercase letter</span>, 
         <span :class="has_number ? 'has_required' : ''">One number</span>, and 
-        <span :class="has_special ? 'has_required' : ''">one special character.</span></small>
+        <span :class="has_special ? 'has_required' : ''">one special character.</span></small></code>
                                 </div>                             
                         </div>
                         <b-button type="submit" class="login-btn">REGISTER NOW</b-button>
@@ -113,7 +113,8 @@ export default {
             password: "",
             EmployeeNo: "",
             email: "",
-            UserType: null 
+            UserType: null,
+            UserTypeCategory: null 
         },
         reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
     };
@@ -159,12 +160,15 @@ export default {
         Username: this.form.EmployeeNo,
         Password: this.form.password,
         Email: this.form.email,
-        UserType: parseInt(this.form.UserType),
+        UserTypeCategory: parseInt(this.form.UserTypeCategory),
+        UserType: 2,
         ReturnUrl: 'http://localhost:8080/confirmation'    
       };
       this.$store.dispatch('createAccout', rawData)
-      .then(() =>{this.$router.push('/')
-      this.makeToast(`success`)})
+      .then(() =>{  this.makeToast(`success`);
+                    // alert(this.$bvModal.msgBoxOk('Action completed'))
+                    // this.$router.push('/register')
+                    })
         .catch(err => { if (err.response.status == 400)
             this.$bvToast.toast("Kindly Fill-Up the Form", {
                 title: "Warning",

@@ -9,11 +9,11 @@
             alt=""
             srcset=""
           />
-          <p class="profile-name"><strong><code>{{user.data.employeeNumber}}</code></strong>
+          <p class="profile-name"><strong><code>{{user.employeeNumber}}</code></strong>
           </p>
           <p class="profile-name"><strong>
-            {{user.data.person.lastName+", " +user.data.person.firstName+" " 
-                              +user.data.person.middleName}}</strong>
+            {{user.person.lastName +", " + user.person.firstName+" " 
+                              + user.person.middleName}}</strong>
           </p>
         </div>
         <div class="line"></div>
@@ -37,7 +37,7 @@
         </div>
         <div id="last-login">
           <div class="last-login">Your last login:</div>
-          <div class="last-login-time">21-Feb-2021 5:03:42 PM</div>
+          <div class="last-login-time">{{user.userLogin | humanize}}</div>
         </div>
       </div>
       <!-- <div id="ads">
@@ -55,19 +55,17 @@ import axios from "axios";
 export default {
     data() {
         return {
-          user:[]
+            user : {
+              employeeNumber:"",
+              firstName:"",
+              lastName:"",
+              middleName:"",
+              user: "",
+              userLogin:""
+            }
         };
   },
-  // computed: {
-  //   member: {
-  //     get () {
-  //       return this.$store.state.member;
-  //     }      
-  //   }
-  // },
   async created() {    
-          // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-          // this.$store.dispatch('memberDetails');
       await this.initUser();
   },
   methods: {
@@ -81,7 +79,10 @@ export default {
           },
         })
         .then((response) => {
-          this.user = response.data;
+          this.user = response.data.data;
+          const memberId = response.data.data.id;
+          localStorage.setItem('memberId', memberId)
+
         })
         .catch((error) => {
           error.alert('Error');

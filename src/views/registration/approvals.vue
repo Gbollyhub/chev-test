@@ -26,21 +26,32 @@
                   <div class="header_background">Module Approver</div>
                 </div>
                 <div class="col-md-12">
-                  <strong><b-form-group
+                  <strong>
+                    <b-form-group
                     label-cols="4"
                     id="input-group-3"
                     label="Module"
                     label-for="input-3"
                     label-cols-lg="2"
                     label-size="sm"
-                  >
-                    <b-form-select
-                      id="input-3"
-                      v-model="module"
-                      :options="modules"
-                    ></b-form-select
-                    ><br
-                  /></b-form-group></strong>
+                  >                  
+                  <b-form-select
+                    :id="`modules`"
+                    v-model="modul"
+                    required>
+                    <b-form-select-option :value="null" disabled>
+                      -- Select Module -- 
+                    </b-form-select-option>
+                    <b-form-select-option 
+                    v-for="item in modules.data" 
+                    :value="item.id"
+                    :key="item.id">
+                      {{item.name}} 
+                    </b-form-select-option>                      
+                  </b-form-select>
+                              <br
+                  /></b-form-group>
+                  </strong>
 
                   <strong><b-form-group
                     label-cols="4"
@@ -52,8 +63,7 @@
                     <b-form-input
                       id="name-input"
                       type="number"
-                      v-model="approver"
-                      @change="addInputs"
+                      v-model.lazy.trim="approver"
                     ></b-form-input
                     ><br
                   /></b-form-group></strong>
@@ -66,152 +76,47 @@
                         <b-th colspan="2">
                           
                           <b-form-group id="input-3" label="Approvers">
+                            
                           </b-form-group>
-                          <div id="dept" v-if="approver" != 0>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department"
-                              required
-                            >
-                          <b-form-select-option :value="null" disabled>
-                            -- Select Department -- 
-                          </b-form-select-option>
-                          <b-form-select-option 
-                          v-for="item in departments" 
-                          :value="item.id"
-                          :key="item.id">
-                            {{item.description}} 
-                        </b-form-select-option>
-                      
-                        </b-form-select>
-
+                          <div v-if="approver !== ''">
+                            <div id="#dept" v-for="i in (parseInt(this.approver))" :key="i">
+                              <b-row class="my-1 form-row mb-3">
+                              <b-form-select
+                                :id="`dept-${i}`"
+                                v-model="department[i]"
+                                required>
+                                <b-form-select-option :value="null" disabled>
+                                  -- Select Department -- 
+                                </b-form-select-option>
+                                <b-form-select-option 
+                                v-for="item in departments" 
+                                :value="item.id"
+                                :key="item.id">
+                                  {{item.description}} 
+                                </b-form-select-option>                      
+                              </b-form-select>
+                              </b-row>
+                            </div>
                           </div>
-                          <!-- <div v-if="approver == 2">
-                            <b-form-select
-                        id="input-3"
-                        v-model="department"
-                        required
-                      >
-                      <b-form-select-option :value="null" disabled>
-                            -- Select Department -- 
-                          </b-form-select-option>
-                          <b-form-select-option 
-                          v-for="item in departments" 
-                          :value="item.id"
-                          :key="item.id">
-                            {{item.description}} 
-                        </b-form-select-option>
-                      
-                      </b-form-select
-                      >
-                            <b-form-select
-                              id="input-3"
-                              v-model="department2"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                          </div>-- -->
-                          <!-- <div v-if="approver == 3">
-                            <b-form-select
-                              id="input-3"
-                              v-model="department1"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department2"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department3"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                          </div> -->
-                          
-                          <!-- <div v-if="approver == 4">
-                            <b-form-select
-                              id="input-3"
-                              v-model="department1"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department2"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department3"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                            <b-form-select
-                              id="input-3"
-                              v-model="department4"
-                              :options="departments"
-                            >
-                            </b-form-select>
-                          </div> -->
                         </b-th>
                         <b-th colspan="3">
                           <b-form-group id="input-3" label="Level">
                           </b-form-group>
-                          <!-- <div v-if="approver == 2">
-                            <b-form-input
-                              id="name-input"
-                              v-model="level1"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level2"
-                            ></b-form-input>
-                          </div> -->
-                          <!-- <div v-if="approver == 3">
-                            <b-form-input
-                              id="name-input"
-                              v-model="level1"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level2"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level3"
-                            ></b-form-input>
-                          </div>
-                          <div v-if="approver == 4">
-                            <b-form-input
-                              id="name-input"
-                              v-model="level1"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level2"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level3"
-                            ></b-form-input>
-                            <b-form-input
-                              id="name-input"
-                              v-model="level4"
-                            ></b-form-input>
-                          </div> -->
+                          <div v-if="approver !== ''">
+                            <div id="#level" v-for="i in (parseInt(this.approver))" :key="i">
+                              <b-row class="my-1 form-row mb-3">
+                              <b-form-input
+                                :id="`level-${i}`"
+                                v-model="level[i]"
+                              ></b-form-input>
+                              </b-row>
+                            </div>
+                          </div>                         
                         </b-th>
-                      </b-tr>                      
-                      
+                      </b-tr>                
                     </b-table-simple>
-                    <div class="form-buttons">
-                      <b-button type="submit" variant="primary"
-                        >Submit</b-button
-                      >
+                    <div class="row justify-content-md-center">
+                      <b-button type="submit" variant="primary">Submit</b-button>
                     </div>
                   </div>
                 </div>
@@ -219,13 +124,12 @@
             </div>
             </div>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="dashboard-right-side-bar">
-                <div class="header_2">Profile</div>
-                    
+                <div class="header_2">Profile</div>                    
                     <RightSidebar></RightSidebar>
                 </div>
-            </div>                      
+            </div>                       -->
             </div>            
           </div>
         </div>
@@ -237,11 +141,8 @@
 
 <script>
 // @ is an alias to /src
-
-// import Header from "../../components/layout/headers/headerDashboard.vue";
-// import NavBar from "../../components/layout/headers/dashboardNav.vue";
 import Menu from "../../components/layout/headers/menus.vue";
-import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
+// import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
 
 import axios from "axios";
@@ -249,57 +150,26 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    // Header,
-    // NavBar,
     Menu,
-    RightSidebar,
+    // RightSidebar,
     Footer
   },
   data() {
     return {
-      checked: false,
-      selectedLoan: "",
       approver : "",
       dept:"",
-      department: null,
-      department1: null,
-      department2: null,
-      department3: null,
-      department4: null,
-      module: null,
-      modules: [
-        { text: "Select Module", value: null },
-        "Membership",
-        "Loans",
-        "Savings",
-        "Special Deposits",
-        "Fixed Deposits",
-        "Insurance",
-        "Real Estate"
-      ],
-      departments: [
-        { text: "Select Approver", value: null },
-        "Accounts",
-        "Operations",
-        "Internal Control",
-        "GM's Office",
-        "Secretary",
-        "Assistant Secretary",
-        "Treasurer",
-        "Assistant Treasurer",
-        "President",
-        "Vice President"
-      ],
-
-      fields: ["Approvers", "Level"],          
-      
+      department: [],
+      level:[],
+      modules: [],
+      modul:null,
+      fields: ["Approvers", "Level"],      
     };
   },
   async created() {
     await this.initDept();
+    await this.initModules();
   },
   methods: {
-
     async initDept() {        
      await axios
         .get(`${process.env.VUE_APP_API_URL}/Department/All`,{
@@ -314,33 +184,49 @@ export default {
           error.alert("Error");
         });
     },
-    addInputs(elm) {
-      var dept = document.querySelector('#dept');
-      dept.innerHTML = '';
-      for (var i = 0; i < parseInt(elm.value); i++) {
-      var wrapper = document.createElement('div');
-      wrapper.innerHTML = //'<input type="text" placeholder="textfield ' + i + '" />';
-                          `<b-form-select
-                        id="input-3"
-                        v-model="form.dept"                       
-                        required
-                      >
-                      <b-form-select-option :value="null" disabled>
-                            -- Select Department -- 
-                          </b-form-select-option>
-                          <b-form-select-option 
-                          v-for="item in departments" 
-                          :value="item.id"
-                          :key="item.id">
-                            {{item.description}} 
-                        </b-form-select-option>
-                      
-                      </b-form-select>`
-      dept.appendChild(wrapper);
-  }
-}
 
+    async initModules() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/ModuleApprovers/Modules`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          }
+        })
+        .then(response => {
+          this.modules = response.data;
+        })
+        .catch(error => {
+          error.alert("Error");
+        });
+    },
 
+    
+    async onSubmit(event) {
+      event.preventDefault();
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return;
+      }
+
+      let rawData = {
+          // department:
+          // level:        
+      };
+      rawData = JSON.stringify(rawData);
+      await axios
+        .post(`${process.env.VUE_APP_API_URL}/add/employee`, rawData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          }
+        })
+        .then(response => {
+          this.rawData = response.data;
+          this.makeToast(`success`);
+        })
+        .catch(error => {
+          alert(error);
+        });
+    },
   }
 };
 </script>

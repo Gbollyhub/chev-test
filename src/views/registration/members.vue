@@ -59,13 +59,13 @@
                     </div>
                   </div>
                 </div>
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                   <div class="dashboard-right-side-bar">
                   <div class="header_2">Profile</div>
                       
                       <RightSidebar></RightSidebar>
                   </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@
 // import Header from "../../components/layout/headers/headerDashboard.vue";
 // import NavBar from "../../components/layout/headers/dashboardNav.vue";
 import Menu from "../../components/layout/headers/menus.vue";
-import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
+// import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue"
 import Footer from "../../components/layout/footer/footer.vue";
 
 import axios from "axios";
@@ -92,7 +92,7 @@ export default {
     // Header,
     // NavBar,
     Menu,
-    RightSidebar,
+    // RightSidebar,
     Footer
   },
   data() {

@@ -88,13 +88,15 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>              
               <div class="col-md-4">
+                <div v-if="this.userType == 2">
                 <div class="dashboard-right-side-bar">
                   <div class="header_2">Profile</div>
 
                   <RightSidebar></RightSidebar>
                 </div>
+              </div>
               </div>
             </div>
           </div>
@@ -123,6 +125,7 @@ export default {
   },
   data() {
     return {
+    userType: localStorage.getItem('userType'),
       transactionHistory: [
         { amount: "0", type: "Loan", date: `20-12-2020 9:00pm` },
         { amount: "0", type: "withdraw", date: "20-12-2020 9:00pm" },
@@ -132,10 +135,6 @@ export default {
     };
   },
  
- created: {
-   
- },
-
   methods: {
 
     async initUser() {

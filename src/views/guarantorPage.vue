@@ -23,7 +23,7 @@
                   <div class="account-overview">
                     <div class="account-overview-content">
                         <div class="profile-image">
-                        <p class="profile-name"><strong><h2>Hello!!!</h2>
+                        <p class="profile-name"><strong>
                         <h4> CEMCS Member with the details below has requested that you be His/Her Guarantor for the Loan Amount specifield</h4>
                             </strong>
                         </p><br/>
@@ -51,11 +51,25 @@
                                             Member Email Address :
                                         </b-th>
                                     </b-tr>                                                 
-                                </b-table-simple>                            
+                                </b-table-simple>
+                                <div>
+                                  <b-form-textarea
+                                    id="textarea"
+                                    v-model="comment"
+                                    placeholder="Type in comment..."
+                                    rows="3"
+                                    max-rows="6"
+                                  ></b-form-textarea>
+                                  <pre class="mt-3 mb-0">{{ comment }}</pre>
+                                </div> 
+                                <div class="form-buttons">
+                                  <b-button class="form-btn">Approve</b-button>
+                                  <b-button class="form-btn" >Reject</b-button>
+                                </div>                         
                             </div>
-                            <div class="profile-image">
+                            <!-- <div class="profile-image">
                                 <span><a href="http://localhost:8080">Click here to accept this request</a></span>
-                            </div>
+                            </div> -->
                     </div>
                   </div>
                 </div>
@@ -89,6 +103,7 @@ export default {
   },
   data () {
     return {
+      comment: ''
     }
   },
 };

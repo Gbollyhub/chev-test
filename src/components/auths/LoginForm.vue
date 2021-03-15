@@ -62,7 +62,7 @@
                                     symbol and number"/>
                                 </div>
                             </div>
-                                <b-button type="submit" @click="login" class="login-btn">LOGIN</b-button>
+                                <b-button type="submit" @click="login" class="login-btn">LOGIN</b-button>                            
                             <div class="d-flex justify-content-end">
                                 <a href="#">Forgot Password?</a>
                             </div>
@@ -73,6 +73,7 @@
         </section>
 </template>
 <script>
+// import axios from "axios";
 export default {
 data() {
     return {
@@ -80,32 +81,85 @@ data() {
             Username: "",
             Password: ""
         },            
-        member: ""
+        member: "",
+        userType : localStorage.getItem('userType')
     };
   },
+//   computed: {
+//       getMemId (){
+//           return this.$store.state.memberId
+//       }
+//   },
+//   async created() {
+//     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+//     this.$store.dispatch('memberDetails')
+//   },
     methods: {
-        login () {
+
+        login () {            
         this.$store.dispatch('login', this.user)
-       .then(() => this.$router.push('/portal'))
-       .catch(err => { if (err.response.status == 400)
+       .then(() => {           
+                 
+           if (this.$route.query){
+               let path = this.$route.query.path.toLowerCase()
+               console.log("Path", path)
+               this.$router.push(`/${path}`)               
+               return
+            }
+        console.log(localStorage.getItem('userType'))
+        if ((localStorage.getItem('userType')) == 2) 
+                 window.location.replace('/portal')
+        if ((localStorage.getItem('userType')) == 3)
+                 window.location.replace('/view_approval')
+               
+       })
+       .catch(err => 
+       { if (err.response && err.response.status == 400)
             this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
             });
-            if (err.response.status == 401)
+            if (err.response && err.response.status == 401)
             this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-            }); else this.$bvToast.toast(err ,{
+            }); 
+        }
+        )
+      },
+
+       Emplogin () {            
+        this.$store.dispatch('login', this.user)
+       .then(() => {           
+                 
+        //    if (this.$route.query){
+        //        let path = this.$route.query.path.toLowerCase()
+        //        console.log("Path", path)
+        //        this.$router.push(`/${path}`)               
+        //        return
+        //     }  
+                 window.location.replace('/view_approval')               
+       })
+       .catch(err => 
+       { if (err.response && err.response.status == 400)
+            this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
                 variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-            })}
+            });
+            if (err.response && err.response.status == 401)
+            this.$bvToast.toast(err.response.data.message, {
+                title: "Warning",
+                variant: "warning",
+                solid: true,
+                autoHideDelay: 5000
+            }); 
+        }
         )
       },
     }

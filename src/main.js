@@ -51,6 +51,9 @@ Vue.filter('capitalize', function (value) {
 
 Vue.filter("humanize", date => moment(date).format("MMMM Do YYYY, h:mm a"));
 
+Vue.filter("hum", date => moment(date).format("MMMM Do YYYY"));
+
+
 Vue.filter("Month", date => moment(date).format("M"));
 
 Vue.filter("Year", date => moment(date).format("YYYY"));

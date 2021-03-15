@@ -390,6 +390,7 @@
               </div>
               </div>            
             </div>
+            <div v-if="this.userType == 2">
             <div class="col-md-4">
                 <div class="dashboard-right-side-bar">
                 <div class="header_2">Profile</div>
@@ -397,6 +398,7 @@
                     <RightSidebar></RightSidebar>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>

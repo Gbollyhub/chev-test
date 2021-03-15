@@ -25,12 +25,10 @@
                   <div class="account-overview">
                     <div class="account-overview-content">
                       <Loan-Comp @setParamResp="Onset"> </Loan-Comp>
-                      <View-Plan ></View-Plan>
+                    </div>
                       {{this.set.data}}
                       {{this.set.message}}
                       {{this.set.errors}}
-                    </div>
-
                   </div>
                 </div>
               </div>
@@ -55,7 +53,6 @@ import Menu from "../../components/layout/headers/menus.vue";
 import RightSidebar from "../../components/layout/sidebar/profile-sidebar.vue";
 import Footer from "../../components/layout/footer/footer.vue";
 import LoanComp from "../../components/LoanComp.vue";
-import ViewPlan from "../../components/viewSchedule.vue";
 
 
 export default {
@@ -65,7 +62,6 @@ export default {
     RightSidebar,
     Footer,
     LoanComp,
-    ViewPlan
   },
   data () {
     return {
