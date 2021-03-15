@@ -223,7 +223,7 @@
                 </b-row>
             </div>
 
-            <div v-if="mType === 2 && loanAmount.length >= 9" >              
+            <div v-if="mType === 2 && loanAmount.length > 0" >              
               <div class="header_2">Guarantors</div>
               
               <span v-if="guarant.data !== 0">
@@ -254,13 +254,13 @@
                   </b-col>
                   <b-col sm="8">
                       <b-form-input
-                      :id="`name-${n}`"
-                      v-model="Info.person.firstName"
+                      v-bind:id="`name-${n}`"
+                      v-model="Info.person.firstName[n]"
                       type="text"
                       ></b-form-input>
                   </b-col>
                   </b-row>
-                  
+                  {{Info.person.firstName}}
                   <b-row class="my-1 form-row mb-3">
                   <b-col sm="4">
                       <label
@@ -269,7 +269,7 @@
                   </b-col>
                   <b-col sm="8">
                       <b-form-input
-                      :id="`name-${n}`"
+                      v-bind:id="`name-${n}`"
                       v-model="Info.person.email[n]"
                       type="text"
                       @blur="addGrant(grant.guarantorNumber[n],Info.person.firstName[n],Info.person.email[n])"
@@ -607,7 +607,7 @@ export default {
         return
       }
       
-      // this.grantData.splice(index, 1)
+      this.grantData.splice(index, 1)
 
       this.grantData.push({
         EmployeeNumber : gNo,
@@ -616,7 +616,8 @@ export default {
       });
     },
 
-     async getGuarantorInfo(gNo) {
+
+       async getGuarantorInfo(gNo) {
       let guarantor = {            
             EmployeeNumber: gNo
           }; 

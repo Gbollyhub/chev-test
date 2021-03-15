@@ -64,7 +64,7 @@
                                 </div> 
                                 <div class="form-buttons">
                                   <b-button class="form-btn">Approve</b-button>
-                                  <b-button class="form-btn" >Reject</b-button>
+                                  <b-button class="form-btn" @click="addComment">Reject</b-button>
                                 </div>                         
                             </div>
                             <!-- <div class="profile-image">
@@ -106,5 +106,8 @@ export default {
       comment: ''
     }
   },
+  method: {
+    
+  }
 };
 </script>
