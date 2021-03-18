@@ -148,9 +148,12 @@ export default {
           error.alert("Error");
         });
     }, 
-    async initapprove(selectedLoan) {        
+    // async initapprove(selectedLoan) {  
+      async initapprove() {        
      await axios
-        .get( `${process.env.VUE_APP_API_URL}/Members/Approved/${selectedLoan}`,{
+        // .get( `${process.env.VUE_APP_API_URL}/Members/Approved/${selectedLoan}`,{
+          // -----for pending------
+        .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`

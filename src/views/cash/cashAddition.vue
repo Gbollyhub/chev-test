@@ -73,35 +73,52 @@
                             label="Effective Date"
                             label-for="example-datepicker"
                           >
+                          <!-- <b-row class="my-1 form-row mb-3">
+                          <b-col sm="3">
+                    <b-form-select
+                    v-model="effectiveMonth" disabled
+                    :options="Months"
+                    value-field="value"
+                    text-field="name"
+                ></b-form-select></b-col>
+                    <b-col sm="3"><b-form-input
+                    :id="`DateExpected`"
+                    v-model="effectiveYear" disabled
+                    type="text"
+                    ></b-form-input>
+                </b-col></b-row> -->
                             <date-picker class='input-group date down' :state="effectiveDate"
-                                 v-model="user.effectiveDate" :config="options"></date-picker>
+                                 v-model="effectiveDate" :config="options"></date-picker>
                           </b-form-group>
+
                           <b-form-group
                             label-cols="2"
                             label-cols-lg="3"
                             label-size="sm"
-                            label="Account"
+                            label="Account Type"
                             label-for="input-sm"
-                          >
-                            <b-form-select
+                          ><b-form-select
                               id="input-3"
-                              v-model="user.account"
+                              v-model="account"
                               :options="accountTypes"
                             ></b-form-select
                           ></b-form-group>
+
                           <b-form-group
                             label-cols="2"
                             label-cols-lg="3"
                             label-size="sm"
-                            label="Amount"
+                            label="Amount Desired"
                             label-for="input-sm"
-                          >
-                            <b-form-input
+                          ><b-form-input
                               id="input-4"
-                              v-model="user.amount"
+                              v-model.trim="amount"
                               :formatter="numberFormat"
-                            ></b-form-input
-                          ></b-form-group>
+                            ></b-form-input >
+                          <span v-if="amount != ''"><code>
+    {{parseFloat(this.amount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    </code></span>
+                          </b-form-group>
                         </strong>
 
                         <div class="row justify-content-md-center">
@@ -136,18 +153,15 @@
 <script>
 // @ is an alias to /src
 
-// import Header from "../../components/layout/headers/headerDashboard.vue";
-// import NavBar from "../../components/layout/headers/dashboardNav.vue";
 import Menu from '../../components/layout/headers/menus.vue';
 import RightSidebar from '../../components/layout/sidebar/profile-sidebar.vue';
 import Footer from '../../components/layout/footer/footer.vue';
 
+import moment from 'moment'
 import axios from 'axios';
 export default {
   name: 'Home',
   components: {
-    // Header,
-    // NavBar,
     Menu,
     RightSidebar,
     Footer,
@@ -162,23 +176,55 @@ export default {
           showClear: true,
           showClose: true,
         },
-      user: {
-        employeeNumber: '',
-        name: '',
-        effectiveDate: '',
-        account: '',
-        amount: '',
-      },
+      user: {},
+      employeeNumber: '',
+      name: '',
+      account: null,
+      amount: '',
+      effectiveDate: new Date(),
+      effectiveMonth: "",
+      effectiveYear: moment(new Date().toLocaleString()).format("YYYY"),
       accountTypes: [
+        { text: "---Select Account Type---", value: null, disabled: true },
         { value: 1, text: "Savings " },
         { value: 2, text: "Special Deposit " }
+      ],
+
+      Months: [
+        { name: "January", value: 0 },
+        { name: "February", value: 1 },
+        { name: "March", value: 2 },
+        { value: 3, name: "April" },
+        { value: 4, name: "May" },
+        { value: 5, name: "June"},
+        { value: 6, name: "July" },
+        { value: 7, name: "August" },
+        { value: 8, name: "September" },
+        { value: 9, name: "October"},
+        { value: 10, name: "November" },
+        { value: 11, name: "December"}
       ],
     };
   },
   async created() {
     await this.initUser();
+    this.effectDate();
   },
   methods: {
+
+
+    effectDate () {
+      const current = new Date();
+      const currentDate = current.getDate();
+      if (currentDate < 15) {
+        return this.effectiveMonth = current.getMonth();
+      }
+      else {
+       return  this.effectiveMonth = current.getMonth() +1;
+      }
+      
+      
+    },
 
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
@@ -196,10 +242,10 @@ export default {
     },
     async onSubmit() {
       let rawData = {
-        TransactionDate: this.user.effectiveDate,
+        TransactionDate: this.effectiveDate,
         MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.user.amount.replace(/,/g, '')),
-        SavingsType: parseInt(this.user.account),
+        DepositAmount: parseInt(this.amount.replace(/,/g, '')),
+        SavingsType: this.account,
         TransactionTypeId: 3,
       };
       rawData = JSON.stringify(rawData);
@@ -218,12 +264,16 @@ export default {
           this.makeToast(`success`);
           if (this.form.MemberType != 2) {
             window.history.length >
-              this.$router.push(`/payment/${this.form.fname}&${this.form.lname}&
-              ${this.form.email}&${this.form.mobileNo}`);
+              this.$router.push(`/payment}`);
           }
         })
-        .catch((error) => {
-          alert(error);
+        .catch(error => {
+          this.$bvToast.toast(error.message, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
         });
     },
 
@@ -238,9 +288,6 @@ export default {
         .then((response) => {
           this.user = response.data;
         })
-        .catch((error) => {
-          error.alert('Error');
-        });
     },
   },
 };

@@ -117,6 +117,18 @@ export default new Vuex.Store({
       })
     },
 
+    getLoanApplication(Id) {
+      return new Promise((resolve, reject) => {
+        axios({url: `${process.env.VUE_APP_API_URL}/Loans/${Id}`, method: 'GET'})
+        .them(response => {
+          this.commit("AppLoanId", response.data)
+          resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
     states(){
       return new Promise((resolve, reject) => {
         axios({url: `${process.env.VUE_APP_API_URL}/States/All`, method: 'GET'})
@@ -155,6 +167,9 @@ export default new Vuex.Store({
     AllMembers(state, Allmember, memberNum) {
       state.Allmember =  Allmember.data;
       state.memberNum =  memberNum.data;
+    },
+    AppLoanId(state, appLoan){
+      state.appLoan = appLoan.data
     },
     setShowAlert(state, value) {
       state.showAlert = value

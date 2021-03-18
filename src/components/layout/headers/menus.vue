@@ -37,7 +37,7 @@
 							<b-dropdown-item to="/view" class="chevron-nav-dropdown-link">Employees</b-dropdown-item>
 							<b-dropdown-item to="/config" class="chevron-nav-dropdown-link">Loan Config</b-dropdown-item>        
 						</b-nav-item-dropdown></div>
-					<b-nav-item @click="logout" class="chevron-nav-link">logout {{this.userType}}</b-nav-item>
+					<b-nav-item @click="logout" class="chevron-nav-link">logout </b-nav-item>
 				</b-navbar-nav>
 			</b-collapse>
 		</b-navbar>

@@ -71,7 +71,7 @@
                               >
                                 <b-form-datepicker
                                   id="example-datepicker"
-                                  v-model="user.effectiveDate"
+                                  v-model="effectiveDate"
                                   required
                                 ></b-form-datepicker
                                 ></b-form-group>
@@ -85,7 +85,7 @@
                                 >
                                 <b-form-select
                                     id="input-3"
-                                    v-model="user.inc_dec"
+                                    v-model="inc_dec"
                                     :options="inc_decs"
                                 ></b-form-select
                                 ></b-form-group>
@@ -99,7 +99,7 @@
                                 >
                                 <b-form-select
                                     id="input-3"
-                                    v-model="user.account"
+                                    v-model="account"
                                     :options="accountTypes"
                                 ></b-form-select
                                 ></b-form-group>
@@ -112,10 +112,13 @@
                               >
                                 <b-form-input
                                   id="input-4"
-                                  v-model="user.amount"
+                                  v-model="amount"
                                   :formatter="numberFormat"
-                                ></b-form-input
-                                ></b-form-group>
+                                ></b-form-input>
+                                <span v-if="amount != ''"><code>
+    {{parseFloat(this.amount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    </code></span>
+                                </b-form-group>
                            </strong>
 
                     
@@ -166,19 +169,20 @@ export default {
     return {
       show: true,
       notify:0,
-      user: {
+      user: {},
         employeeNumber: "",
         name: "",
         effectiveDate: "",
-        account: "",
+        account: null,
         amount:"",
-        inc_dec: ""
-      },
+        inc_dec: null,
       accountTypes: [
+        { text: "---Select Account Type---", value: null, disabled: true },
         { value: 1, text: "Savings " },
         { value: 2, text: "Special Deposit " }
       ],
       inc_decs: [
+        { text: "---Select Saving Type---", value: null, disabled: true },
         { value: 1, text: "Savings Increase" },
         { value: 2, text: "Savings Decrease" }
       ],
@@ -208,11 +212,11 @@ export default {
      async onSubmit() {
       let rawData = {
 
-        TransactionDate: this.user.effectiveDate,
+        TransactionDate: this.effectiveDate,
         MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.user.amount),
-        SavingsType: parseInt(this.user.account),        
-        TransactionTypeId: parseInt(this.user.inc_dec)
+        DepositAmount: parseInt(this.amount.replace(/,/g, '')),
+        SavingsType: this.account,        
+        TransactionTypeId: this.inc_dec
         }
       rawData = JSON.stringify(rawData);
       await axios
@@ -230,8 +234,13 @@ export default {
               ${this.form.email}&${this.form.mobileNo}`);
           }
         })
-        .catch((error) => {
-          alert(error);
+        .catch(error => {
+          this.$bvToast.toast(error.Message, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
         });
      },
 

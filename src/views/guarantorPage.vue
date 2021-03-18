@@ -24,35 +24,45 @@
                     <div class="account-overview-content">
                         <div class="profile-image">
                         <p class="profile-name"><strong>
-                        <h4> CEMCS Member with the details below has requested that you be His/Her Guarantor for the Loan Amount specifield</h4>
+                        <h6> CEMCS Member with the details below has requested that you be His/Her Guarantor for the Loan Amount specifield</h6>
                             </strong>
                         </p><br/>
-                               <h3> <code>Requested Loan Amount :    </code></h3>
+                               <h3> <code>Requested Loan Amount : {{ LoanAppDetails.loanAmount | numberFormat}} {{parseFloat(LoanAppDetails.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only</code></h3>
                         </div>
+                        <div class="row justify-content-md-center">
                         <div class=col-md-8>
                                 <b-table-simple striped hover>
                                     <b-tr>
                                         <b-th >
-                                            Member's Employee Number :
+                                            Member's Employee Number : {{LoanAppDetails.member.employeeNumber}}
                                         </b-th>
                                     </b-tr>
                                     <b-tr>
                                         <b-th>
-                                            Member Full-Name :
+                                            Member Full-Name : {{LoanAppDetails.member.person.firstName}}
                                         </b-th>
                                     </b-tr> 
                                     <b-tr>
                                         <b-th >
-                                            Member Extention/Mobile :
+                                            Member Extention/Mobile : {{LoanAppDetails.member.person.workPhone}}
                                         </b-th>
                                     </b-tr>
                                     <b-tr>
                                         <b-th>
-                                            Member Email Address :
+                                           Member Email Address : {{LoanAppDetails.member.person.email}}
                                         </b-th>
                                     </b-tr>                                                 
                                 </b-table-simple>
                                 <div>
+                                  <b-alert
+                                      variant="danger"
+                                      dismissible
+                                      fade
+                                      :show="showDismissibleAlert"
+                                      @dismissed="showDismissibleAlert=false">
+                                      {{this.errors}}
+                                  </b-alert>
+                                  <b-form>
                                   <b-form-textarea
                                     id="textarea"
                                     v-model="comment"
@@ -60,12 +70,23 @@
                                     rows="3"
                                     max-rows="6"
                                   ></b-form-textarea>
-                                  <pre class="mt-3 mb-0">{{ comment }}</pre>
+                                  </b-form>
                                 </div> 
                                 <div class="form-buttons">
-                                  <b-button class="form-btn">Approve</b-button>
-                                  <b-button class="form-btn" @click="addComment">Reject</b-button>
+                          <b-button
+                            type="submit"
+                            @click="reject"
+                            variant="primary"
+                            >Reject</b-button
+                          >
+                          <b-button
+                            type="submit"
+                            @click="approve"
+                            variant="primary"
+                            >Approve</b-button
+                          >
                                 </div>                         
+                            </div>
                             </div>
                             <!-- <div class="profile-image">
                                 <span><a href="http://localhost:8080">Click here to accept this request</a></span>
@@ -94,6 +115,9 @@
 import Menu from "../components/layout/headers/menus.vue";
 import Footer from "../components/layout/footer/footer.vue";
 
+import axios from "axios";
+
+
 
 export default {
   name: "Home",
@@ -103,11 +127,138 @@ export default {
   },
   data () {
     return {
-      comment: ''
+       dismissSecs: 5,
+      dismissCountDown: 0,
+      showDismissibleAlert: false,
+      comment: null,      
+      LoanApplicationId: "",
+      errors: "",
+      code:"",
+      amount:"",
+      loanAmount: "",
+      employeeNumber:"",
+      firstName: "",
+      lastName: "",
+      middleName: "",
+      email:"",
+      workPhone: "",
+      LoanAppDetails:{}      
+      // member:{
+      //     person: {        
+      //     firstName: "",
+      //     lastName: "",
+      //     middleName: "",
+      //     email:"",
+      //     workPhone: ""
+      //   },
+      // },
+      
     }
   },
-  method: {
+  computed: {
+    // LoanAppDetails() {
+    //     return this.$store.state.AppLoanId
+    // }
+  },
+  async created () {
+    this.code = atob(this.$route.query.code);    
+    this.guarantorNo = this.code.split(':')[1];
+    this.LoanId = this.code.split(':')[0];
+    this.memberId = this.code.split(':')[2];    
     
+
+    await this.loanAppId();
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    // this.$store.dispatch('getLoanApplication',this.LoanId)
+
+    this.amount = this.LoanAppDetails.loanAmount;
+  },
+  methods: {
+
+      async reject() {
+        if (this.comment == null) {
+          return this.errors = " Please Kindly leave a comment for Rejection"
+        }else {
+          let rawData = {
+          LoanApplicationId : parseInt(this.LoanId),
+          EmployeeNumber: parseInt(this.guarantorNo),
+          Comments: this.comment,
+          Status: 2
+        }
+        rawData = JSON.stringify(rawData);
+        await axios
+          .post(
+            `${process.env.VUE_APP_API_URL}/Guarantors/approve`,
+            rawData,
+            {
+              headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+              },
+            }
+          )
+          .then(() => {})
+          .catch(error => {
+              this.$bvToast.toast(error, {
+                  title: "Error",
+                  variant: "danger",
+                  solid: true,
+                  autoHideDelay: 5000
+              });
+            });
+        }
+      },
+
+    async approve() {
+      let rawData = {
+        LoanApplicationId : parseInt(this.LoanId),
+        EmployeeNumber: parseInt(this.guarantorNo.trim()),
+        Comments: this.comment,
+        Status: 2
+      }
+      rawData = JSON.stringify(rawData);
+      await axios
+        .post(
+          `${process.env.VUE_APP_API_URL}/Guarantors/approve`,
+          rawData,
+          {
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+          }
+        )
+        .then(() => {
+        })
+        .catch(error => {
+            this.$bvToast.toast(error, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+          });
+    },
+
+    async loanAppId() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/Loans/${this.LoanId}`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        .then(response => {
+          this.LoanAppDetails = response.data.data;
+        })
+        .catch(error => {
+          this.$bvToast.toast(error, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+        });
+    },
+
   }
 };
 </script>

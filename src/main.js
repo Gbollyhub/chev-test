@@ -49,6 +49,13 @@ Vue.filter('capitalize', function (value) {
   return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
+Vue.filter('price', function (number) {
+  if (isNaN(number)) {
+      return ' ';
+  }
+  return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+});
+
 Vue.filter("humanize", date => moment(date).format("MMMM Do YYYY, h:mm a"));
 
 Vue.filter("hum", date => moment(date).format("MMMM Do YYYY"));

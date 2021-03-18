@@ -52,16 +52,17 @@
                 <b-row class="my-1 form-row mb-3 ">
                 <b-col sm="4">
                 <label class="pt-1 form-label" :for="lumpSum"
-                    >Expected Lump Sum Type <code>*</code></label
+                    >Expected Lump Sum Type<code>*</code></label
                 >
                 </b-col>
                 <b-col sm="8">
                 <b-form-select
                     v-model="expectedLumpSum"
                     :options="lumpSums"
+                    @change="LumpSumDate(expectedLumpSum)"
                 ></b-form-select>
                 </b-col>
-                </b-row>
+                </b-row> 
                 <!-- <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
                     <label
@@ -85,16 +86,16 @@
                     >Date Expected MM/YY <code>*</code></label
                     >
                 </b-col>
-                <b-col sm="3">
+                <b-col sm="4">
                     <b-form-select
-                    v-model="ExpMonth" disabled
+                    v-model="effectiveMonth" disabled
                     :options="Months"
                     value-field="value"
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
                     :id="`DateExpected`"
-                    v-model="ExpYear" disabled
+                    v-model="effectiveYear" disabled
                     type="text"
                     ></b-form-input>
                 </b-col>
@@ -131,11 +132,11 @@
                     <b-form-input
                     :id="`AmountDesire`"
                     type="text"
-                    v-model.trim="amountDesire"                                                                                
+                    v-model.trim="loanAmount"                                                                                
                     :formatter="numberFormat"
                     ></b-form-input>
-                    <span v-if="amountDesire != ''"><code>
-    {{parseFloat(this.amountDesire.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    <span v-if="loanAmount != ''"><code>
+    {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
                     </code></span>
                 </b-col>
                 </b-row>
@@ -223,7 +224,7 @@
                 </b-row>
             </div>
 
-            <div v-if="mType === 2 && loanAmount.length > 0" >              
+            <div v-if="(mType === 2 && loanAmount.length > 0) || (selectedLoan === 4) || (selectedLoan === 1)" >              
               <div class="header_2">Guarantors</div>
               
               <span v-if="guarant.data !== 0">
@@ -255,12 +256,11 @@
                   <b-col sm="8">
                       <b-form-input
                       v-bind:id="`name-${n}`"
-                      v-model="Info.person.firstName[n]"
+                      v-model="grant.guarantorName[n]"
                       type="text"
                       ></b-form-input>
                   </b-col>
                   </b-row>
-                  {{Info.person.firstName}}
                   <b-row class="my-1 form-row mb-3">
                   <b-col sm="4">
                       <label
@@ -270,19 +270,19 @@
                   <b-col sm="8">
                       <b-form-input
                       v-bind:id="`name-${n}`"
-                      v-model="Info.person.email[n]"
+                      v-model="grant.guarantorEmail[n]"
                       type="text"
-                      @blur="addGrant(grant.guarantorNumber[n],Info.person.firstName[n],Info.person.email[n])"
+                      @blur="addGrant(grant.guarantorNumber[n],grant.guarantorName[n],grant.guarantorEmail[n])"
                       ></b-form-input>
                   </b-col>
                   </b-row>
                 </div>
               </span>
-              <span v-if="guarant.data === 0">
+              <!-- <span v-if="guarant.data === 0">
                 <div>
                   <strong> Not Enough Years of Experience for Loan the Request</strong><br/>
                 </div>
-              </span>
+              </span> -->
             </div>
             <div class="header_2">Method Of Collection</div>
             <b-row class="my-1 form-row mb-3 ">
@@ -337,9 +337,9 @@
                 </b-col>
             </b-row>
             </b-form>
-            {{grantData}}
+            <!-- {{this.grantData}} -->
             <div class="form-buttons">
-            <b-button class="form-btn">Reset</b-button>
+            <b-button class="form-btn" @click="reset">Reset</b-button>
             <b-button class="form-btn" @click="saveLoan">Submit</b-button>
             </div>
         </div>
@@ -411,10 +411,6 @@ export default {
       loan:{
         loanType: ""
       },
-      accountTypes: [
-        { value: 1, text: "Special Deposit " },
-        { value: 2, text: "Fixed Deposit " }
-      ],
       banks: [
         { value: "214", text: "First City Monument Bank" },
         { value: "215", text: "Unity Bank" },
@@ -432,6 +428,7 @@ export default {
         { value: "070", text: "Fidelity Bank" }
       ],
       lumpSums: [
+         { text: "---Select Lump Sum---", value: null },
         { value: 1, text: "Annual Rent Subsidy" },
         { value: 2, text: "Security Allowance" },
         { value: 3, text: "Generator Maintenance/ Diesel Allowance" },
@@ -475,13 +472,43 @@ export default {
 
     effectiveDate () {
       const current = new Date();
-      const currentDate = current.getDate();
+      const currentDate = current.getDate();      
       if (currentDate < 15) {
         return this.effectiveMonth = current.getMonth();
       }
       else {
        return  this.effectiveMonth = current.getMonth() +1;
       }
+    },
+
+    LumpSumDate(value) {
+      const current = new Date();
+      const currentYear = current.getFullYear();
+          console.log("Year is ", currentYear );      
+      if (value == 1) {
+        if ( current.getMonth() > 0) {
+          this.effectiveYear = currentYear+1;
+      }else { this.effectiveYear = currentYear; }
+        this.effectiveMonth = 0;
+      }
+      else if (value == 2) {
+        this.effectiveMonth = 3;
+        if ( current.getMonth() > 3) {
+          this.effectiveYear = currentYear+1;
+      }else { this.effectiveYear = currentYear; }
+      }
+      else if (value == 3) {
+        this.effectiveMonth = 8;
+        if ( current.getMonth() > 8) {
+          this.effectiveYear = currentYear+1;
+      }else { this.effectiveYear = currentYear; }
+      }
+      else if (value == 4) {
+        this.effectiveMonth = 10;
+        if ( current.getMonth() > 8) {
+          this.effectiveYear = currentYear+1;
+      }else { this.effectiveYear = currentYear; }
+      }else { this.effectiveMonth = "";}
       
       
     },
@@ -521,7 +548,7 @@ export default {
       } 
       if (this.mType == 1) {
         if (desireAmount > mAmountDesire) {
-          return this.errors = `Sorry, Maximum loan value is ${mAmountDesire}`
+          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected  ${mAmountDesire}`
         }  
       }
       return this.errors = "";
@@ -600,14 +627,15 @@ export default {
               console.log("gData is " + JSON.stringify(this.grantData[i]))
               console.log("Gno is " + gNo)
         if (this.grantData[i].EmployeeNumber === gNo) {
+          console.log("Index is ", index)
+          console.log("i is ",i)
           index = i
           break
         }
-      }if (index === 0) {
-        return
       }
-      
-      this.grantData.splice(index, 1)
+
+      console.log("Last index is ",index)
+      // this.grantData.splice(index, 1)
 
       this.grantData.push({
         EmployeeNumber : gNo,
@@ -724,12 +752,15 @@ export default {
       this.AmountValidation()
       this.RepaymentValidation()
 
+      let repay = parseInt(this.minMonthlyRepayPeriod)
+      if (repay == null) { repay = 0}
+
       let rawData = {
         LoanId : this.details.loanId,
         MemberId: this.details.memberTypeId,
         InterestRate: this.details.intrestRate,
         LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
-        RepaymntPeriod: parseInt(this.minMonthlyRepayPeriod),
+        RepaymntPeriod: repay,
         EffectiveMonth:this.effectiveMonth,
         EffectiveYear: parseInt(this.effectiveYear),
         BankCode: this.form.bankcode,
@@ -765,6 +796,18 @@ export default {
                 autoHideDelay: 5000
             });
           });
+    },
+
+      reset() {
+        this.selectedLoan = "";
+        this.details.loanId = "";
+        this.details.memberTypeId = "";
+        this.loanAmount = "";
+        this.minMonthlyRepayPeriod = "";
+        this.form.bankcode = "";
+        this.form.accountNumber = "";
+        this.name.data = "";
+        this.grantData = null
     },
 
   },
