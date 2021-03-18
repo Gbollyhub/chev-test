@@ -27,7 +27,7 @@
                         <h6> CEMCS Member with the details below has requested that you be His/Her Guarantor for the Loan Amount specifield</h6>
                             </strong>
                         </p><br/>
-                               <h3> <code>Requested Loan Amount : {{ LoanAppDetails.loanAmount | numberFormat}} {{parseFloat(LoanAppDetails.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only</code></h3>
+                               <h3> <code>Requested Loan Amount : {{ LoanAppDetails.loanAmount | numberFormat}} {{LoanAppDetails.loanAmount | NumbersToWords | capitalize}} Naira Only</code></h3>
                         </div>
                         <div class="row justify-content-md-center">
                         <div class=col-md-8>
@@ -55,12 +55,12 @@
                                 </b-table-simple>
                                 <div>
                                   <b-alert
-                                      variant="danger"
-                                      dismissible
-                                      fade
-                                      :show="showDismissibleAlert"
-                                      @dismissed="showDismissibleAlert=false">
-                                      {{this.errors}}
+                                    :show="dismissCountDown"
+                                    dismissible
+                                    :variant="dyn"
+                                    @dismissed="dismissCountDown=0"
+                                    @dismiss-count-down="countDownChanged">
+                                    {{this.errors}}
                                   </b-alert>
                                   <b-form>
                                   <b-form-textarea
@@ -71,7 +71,7 @@
                                     max-rows="6"
                                   ></b-form-textarea>
                                   </b-form>
-                                </div> 
+                                </div><br/>
                                 <div class="form-buttons">
                           <b-button
                             type="submit"
@@ -127,12 +127,13 @@ export default {
   },
   data () {
     return {
-       dismissSecs: 5,
+      dismissSecs: 5,
       dismissCountDown: 0,
-      showDismissibleAlert: false,
+      dyn:"success",
       comment: null,      
       LoanApplicationId: "",
       errors: "",
+      msg:"",
       code:"",
       amount:"",
       loanAmount: "",
@@ -175,13 +176,21 @@ export default {
   },
   methods: {
 
+        countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
+
       async reject() {
+
         if (this.comment == null) {
-          return this.errors = " Please Kindly leave a comment for Rejection"
-        }else {
+          this.dyn = "danger"                   
+          this.dismissCountDown = this.dismissSecs
+          return this.errors = " Please Kindly leave a comment for Rejection" 
+        }
+
           let rawData = {
           LoanApplicationId : parseInt(this.LoanId),
-          EmployeeNumber: parseInt(this.guarantorNo),
+          EmployeeNumber: this.guarantorNo.toString(),
           Comments: this.comment,
           Status: 2
         }
@@ -196,7 +205,11 @@ export default {
               },
             }
           )
-          .then(() => {})
+          .then((response) => {
+            this.dyn = "success"
+            this.errors = response.data.data
+          this.dismissCountDown = this.dismissSecs
+          })
           .catch(error => {
               this.$bvToast.toast(error, {
                   title: "Error",
@@ -205,15 +218,14 @@ export default {
                   autoHideDelay: 5000
               });
             });
-        }
       },
 
     async approve() {
       let rawData = {
         LoanApplicationId : parseInt(this.LoanId),
-        EmployeeNumber: parseInt(this.guarantorNo.trim()),
+        EmployeeNumber: this.guarantorNo.toString(),
         Comments: this.comment,
-        Status: 2
+        Status: 1
       }
       rawData = JSON.stringify(rawData);
       await axios
@@ -226,7 +238,10 @@ export default {
             },
           }
         )
-        .then(() => {
+        .then((response) => {
+          this.dyn="success"
+          this.errors = response.data.data
+          this.dismissCountDown = this.dismissSecs
         })
         .catch(error => {
             this.$bvToast.toast(error, {

@@ -41,7 +41,8 @@ const routes = [
   {
     path: "/confirmation",
     name: "Confirmation",
-    component: Confirmation
+    component: Confirmation,
+    meta: {requiresAuth: true},
   },
   {
     path: "/portal",
@@ -151,7 +152,8 @@ const routes = [
   {
     path: "/guarantor",
     name: "Gurantor",
-    component: Guarantor
+    component: Guarantor,
+    meta: {requiresAuth: true},
   },
   {
     path: "/payment",
