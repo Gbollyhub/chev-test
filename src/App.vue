@@ -14,7 +14,7 @@
 @import "assets/css/webflow.css";
 
 .app {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Ilisarniq', sans-serif;
   color: #333;
   font-size: 14px;
   line-height: 20px;
