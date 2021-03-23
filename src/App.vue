@@ -1,12 +1,25 @@
 <template>
+<div class="app">
   <router-view />
+</div>
+  
 </template>
 
 <style>
 @import "assets/css/chevron.css";
 @import "assets/css/chevron-styles.css";
 @import "assets/css/responsive.css";
+@import "assets/css/normalize.css";
+@import "assets/css/paysure-core.webflow.css";
+@import "assets/css/webflow.css";
 
+.app {
+    font-family: 'Nunito Sans', sans-serif;
+  color: #333;
+  font-size: 14px;
+  line-height: 20px;
+}
+/* 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -26,5 +39,5 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>

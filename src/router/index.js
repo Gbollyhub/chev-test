@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
 import Dashboard from "../views/dashboard/dashboard.vue";
 import Transfer from "../views/tranfer/transfer.vue";
 import Transfer_ from "../views/tranfer/transfer_.vue";
@@ -18,25 +18,45 @@ import Register1 from "../views/registration/reg.vue";
 import NewAccount from "../views/NewAccount.vue";
 import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
-import Login from "../views/Login.vue";
-
+import Login from "../views/auth/Login.vue";
 import store from "../store";
-
 import Confirmation from "../views/confirmation.vue";
-
 import Employee from "../views/registration/employeeReg.vue";
 import mEmployee from "../views/registration/viewEmployee.vue";
 import mApproval from "../views/registration/view_approval.vue";
-
 import Approvals from "../views/registration/approvals.vue";
+
+
+import Transactions from "../views/transactions/transactions.vue";
+import Savings from "../views/savings/savings.vue";
+import LoanOption from "../views/loan/loan.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "Login",
+    component: Login,
+    meta: { guest: true },
+  },
+  {
+    path: "/transactions",
+    name: "Transactions",
+    component: Transactions,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/loan-option",
+    name: "LoanOption",
+    component: LoanOption,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/savings",
+    name: "Savings",
+    component: Savings,
+    meta: {requiresAuth: true},
   },
   {
     path: "/confirmation",
@@ -45,7 +65,7 @@ const routes = [
     meta: {requiresAuth: true},
   },
   {
-    path: "/portal",
+    path: "/overview",
     name: "Dashboard",
     component: Dashboard,    
     meta: {requiresAuth: true},
@@ -139,12 +159,6 @@ const routes = [
     component: Plan
   },
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
-    meta: { guest: true },
-  },
-  {
     path: "/new-account",
     name: "NewAccount",
     component: NewAccount
@@ -160,15 +174,6 @@ const routes = [
     name: "payment",
     component: Payment
   },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
 ];
 
 const router = new VueRouter({
@@ -185,10 +190,10 @@ router.beforeEach((to, from, next) => {
       return;
     }else if (to.name !== 'Login') {            
         return next({
-          path: "/login?path="+to.name
+          path: "/?path="+to.name
         });    
     }
-    next("/login");
+    next("/");
   } else {    
     next();
   }
@@ -197,7 +202,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.guest)) {
     if (store.getters.isLoggedIn) {
-      next("/portal");
+      next("/overview");
       return;
     }
     next();
