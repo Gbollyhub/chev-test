@@ -27,6 +27,8 @@
       </div>
       <button type="submit" class="app-login-button">Login into Account</button>
       </form>
+      <br>
+       <router-link to="/new-account"> <div style="text-align:center;text-decoration:underline;">Don't have an account? Register for an account</div> </router-link>
       <div class="app-login-divider"></div>
       <div class="app-login-notice">
         <div class="app-login-notice-col-1"></div>
