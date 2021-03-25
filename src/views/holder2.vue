@@ -13,7 +13,7 @@
               </div>
               <div class="date">
                 <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{new Date().toLocaleString() | humanize}}</div>
+                <div class="date-item ml-2">{{new Date().utc() | humanize}}</div>
               </div>
             </div>
             <div class="line"></div>

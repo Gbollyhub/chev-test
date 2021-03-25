@@ -47,7 +47,7 @@
             <div v-if="mType === 1">
                 <b-row class="my-1 form-row mb-3 ">
                 <b-col sm="4">
-                <label class="pt-1 form-label" :for="lumpSum"
+                <label class="pt-1 form-label"
                     >Expected Lump Sum Type<code>*</code></label
                 >
                 </b-col>
@@ -59,39 +59,24 @@
                 ></b-form-select>
                 </b-col>
                 </b-row> 
-                <!-- <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="DateExpected"
-                    >Date Expected <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`DateExpected`"
-                    type="date"
-                    ></b-form-input>
-                </b-col>
-                </b-row> -->
+                
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="DateExpected"
                     >Date Expected MM/YY <code>*</code></label
                     >
                 </b-col>
                 <b-col sm="4">
                     <b-form-select
-                    v-model="effectiveMonth" disabled
+                    v-model="effectMonth" disabled
                     :options="Months"
                     value-field="value"
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
                     :id="`DateExpected`"
-                    v-model="effectiveYear" disabled
+                    v-model="effectYear" disabled
                     type="text"
                     ></b-form-input>
                 </b-col>
@@ -100,7 +85,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="AmountExpected"
                     >Amount Expected <code>*</code></label
                     >
                 </b-col>
@@ -120,7 +104,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="AmountDesire"
                     >Amount Desired <code>*</code></label
                     >
                 </b-col>
@@ -130,6 +113,7 @@
                     type="text"
                     v-model.trim="loanAmount"                                                                                
                     :formatter="numberFormat"
+                    @blur="AmountValidation"
                     ></b-form-input>
                     <span v-if="loanAmount != ''"><code>
     {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
@@ -165,7 +149,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="DateExpected"
                     >Effective Date MM/YY <code>*</code></label
                     >
                 </b-col>
@@ -205,7 +188,7 @@
 
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
-                    <label class="pt-1 form-label" :for="Rate"
+                    <label class="pt-1 form-label"
                     >Rate (%) <code>*</code></label
                     >
                 </b-col>
@@ -220,10 +203,10 @@
                 </b-row>
             </div>
 
-            <div v-if="(mType === 2 && loanAmount.length > 0) || (selectedLoan === 4) || (selectedLoan === 1)" >              
-              <div class="header_2">Guarantors</div>
-              
+            <div v-if="(mType === 2 && loanAmount.length > 9) || (selectedLoan === 4) || (selectedLoan === 1)" >              
+                            
               <span v-if="guarant.data !== 0">
+                  <div class="header_2">Guarantors</div>
                 
                 <div class="content" id='#gt' v-for="n in guarant.data" :key="n">          
                   <b-row class="my-1 form-row mb-3">
@@ -240,6 +223,7 @@
                       v-model.lazy.trim="grant.guarantorNumber[n]"
                       @blur="getGuarantorInfo(grant.guarantorNumber[n])"
                       type="number"
+                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
@@ -254,6 +238,7 @@
                       v-bind:id="`name-${n}`"
                       v-model="grant.guarantorName[n]"
                       type="text"
+                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
@@ -268,6 +253,7 @@
                       v-bind:id="`name-${n}`"
                       v-model="grant.guarantorEmail[n]"
                       type="text"
+                      required
                       @blur="addGrant(grant.guarantorNumber[n],grant.guarantorName[n],grant.guarantorEmail[n])"
                       ></b-form-input>
                   </b-col>

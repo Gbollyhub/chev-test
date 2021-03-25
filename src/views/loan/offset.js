@@ -1,18 +1,48 @@
-
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+  const currencyMask = createNumberMask({
+    prefix: '',
+    allowDecimal: true,
+    decimalLimit :2,
+    includeThousandsSeparator: true,
+    allowNegative: false,
+  });
 export default {
     data() {
         return {
-            waiverForm: {
+            show: true,
+            mask: currencyMask,
+            form: {
                 loanType: "Select a Loan Type",
                 waiverType: "Select a Waiver Type",
-                amount: 0,
-                fee: 0
+                offsetAmount:"",
+                cashAmount:"",
+                depositAmount:"",
+                MonthSaving:"",
+                balance:"",
+                depositBalance:""
             },
            waiverDetails: []
         };
     }, 
     methods: {
-        addWaiver(){
+
+        onReset(event) {
+            event.preventDefault()
+            this.form.loanType = null,
+            this.form.waiverType = null,
+            this.form.offsetAmount ="",
+            this.form.cashAmount ="",
+            this.form.depositAmount ="",
+            this.form.MonthSaving ="",
+            this.form.balance ="",
+            this.form.depositBalance =""
+            this.show = false
+            this.$nextTick(() => {
+              this.show = true
+            })
+          },
+        async onSubmit(event) {
+            event.preventDefault()
             console.log('click')
             let value = this.waiverForm
             console.log("d?>>>", value)

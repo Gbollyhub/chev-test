@@ -32,8 +32,10 @@ export default {
       garantorName : "",
       accountName : "",      
       beneficiary : "",
+      effectMonth: "",
+      effectYear: moment.utc(new Date).format("YYYY"),     
       effectiveMonth: "",
-      effectiveYear: moment(new Date().toLocaleString()).format("YYYY"),
+      effectiveYear: moment.utc(new Date).format("YYYY"),
       form: {
         accountNumber:"",
         bankcode:"",
@@ -100,6 +102,7 @@ export default {
        
     };
   },
+
   async created() {
     await this.initialize();
     this.effectiveDate();
@@ -118,7 +121,6 @@ export default {
       }
     },
   methods: {
-
     effectiveDate () {
       const current = new Date();
       const currentDate = current.getDate();      
@@ -132,35 +134,33 @@ export default {
 
     LumpSumDate(value) {
       const current = new Date();
-      const currentYear = current.getFullYear();
-          console.log("Year is ", currentYear );      
+      const currentYear = current.getFullYear();    
       if (value == 1) {
         if ( current.getMonth() > 0) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
-        this.effectiveMonth = 0;
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
+        this.effectMonth = 0;
       }
       else if (value == 2) {
-        this.effectiveMonth = 3;
+        this.effectMonth = 3;
         if ( current.getMonth() > 3) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
       }
       else if (value == 3) {
-        this.effectiveMonth = 8;
+        this.effectMonth = 8;
         if ( current.getMonth() > 8) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
       }
       else if (value == 4) {
-        this.effectiveMonth = 10;
+        this.effectMonth = 10;
         if ( current.getMonth() > 8) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
-      }else { this.effectiveMonth = "";}
-      
-      
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
+      }else { this.effectMonth = "";}
     },
+
     
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
@@ -176,28 +176,25 @@ export default {
         autoHideDelay: 5000,
         appendToast: append
       });
-    },
-    
+    },    
 
-    AmountValidation() {     
-      
+    AmountValidation() {      
       this.showDismissibleAlert = !this.showDismissibleAlert;
       let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
       let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
-      let desireAmount = parseFloat(this.amountDesire.replace(/,/g, ''))
       let mAmountDesire = expectedAmount * 0.75
 
       if (this.mType == 3 || this.mType == 2) {
         if(amount < this.minLoanAmount && this.minLoanAmount != 0){
-              return this.errors = `Loan Amount must be Minimum of ₦ ${this.minLoanAmount | this.numberFormat} only`
+              return this.errors = `Loan Amount must be Minimum of ₦ ${this.numberFormat(this.minLoanAmount)} only`
         }
         if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
-              return this.errors = `Loan Amount must be Maximum of ₦ ${this.maxLoanAmount | this.numberFormat} only`
+              return this.errors = `Loan Amount must be Maximum of ₦ ${this.numberFormat(this.maxLoanAmount)} only`
         }
       } 
       if (this.mType == 1) {
-        if (desireAmount > mAmountDesire) {
-          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected  ${mAmountDesire}`
+        if (amount > mAmountDesire) {
+          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected ₦ ${this.numberFormat(this.amountExpected)}`
         }  
       }
       return this.errors = "";
@@ -398,11 +395,21 @@ export default {
 
     async saveLoan() {
 
-      this.AmountValidation()
-      this.RepaymentValidation()
+      if (this.AmountValidation()) {
+        return;
+      }
+      if (this.RepaymentValidation()) {
+        return;
+      }
 
-      let repay = parseInt(this.minMonthlyRepayPeriod)
-      if (repay == null) { repay = 0}
+      let Month = this.effectiveMonth
+      let Year = parseInt(this.effectiveYear)
+      let repay = parseInt(this.minMonthlyRepayPeriod)      
+      if (this.mType === 1) {
+        Month = this.effectMonth
+        Year = parseInt(this.effectYear)
+        repay = 0
+      }
 
       let rawData = {
         LoanId : this.details.loanId,
@@ -410,8 +417,8 @@ export default {
         InterestRate: this.details.intrestRate,
         LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
         RepaymntPeriod: repay,
-        EffectiveMonth:this.effectiveMonth,
-        EffectiveYear: parseInt(this.effectiveYear),
+        EffectiveMonth: Month,
+        EffectiveYear: Year,
         BankCode: this.form.bankcode,
         MethodOfCollection: 2,
         AccountNumber: this.form.accountNumber,

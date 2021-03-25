@@ -23,6 +23,9 @@ Vue.use(FlashMessage);
 Vue.use(Vuelidate);
 // Vue.use(window.vuelidate.default);
 
+import VueAutosuggest from "vue-autosuggest";
+Vue.use(VueAutosuggest);
+
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 Vue.use(Flutterwave, { publicKey: 'FLWPUBK-0c829d67037c8c431685e19e78d58963-X' } )
@@ -32,6 +35,9 @@ Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
 Vue.use(VueCookies)
+
+import VueMask from 'v-mask'
+Vue.use(VueMask)
 
 
 Vue.use(converter);
