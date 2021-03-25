@@ -15,7 +15,7 @@ import Register from "../views/registration/register.vue";
 import Cash_addition from "../views/cash/cashAddition.vue";
 import Dec_Inc from "../views/cash/decrease_increase.vue";
 import Register1 from "../views/registration/reg.vue";
-import NewAccount from "../views/NewAccount.vue";
+import NewAccount from "../views/auth/Register1.vue";
 import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/auth/Login.vue";
