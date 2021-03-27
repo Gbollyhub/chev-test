@@ -7,7 +7,7 @@ export default {
     return {
         loader: false,
         nameState: true,
-        show: true,      
+        show: true,  
         notify: 0,
         has_number: false,
         has_lowercsae: false,
@@ -15,28 +15,64 @@ export default {
         has_special: false,
         form: {
             password: "",
+            checkPassword:'',
             EmployeeNo: "",
             email: "",
             UserType: null,
             UserTypeCategory: 0
         },
+        rules: [
+          { message:'One lowercase letter required.', regex:/[a-z]+/ },
+          { message:"One uppercase letter required.",  regex:/[A-Z]+/ },
+          { message:"One number required.", regex:/[0-9]+/ },
+          { message:'One special character required.', regex:/[!@#%*+=._-]/ }
+        ],
+        passwordVisible:false,
+        submitted:false,
         reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
-    };
-  },
-    watch:{
-        password(){
-            this.has_number    = /\d/.test(this.password);
-            this.has_lowercase = /[a-z]/.test(this.password);
-            this.has_uppercase = /[A-Z]/.test(this.password);
-            this.has_special   = /[!@#%*+=._-]/.test(this.password);
-        }
-    },
-    computed: {
-      password() {
-        return this.form.password.length >= 8 ? true : false
-      }
-    },
-    methods: {        
+        
+      };
+  },    
+  computed: {
+		notSamePasswords () {
+			if (this.passwordsFilled) {
+        
+        console.log(true)
+				return (this.form.password !== this.form.checkPassword)
+			} else {
+				return false
+			}
+		},
+		passwordsFilled () {
+			return (this.form.password !== '' && this.form.checkPassword !== '')
+		},
+		passwordValidation () {
+			let errors = []
+			for (let condition of this.rules) {
+				if (!condition.regex.test(this.form.password)) {
+					errors.push(condition.message)
+				}
+			}
+			if (errors.length === 0) {
+				return { valid:true, errors }
+			} else {
+				return { valid:false, errors }
+			}
+		}
+	},
+    methods: {
+      
+      resetPasswords () {
+        this.password = ''
+        this.checkPassword = ''
+        this.submitted = true
+        setTimeout(() => {
+          this.submitted = false
+        }, 2000)
+      },
+      togglePasswordVisibility () {
+        this.passwordVisible = !this.passwordVisible
+      },
         makeToast(variant = null) {
             this.notify++;
             this.$bvToast.toast(`Check your Email for confirmation link`, {
@@ -48,19 +84,13 @@ export default {
         },
         isEmailValid() {
       return (this.form.email == "")? "" : (this.reg.test(this.form.email)) ? 'has-success' : 'has-error';
-    },
-        checkFormValidity() {
-        const valid = this.$refs.form.checkValidity();
-        this.nameState = valid;
-        return valid;
-        }, 
+    }, 
+        
     async onSubmit(event) {
       event.preventDefault();
       // Exit when the form isn't valid
-      this.loader = true     
-      if (!this.checkFormValidity()) {
-        return;
-      }
+      this.loader = true  
+
       let rawData = {
         Username: this.form.EmployeeNo,
         Password: this.form.password,

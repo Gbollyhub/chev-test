@@ -10,6 +10,7 @@ export default {
   data() {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
+      show: true,
       checked: false,
       dismissSecs: 5,
       dismissCountDown: 0,
@@ -110,9 +111,9 @@ export default {
     this.$store.dispatch('getAllMembers')
   },
   computed: {
-      accNum() {
-        return this.form.accountNumber.length == 10 ? true : false
-      },
+      // accNum() {
+      //   return this.form.accountNumber.length == 10 ? true : false
+      // },
       getAllmembers () {
           return this.$store.state.Allmember
       },
@@ -206,10 +207,12 @@ export default {
       this.showDismissibleAlert = !this.showDismissibleAlert;
       if (this.mType == 3 || this.mType == 2) {
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
-          return this.errors = `Value Less than Minimum Repayment Period for ${this.details.loan.name} Loan` 
+          return this.errors = `Minimum Repayment Period supplied is not valid, enter a value greater than 
+          ${this.MinRepayPeriod} or less than or equal to ${this.MaxRepayPeriod}` 
         }
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MaxRepayPeriod) {
-          return this.errors = `Value more than Maximum Repayment Period for ${this.details.loan.name} Loan`
+          return this.errors = `Maximum Repayment Period supplied is not valid, enter a value greater than
+          ${this.MinRepayPeriod} or less than or equal to ${this.MaxRepayPeriod}`
         }
       }
 
@@ -334,15 +337,7 @@ export default {
         })
         .then(response => {
           this.name = response.data;          
-        })
-        .catch(error => {
-          this.$bvToast.toast(error, {
-                title: "Error",
-                variant: "danger",
-                solid: true,
-                autoHideDelay: 5000
-            });
-        });    
+        })   
     },    
 
     async getConfig(selectedLoan) {        
@@ -393,13 +388,14 @@ export default {
           });
     },
 
-    async saveLoan() {
+    async onSubmit(event) {
+      event.preventDefault()
 
       if (this.AmountValidation()) {
-        return;
+        return this.errors;
       }
       if (this.RepaymentValidation()) {
-        return;
+        return this.errors;
       }
 
       let Month = this.effectiveMonth
@@ -454,8 +450,9 @@ export default {
           });
     },
 
-      reset() {
-        this.selectedLoan = "";
+    onReset(event) {
+        event.preventDefault()
+        this.selectedLoan = null;
         this.details.loanId = "";
         this.details.memberTypeId = "";
         this.loanAmount = "";
@@ -464,6 +461,11 @@ export default {
         this.form.accountNumber = "";
         this.name.data = "";
         this.grantData = null
+
+        this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
     },
 
   },

@@ -17,7 +17,7 @@
             </b-alert>
             </div>
 
-            <b-form class="form">
+            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group
             class="pt-1 form-label"
             label-cols="4"
@@ -208,16 +208,20 @@
               <span v-if="guarant.data !== 0">
                   <div class="header_2">Guarantors</div>
                 
-                <div class="content" id='#gt' v-for="n in guarant.data" :key="n">          
+                <div class="wrapper" id='#gt' v-for="n in guarant.data" :key="n">          
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"                                       
                       >Employee Number<code>*</code></label
                       >
-                  </b-col>
+                  </b-col> -->
                   <!-- {{ this.guarantorNumber }} -->
                   <b-col sm="8">
+                      <label
+                      class="pt-1 form-label"                                       
+                      >Employee Number<code>*</code></label
+                      >
                       <b-form-input
                       :id="`guarantorNumber${n}`"
                       v-model.lazy.trim="grant.guarantorNumber[n]"
@@ -228,12 +232,15 @@
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Name <code>*</code></label>
-                  </b-col>
+                  </b-col> -->
                   <b-col sm="8">
+                      <label
+                      class="pt-1 form-label"
+                      >Name <code>*</code></label>
                       <b-form-input
                       v-bind:id="`name-${n}`"
                       v-model="grant.guarantorName[n]"
@@ -243,12 +250,15 @@
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Email Address  <code>*</code></label>
-                  </b-col>
-                  <b-col sm="8">
+                  </b-col> -->
+                  <b-col sm="10">
+                      <label
+                      class="pt-1 form-label"
+                      >Email Address  <code>*</code></label>
                       <b-form-input
                       v-bind:id="`name-${n}`"
                       v-model="grant.guarantorEmail[n]"
@@ -277,6 +287,7 @@
                 <b-form-select
                     v-model="form.bankcode"
                     :options="banks"
+                    required
                 ></b-form-select>
                 </b-col>
             </b-row>
@@ -293,13 +304,13 @@
                     :max="10"
                     @blur="verifyAcc"
                     type="number"
-                    :state="accNum"
                     aria-describedby="input-live-help input-live-feedback"
                     trim
+                    required
                 ></b-form-input>
-                <b-form-invalid-feedback id="input-live-feedback">
-                  Account Number must be 10 digits
-                </b-form-invalid-feedback>
+               <div v-if="form.accountNumber.length !== 10 && form.accountNumber !== ''">
+                  <p style="color:red;font-size:12px;" >Account Number must be 10 digits</p>
+                </div>
                 </b-col>
             </b-row>
             <b-row class="my-1 form-row mb-3">
@@ -315,14 +326,15 @@
                     id="`Beneficiary`"
                     v-model="name.data"
                     type="text"
+                    required
                 ></b-form-input>
                 </b-col>
             </b-row>
-            </b-form>
     <div style="margin-top:50px;" class="button-group">
-          <button @click="reset" style="background:#c00;display:inline-block;margin-right:30px" class="app-form-button">Reset</button>
-           <button @click="saveLoan" style="display:inline-block" class="app-form-button">Submit</button>
+          <button type="reset" style="background:#c00;display:inline-block;margin-right:30px" class="app-form-button">Reset</button>
+           <button type="submit" style="display:inline-block" class="app-form-button">Submit</button>
     </div>
+            </b-form>
       </div>
     </template>
 
