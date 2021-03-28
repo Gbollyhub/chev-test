@@ -11,7 +11,7 @@ import Plan from "../views/loans/viewSchedule.vue";
 import Setup from "../views/loanSetUp/setup.vue";
 import Config from "../views/loanSetUp/config.vue";
 import PriCon from "../views/loanSetUp/pry_con_setup.vue";
-import Register from "../views/registration/register.vue";
+import Register from "../views/auth/Register2.vue";
 import Cash_addition from "../views/cash/cashAddition.vue";
 import Dec_Inc from "../views/cash/decrease_increase.vue";
 import Register1 from "../views/registration/reg.vue";
@@ -21,15 +21,16 @@ import Payment from "../views/payment.vue";
 import Login from "../views/auth/Login.vue";
 import store from "../store";
 import Confirmation from "../views/confirmation.vue";
-import Employee from "../views/registration/employeeReg.vue";
+import Employee from "../views/settings/employeeReg.vue";
 import mEmployee from "../views/registration/viewEmployee.vue";
-import mApproval from "../views/registration/view_approval.vue";
+import mApproval from "../views/settings/viewApproval.vue";
 import Approvals from "../views/registration/approvals.vue";
 
 
 import Transactions from "../views/transactions/transactions.vue";
 import Savings from "../views/savings/savings.vue";
 import LoanOption from "../views/loan/loan.vue";
+import Settings from "../views/settings/settings.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,12 @@ const routes = [
     name: "Login",
     component: Login,
     meta: { guest: true },
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
+    meta: {requiresAuth: true},
   },
   {
     path: "/transactions",
