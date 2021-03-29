@@ -27,7 +27,7 @@
                      <div class="content-slide-box">
                       <div class="content-info-card">
                         <div class="div-block-2">
-                          <div class="slide-card-header">Total Loan</div>
+                          <div class="slide-card-header">Loan Requests</div>
                           <div class="slide-card-value">N0</div>
                         </div>
                         <div class="slide-card-icon green"></div>
@@ -63,14 +63,14 @@
 										<tbody>
                   <tr class="app-table-row">
                       <td  class="app-table-data">CHV-783487242</td>
-                     <td class="app-table-data">Trf:/N20,000/EMP-ID-4838/</td>
+                     <td class="app-table-data">Trf:/N60,000/EMP-ID-4838/</td>
                      <td class="app-table-data">Transfer</td>
                      <td class="app-table-data">Success</td>
                      <td class="app-table-data">12/03/21</td>
                    </tr>
                      <tr class="app-table-row">
                       <td  class="app-table-data">CHV-783487242</td>
-                     <td class="app-table-data">Withdrawal:/N20,000/EMP-ID-4838/</td>
+                     <td class="app-table-data">Withdrawal:/N30,000/EMP-ID-4838/</td>
                      <td class="app-table-data">Withdrawal</td>
                      <td class="app-table-data">Success</td>
                      <td class="app-table-data">12/03/21</td>
@@ -84,7 +84,7 @@
                    </tr>
                     <tr class="app-table-row">
                       <td  class="app-table-data">CHV-783487242</td>
-                     <td class="app-table-data">Withdrawal:/N20,000/EMP-ID-4838/</td>
+                     <td class="app-table-data">Withdrawal:/N90,000/EMP-ID-4838/</td>
                      <td class="app-table-data">Withdrawal</td>
                      <td class="app-table-data">Success</td>
                      <td class="app-table-data">12/03/21</td>
