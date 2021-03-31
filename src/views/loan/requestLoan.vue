@@ -12,7 +12,7 @@
             >{{this.errors}} 
             </b-alert>
             </div>
-             <div v-if="this.result != {}">
+             <div v-if="!this.result">
                 <b-alert variant="danger"
                     dismissible
                     fade
@@ -123,6 +123,7 @@
                     v-model.trim="loanAmount"                                                                                
                     :formatter="numberFormat"
                     @blur="AmountValidation"
+                    required
                     ></b-form-input>
                     <span v-if="loanAmount != ''"><code>
     {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
@@ -147,6 +148,7 @@
                     @change="getGuarantor"
                     type="text"                                                                               
                     :formatter="numberFormat"
+                    required
                     ></b-form-input>
                     <span v-if="loanAmount != ''"><code>
     {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only

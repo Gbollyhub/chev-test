@@ -103,12 +103,12 @@ export default {
       // accNum() {
       //   return this.form.accountNumber.length == 10 ? true : false
       // },
-      getAllmembers () {
-          return this.$store.state.Allmember
-      },
-      memNumbers () {
-          return this.$store.state.memberNum
-      }
+      // getAllmembers () {
+      //     return this.$store.state.Allmember
+      // },
+      // memNumbers () {
+      //     return this.$store.state.memberNum
+      // }
     },
   methods: {
 
@@ -178,15 +178,15 @@ export default {
 
       if (this.mType == 3 || this.mType == 2) {
         if(amount < this.minLoanAmount && this.minLoanAmount != 0){
-              return this.errors = `Loan Amount must be Minimum of ₦ ${this.numberFormat(this.minLoanAmount)} only`
+              return this.errors = `Loan Amount must be Minimum of ₦ ${Number(this.minLoanAmount).toLocaleString()} only`
         }
         if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
-              return this.errors = `Loan Amount must be Maximum of ₦ ${this.numberFormat(this.maxLoanAmount)} only`
+              return this.errors = `Loan Amount must be Maximum of ₦ ${Number(this.maxLoanAmount).toLocaleString()} only`
         }
       } 
       if (this.mType == 1) {
         if (amount > mAmountDesire) {
-          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected ₦ ${this.numberFormat(this.amountExpected)}`
+          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected ₦ ${Number(this.amountExpected).toLocaleString()}`
         }  
       }
       return this.errors = "";
