@@ -76,46 +76,46 @@
             >
       <b-container class="justify-content-md-center">
           <b-row class="mb-1 text-left">
+          <b-col cols="5"><b>Loan Application ID</b></b-col>          
           <b-col cols="3"></b-col>
-          <b-col cols="5"><b>Loan Application ID</b></b-col>
           <b-col>
             <b>{{loanDetails.id}}</b>
           </b-col>          
         </b-row>
 
         <b-row class="mb-1 text-left">
+          <b-col cols="5">Loan Amount</b-col>       
           <b-col cols="3"></b-col>
-          <b-col cols="4">Loan Amount</b-col>
           <b-col>
             {{loanDetails.loanAmount | price}}
           </b-col>          
         </b-row>
         
         <b-row class="mb-1 text-left">
+          <b-col cols="5">Principal Amount</b-col>       
           <b-col cols="3"></b-col>
-          <b-col cols="4">Principal Amount</b-col>
           <b-col>
             {{loanDetails.principal | price}}
           </b-col>          
         </b-row>
         <b-row class="mb-1 text-left">
+          <b-col cols="5">Interest Amount</b-col>       
           <b-col cols="3"></b-col>
-          <b-col cols="4">Interest Amount</b-col>
           <b-col>
             {{loanDetails.interest | price}}
           </b-col>          
         </b-row>
         <b-row class="mb-1 text-left">
+          <b-col cols="5">Repayment Period</b-col>       
           <b-col cols="3"></b-col>
-          <b-col cols="5">Repayment Period</b-col>
           <b-col>
               {{loanDetails.repaymentPeriod}}
           </b-col>          
         </b-row>
         <b-row class="mb-1 text-left">
+          <b-col cols="5">Loan Application Date</b-col>       
           <b-col cols="3"></b-col>
-          <b-col cols="4">Loan Application Date</b-col>
-          <b-col>
+          <b-col cols="4">
             {{loanDetails.dateSubmitted | hum}}
           </b-col>          
         </b-row>

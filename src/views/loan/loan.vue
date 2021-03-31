@@ -40,7 +40,7 @@
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
 import LoanRequest from './requestLoan.vue'
-import History from './history'
+import History from './history.vue'
 import Waiver from './waiver.vue'
 import Offset from './offset.vue'
 
