@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      user: null,
+      user: {},
     userType: localStorage.getItem('userType'),
       transactionHistory: [
         { amount: "0", type: "Loan", date: `20-12-2020 9:00pm` },
@@ -21,7 +21,7 @@ export default {
       ]
     };
   },
-  async mounted() {    
+  async created() {    
     await this.initUser();
 },
   methods: {

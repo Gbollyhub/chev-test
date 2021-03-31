@@ -48,8 +48,8 @@ export default {
 		}
 	},
     mounted () {
-        document.title = "Chevron CEMCS Corporative"
-		document.images = "../../../assets/images/chevron-cemcs.png"
+    //     document.title = "Chevron CEMCS Corporative"
+		// document.images = "../../../assets/images/chevron-cemcs.png"
     },
 	// computed : {
     //   isLoggedIn : function(){ return this.$store.getters.isAuthenticated}

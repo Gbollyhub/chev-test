@@ -78,7 +78,7 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="DateExpected"
+                    for="DateExpected"
                     >Date Expected MM/YY <code>*</code></label
                     >
                 </b-col>
@@ -90,7 +90,7 @@
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
-                    :id="`DateExpected`"
+                    id="DateExpected"
                     v-model="effectiveYear" disabled
                     type="text"
                     ></b-form-input>
@@ -165,7 +165,7 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="DateExpected"
+                    for="DateExpected"
                     >Effective Date MM/YY <code>*</code></label
                     >
                 </b-col>
@@ -177,7 +177,7 @@
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
-                    :id="`DateExpected`"
+                    id="DateExpected"
                     v-model="effectiveYear" disabled
                     type="text"
                     ></b-form-input>
@@ -205,14 +205,14 @@
 
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
-                    <label class="pt-1 form-label" :for="Rate"
+                    <label class="pt-1 form-label" for="Rate"
                     >Rate (%) <code>*</code></label
                     >
                 </b-col>
                 <b-col sm="8">
                     <b-form-input
                     disabled
-                    :id="`Rate`"
+                    id="Rate"
                     v-model="details.intrestRate"
                     type="text"
                     ></b-form-input>
@@ -223,9 +223,9 @@
             <div v-if="(mType === 2 && loanAmount.length > 0) || (selectedLoan === 4) || (selectedLoan === 1)" >              
               <div class="header_2">Guarantors</div>
               
-              <span v-if="guarant.data !== 0">
+              <span v-if="guarantorArray.length !== 0">
                 
-                <div class="content" id='#gt' v-for="n in guarant.data" :key="n">          
+                <div class="content" v-for="(guarantor, index) in guarantorArray" :key="index">          
                   <b-row class="my-1 form-row mb-3">
                   <b-col sm="4">
                       <label
@@ -236,9 +236,8 @@
                   <!-- {{ this.guarantorNumber }} -->
                   <b-col sm="8">
                       <b-form-input
-                      :id="`guarantorNumber${n}`"
-                      v-model.lazy.trim="grant.guarantorNumber[n]"
-                      @blur="getGuarantorInfo(grant.guarantorNumber[n])"
+                      v-model.lazy.trim="guarantor.guarantorNumber"
+                      @blur="getGuarantorInfo(guarantor.guarantorNumber, index)"
                       type="number"
                       ></b-form-input>
                   </b-col>
@@ -251,8 +250,8 @@
                   </b-col>
                   <b-col sm="8">
                       <b-form-input
-                      v-bind:id="`name-${n}`"
-                      v-model="grant.guarantorName[n]"
+                      readonly
+                      :value="guarantor.guarantorName"
                       type="text"
                       ></b-form-input>
                   </b-col>
@@ -265,10 +264,9 @@
                   </b-col>
                   <b-col sm="8">
                       <b-form-input
-                      v-bind:id="`name-${n}`"
-                      v-model="grant.guarantorEmail[n]"
+                      readonly
+                     :value="guarantor.guarantorEmail"
                       type="text"
-                      @blur="addGrant(grant.guarantorNumber[n],grant.guarantorName[n],grant.guarantorEmail[n])"
                       ></b-form-input>
                   </b-col>
                   </b-row>

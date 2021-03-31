@@ -3,7 +3,6 @@ import moment from 'moment'
 
 
 export default {
-  el:'#gt',
   name: "Home",
   components: {
   },
@@ -22,7 +21,7 @@ export default {
       MemberId:"",
       InterestRate:"",
         name:{data:""},
-        guarant: {data:0},
+      guarant: {data:0},
       loanAmount:"",
       amountDesire:"",
       amountExpected: "",
@@ -97,6 +96,7 @@ export default {
         { value: 10, name: "November" },
         { value: 11, name: "December"}
       ],
+      guarantorArray: []
        
     };
   },
@@ -241,15 +241,15 @@ export default {
     
     //.............................................Start................................
     async getGuarantor() {
+      this.guarantorArray = []
       let guarantor = {            
             MemberId: parseInt(localStorage.getItem('memberId')),
             LoanId: this.details.loanId,
             LoanAmount: parseInt(this.loanAmount.replace(/,/g, ''))
           }; 
           guarantor = JSON.stringify(guarantor);           
-              await axios      
-     await axios
-        .post(`${process.env.VUE_APP_API_URL}/LoanConfig/Guarantors/count`, guarantor, {
+            
+     await axios.post(`${process.env.VUE_APP_API_URL}/LoanConfig/Guarantors/count`, guarantor, {
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -257,6 +257,16 @@ export default {
         })
         .then(response => {
           this.guarant = response.data;
+          for (let index = 0; index < response.data.data; index++) {
+            this.guarantorArray.push({
+              id: index,
+              guarantorNumber : 0,
+              guarantorName : "",
+              guarantorEmail : "", 
+          });
+          }
+          console.log('guarant>>>>>>', response.data.data)
+          console.log('guarantArray>>>>>>', this.guarantorArray)
         })
         .catch(error => {
           this.$bvToast.toast(error, {
@@ -294,12 +304,11 @@ export default {
     },
 
 
-       async getGuarantorInfo(gNo) {
+       async getGuarantorInfo(gNo, index) {
+        //  console.log("Gotten Number", gNo)
       let guarantor = {            
             EmployeeNumber: gNo
-          }; 
-          guarantor = JSON.stringify(guarantor);           
-              await axios      
+          };    
      await axios
         .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
           headers: {
@@ -309,6 +318,10 @@ export default {
         })
         .then(response => {
           this.Info = response.data.data;
+          console.log('gInfo>>>>>>>>>>>>', response.data.data)
+          this.guarantorArray[index].guarantorName = response.data.data.person.firstName + '' + response.data.data.person.lastName
+          this.guarantorArray[index].guarantorEmail = response.data.data.person.email
+
         })
         .catch(error => {
           this.$bvToast.toast(error.message, {
