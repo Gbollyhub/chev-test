@@ -17,6 +17,9 @@ export default {
       showDismissibleAlert: false,
       selectedLoan: "",
       errors: "",
+      result : {},
+      errorMsg:"",
+      
       id:0,
       Loanid:"",
       LoanId:"",
@@ -50,8 +53,8 @@ export default {
        Info: {
           EmployeeNumber:"",
           person:  {
-          firstName : {},
-          email : {},      
+          firstName : [],
+          email : [],      
        }
        },
        grantData:[],
@@ -63,22 +66,7 @@ export default {
       loan:{
         loanType: ""
       },
-      banks: [
-        { value: "214", text: "First City Monument Bank" },
-        { value: "215", text: "Unity Bank" },
-        { value: "221", text: "Stanbic IBTC Bank" },
-        { value: "232", text: "Sterling Bank" },
-        { value: "301", text: "JAIZ Bank" },
-        { value: "032", text: "Union Bank" },
-        { value: "044", text: "Access Bank" },
-        { value: "063", text: "Diamond Bank" },
-        { value: "076", text: "Skye Bank" },
-        { value: "082", text: "Keystone Bank" },
-        { value: "058", text: "GTBank Plc" },
-        { value: "050", text: "Ecobank Plc" },
-        { value: "068", text: "Standard Chartered Bank" },
-        { value: "070", text: "Fidelity Bank" }
-      ],
+      banks:[],
       lumpSums: [
          { text: "---Select Lump Sum---", value: null },
         { value: 1, text: "Annual Rent Subsidy" },
@@ -106,6 +94,7 @@ export default {
 
   async created() {
     await this.initialize();
+    await this.getAllBanks();
     this.effectiveDate();
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     this.$store.dispatch('getAllMembers')
@@ -208,11 +197,11 @@ export default {
       if (this.mType == 3 || this.mType == 2) {
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
           return this.errors = `Minimum Repayment Period supplied is not valid, enter a value greater than 
-          ${this.MinRepayPeriod} or less than or equal to ${this.MaxRepayPeriod}` 
+          ${this.MinRepayPeriod}, less than or equal to ${this.MaxRepayPeriod}` 
         }
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MaxRepayPeriod) {
           return this.errors = `Maximum Repayment Period supplied is not valid, enter a value greater than
-          ${this.MinRepayPeriod} or less than or equal to ${this.MaxRepayPeriod}`
+          ${this.MinRepayPeriod}, less than or equal to ${this.MaxRepayPeriod}`
         }
       }
 
@@ -238,6 +227,26 @@ export default {
             });
         });
     },
+
+    async getAllBanks() {        
+      await axios
+         .get(`${process.env.VUE_APP_API_URL}/banks/All`,{
+           headers: {
+             "Content-Type": "application/json;charset=utf-8"
+           }
+         })
+         .then(response => {
+           this.banks = response.data;
+         })
+         .catch(error => {
+           this.$bvToast.toast(error, {
+                 title: "Error",
+                 variant: "danger",
+                 solid: true,
+                 autoHideDelay: 5000
+             });
+         });
+     },
     
     //.............................................Start................................
     async getGuarantor() {
@@ -273,7 +282,7 @@ export default {
       console.log(this.grantData.length)
       for (let i = 0; i < this.grantData.length; i++) {
               console.log("Lenght is " + this.grantData.length)
-              console.log("gData is " + JSON.stringify(this.grantData[i]))
+              console.log("gData is " + JSON.stringify(this.grantData))
               console.log("Gno is " + gNo)
         if (this.grantData[i].EmployeeNumber === gNo) {
           console.log("Index is ", index)
@@ -282,7 +291,6 @@ export default {
           break
         }
       }
-
       console.log("Last index is ",index)
       // this.grantData.splice(index, 1)
 
@@ -292,6 +300,7 @@ export default {
         GuarantorEmail: gMail
       });
     },
+    
 
 
        async getGuarantorInfo(gNo) {
@@ -433,12 +442,16 @@ export default {
             },
           }
         )
-        .then((response) => {
-          this.errors = response.message      
-          this.result = response.data;
-          this.$emit("setParamResp", this.result);
-          localStorage.setItem("LoanPlan",JSON.stringify(this.result));
-          this.$router.push('/repayment_plan');
+        .then((response) => {    
+          if (response.data.data == null){
+            this.showDismissibleAlert = !this.showDismissibleAlert;
+            this.result = response.data;
+          }else {
+            this.result = response.data;
+            this.$emit("setParamResp", this.result);
+            localStorage.setItem("LoanPlan",JSON.stringify(this.result));
+            this.$router.push('/repayment_plan');
+          }
         })
         .catch(error => {
             this.$bvToast.toast(error, {

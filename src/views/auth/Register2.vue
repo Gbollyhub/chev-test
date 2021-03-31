@@ -90,7 +90,7 @@
 
                                 <date-picker class='input-group date down' :state="nameState"
                                  v-model="form.empDate" :config="options"></date-picker>
-                                </b-form-group> {{this.form.empDate}}
+                                </b-form-group>
 
 
                               <b-form-group
@@ -103,23 +103,32 @@
                                    ({{savings.minimumSavingsAmount | NumbersToWords | capitalize}}) Naira Only
                                 </code></span>
                                 </b-form-group>
+
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
                                 label-size="sm"
                                 label="Monthly Deduction"
                                 label-for="input-sm"
-                                invalid-feedback="Monthly Deduction is required"
-                                :state="mDeduct"
                               >
                                 <b-form-input
                                   id="input-1"
                                   v-model="form.minSaving"
                                   :formatter="numberFormat"
-                                  :state="mDeduct"
                                   required
                                 ></b-form-input>
+
                                 </b-form-group>
+                                <b-form-group
+                                label-cols="4"
+                                label-cols-lg="3"
+                                label-size="sm"
+                                label-for="input-sm"> 
+                                <span v-if="( (parseFloat(this.form.minSaving.replace(/,/g, ''))) < savings.minimumSavingsAmount ) && (form.minSaving !== '')">
+                  <p style="color:red;font-size:12px;" >Monthly Deduction must be greater than or equal to 
+                    ₦{{savings.minimumSavingsAmount | numberFormat}}
+                  </p>
+                </span></b-form-group>
                                 <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
@@ -129,6 +138,7 @@
     {{parseFloat(this.form.minSaving.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
                     </code></span>
                                 </b-form-group>
+                                
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
@@ -136,13 +146,10 @@
                                 id="input-group-3"
                                 label="First Name"
                                 label-for="input-sm"
-                                invalid-feedback="First Name is required"
-                                :state="fname"
                               >
                                 <b-form-input
                                   id="name-input"
                                   v-model="form.fname"
-                                  :state="fname"
                                   required
                                 ></b-form-input
                                 ></b-form-group>

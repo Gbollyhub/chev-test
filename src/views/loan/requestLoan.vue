@@ -2,21 +2,30 @@
 <div>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
-          <div v-if="this.errors != ''">
-            <!-- <b-alert show variant="danger" fade dismissible >
-                {{this.errors}}
-            </b-alert> -->
+          <div v-if="this.errors != ''">            
             <b-alert
                 variant="danger"
                 dismissible
                 fade
                 :show="showDismissibleAlert"
                 @dismissed="showDismissibleAlert=false"
-            >
-                {{this.errors}}
+            >{{this.errors}} 
             </b-alert>
             </div>
-
+             <div v-if="this.result != {}">
+                <b-alert variant="danger"
+                    dismissible
+                    fade
+                    :show="showDismissibleAlert"
+                    @dismissed="showDismissibleAlert=false" >
+                    <ul>
+                        <li v-for="item in result.errors" :key="item.errors">
+                            {{item.errorMessage}}
+                        </li>
+                    </ul>              
+                </b-alert>
+             </div>
+            
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group
             class="pt-1 form-label"
@@ -284,11 +293,26 @@
                 >
                 </b-col>
                 <b-col sm="8">
-                <b-form-select
+                <!-- <b-form-select
                     v-model="form.bankcode"
                     :options="banks"
                     required
-                ></b-form-select>
+                ></b-form-select> -->
+                <b-form-select
+                id="banks"
+                v-model="form.bankcode"
+                required
+            >                                               
+                <b-form-select-option :value="null" disabled>
+                    -- Select Bank -- 
+                </b-form-select-option>
+                <b-form-select-option 
+                v-for="item in banks.data" 
+                :value="item.bankCode"
+                :key="item.id">
+                    {{item.bankName}} 
+                </b-form-select-option>
+            </b-form-select >
                 </b-col>
             </b-row>
             <b-row class="my-1 form-row mb-3">
@@ -301,7 +325,6 @@
                 <b-form-input
                     id="`Account Number`"
                     v-model="form.accountNumber"
-                    :max="10"
                     @blur="verifyAcc"
                     type="number"
                     aria-describedby="input-live-help input-live-feedback"
