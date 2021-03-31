@@ -38,7 +38,11 @@ export default {
           this.user = response.data.data;
         })
         .catch((error) => {
-          error.alert('Error');
+          if (error.response.status == 401) {
+            // auto logout if 401 response returned from api
+            localStorage.removeItem('token')
+            this.$router.push('/')
+        }
         });
     }
   }

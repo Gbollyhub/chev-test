@@ -111,6 +111,8 @@ export default {
       }
     },
   methods: {
+
+   
     effectiveDate () {
       const current = new Date();
       const currentDate = current.getDate();      
@@ -442,8 +444,8 @@ export default {
             },
           }
         )
-        .then((response) => {    
-          if (response.data.data == null){
+        .then((response) => {          
+          if (response.data.data === null){
             this.showDismissibleAlert = !this.showDismissibleAlert;
             this.result = response.data;
           }else {
@@ -454,6 +456,11 @@ export default {
           }
         })
         .catch(error => {
+          if (error.response.status == 401) {
+            // auto logout if 401 response returned from api
+            localStorage.removeItem('token')
+            this.$router.push('/')
+        }
             this.$bvToast.toast(error, {
                 title: "Error",
                 variant: "danger",
