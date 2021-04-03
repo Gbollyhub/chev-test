@@ -9,8 +9,7 @@
         :per-page="perPage"
         :current-page="currentPage"
         small
-        striped hover :fields="fields" :items="users" responsive="sm"
-        >
+        striped hover :fields="fields" :items="users" responsive="sm">
         <template #cell(index)="data">
                   {{ data.index + 1 }}
               </template>
@@ -32,32 +31,6 @@
                   <b class="text-info">{{ data.item.dateSubmitted | hum }}</b></a>
               </template>
 
-            
-            <!-- <b-thead>
-                <tr class="app-table-row">
-                    <th class="app-table-header">Loan ID</th>
-                        <th class="app-table-header">Loan Amount</th>
-                    <th class="app-table-header">Date</th>
-                </tr>
-            </b-thead>
-            <b-tbody>
-                <td class="app-table-row">
-                    <tr v-for="user in users" :key="user.id" class="app-table-data">
-                        <a type="button" @click="getLoanDetails(user.id)" variant="primary">{{user.id}}  </a>                      
-                    </tr>
-                </td>
-                <td>
-                    <tr v-for="user in users" :key="user.loanAmount" class="app-table-data">
-                        <a type="button" @click="getLoanDetails(user.id)" variant="primary">{{user.loanAmount}}</a>
-                    </tr>
-                </td>
-                <td>
-                    <tr v-for="user in users" :key="user.dateSubmitted" class="app-table-data">
-                        <a type="button" @click="getLoanDetails(user.id)" variant="primary">{{user.dateSubmitted | hum}}</a>
-                    </tr>
-                </td>
-
-            </b-tbody> -->
             
         </b-table>
         <b-pagination
