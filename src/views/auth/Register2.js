@@ -44,7 +44,7 @@ export default {
         LastModifiedBy: "",    
         EmployeeNo: "",
         MemberType: "",
-        minSaving: 0,
+        minSaving: "",
       },
       login: {        
         userName:"",
@@ -80,17 +80,6 @@ export default {
   },
   mounted () {
         document.title = "Register | Chevron CEMCS Corporate"
-    },
-    computed: {
-      mDeduct() {
-        return this.form.minSaving.length >= 5
-      },
-      invalidFeedback() {
-        if (this.name.length > 0) {
-          return 'Enter at least 5 figures.'
-        }
-        return 'Please enter something.'
-      }
     },
   async created() {
     await this.loginDetails();
@@ -135,7 +124,10 @@ export default {
     },     
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity();
-      this.nameState = valid;
+      if ((parseFloat(this.form.minSaving.replace(/,/g, ''))) < this.savings.minimumSavingsAmount){
+        return;
+      }
+      // this.nameState = valid;
       return valid;
     },
     onReset(event) {
@@ -214,7 +206,8 @@ export default {
            this.$router.push(`/`);
         })
         .catch((error) => {
-          this.$bvToast.toast(error.message ,{
+          this.loader = false
+          this.$bvToast.toast(error.response.data ,{
                 title: "Warning",
                 variant: "warning",
                 solid: true,
@@ -234,7 +227,7 @@ export default {
           this.savings = response.data;
         })
         .catch(error => {
-         this.$bvToast.toast(error ,{
+         this.$bvToast.toast(error.response ,{
                 title: "Warning",
                 variant: "warning",
                 solid: true,

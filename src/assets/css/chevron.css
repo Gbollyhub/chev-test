@@ -1,110 +1,110 @@
 @font-face {
   font-family: Montserrat-Regular;
-  src: url("../../assets/fonts/Montserrat/Montserrat-Regular.ttf");
+  src: url('../../assets/fonts/Montserrat/Montserrat-Regular.ttf');
 }
 
 @font-face {
   font-family: Montserrat-Bold;
-  src: url("../../assets/fonts/Montserrat/Montserrat-Bold.ttf");
+  src: url('../../assets/fonts/Montserrat/Montserrat-Bold.ttf');
 }
 
 @font-face {
   font-family: Montserrat-SemiBold;
-  src: url("../../assets/fonts/Montserrat/Montserrat-SemiBold.ttf");
+  src: url('../../assets/fonts/Montserrat/Montserrat-SemiBold.ttf');
 }
 
 @font-face {
   font-family: Montserrat-Medium;
-  src: url("../../assets/fonts/Montserrat/Montserrat-Medium.ttf");
+  src: url('../../assets/fonts/Montserrat/Montserrat-Medium.ttf');
 }
 
 @font-face {
-  font-family: "Avenir LT Std 55 Roman";
+  font-family: 'Avenir LT Std 55 Roman';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 55 Roman"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Roman.woff") format("woff");
+  src: local('Avenir LT Std 55 Roman'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Roman.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 55 Oblique";
+  font-family: 'Avenir LT Std 55 Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 55 Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Oblique.woff") format("woff");
+  src: local('Avenir LT Std 55 Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Oblique.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 35 Light";
+  font-family: 'Avenir LT Std 35 Light';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 35 Light"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Light.woff") format("woff");
+  src: local('Avenir LT Std 35 Light'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Light.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 35 Light Oblique";
+  font-family: 'Avenir LT Std 35 Light Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 35 Light Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-LightOblique.woff")
-      format("woff");
+  src: local('Avenir LT Std 35 Light Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-LightOblique.woff')
+      format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 45 Book";
+  font-family: 'Avenir LT Std 45 Book';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 45 Book"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Book.woff") format("woff");
+  src: local('Avenir LT Std 45 Book'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Book.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 45 Book Oblique";
+  font-family: 'Avenir LT Std 45 Book Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 45 Book Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-BookOblique.woff") format("woff");
+  src: local('Avenir LT Std 45 Book Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-BookOblique.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 65 Medium";
+  font-family: 'Avenir LT Std 65 Medium';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 65 Medium"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Medium.woff") format("woff");
+  src: local('Avenir LT Std 65 Medium'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Medium.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 65 Medium Oblique";
+  font-family: 'Avenir LT Std 65 Medium Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 65 Medium Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-MediumOblique.woff")
-      format("woff");
+  src: local('Avenir LT Std 65 Medium Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-MediumOblique.woff')
+      format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 85 Heavy";
+  font-family: 'Avenir LT Std 85 Heavy';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 85 Heavy"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Heavy.woff") format("woff");
+  src: local('Avenir LT Std 85 Heavy'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Heavy.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 85 Heavy Oblique";
+  font-family: 'Avenir LT Std 85 Heavy Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 85 Heavy Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-HeavyOblique.woff")
-      format("woff");
+  src: local('Avenir LT Std 85 Heavy Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-HeavyOblique.woff')
+      format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 95 Black";
+  font-family: 'Avenir LT Std 95 Black';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 95 Black"),
-    url("../../assets/fonts/avenir/AvenirLTStd-Black.woff") format("woff");
+  src: local('Avenir LT Std 95 Black'),
+    url('../../assets/fonts/avenir/AvenirLTStd-Black.woff') format('woff');
 }
 @font-face {
-  font-family: "Avenir LT Std 95 Black Oblique";
+  font-family: 'Avenir LT Std 95 Black Oblique';
   font-style: normal;
   font-weight: normal;
-  src: local("Avenir LT Std 95 Black Oblique"),
-    url("../../assets/fonts/avenir/AvenirLTStd-BlackOblique.woff")
-      format("woff");
+  src: local('Avenir LT Std 95 Black Oblique'),
+    url('../../assets/fonts/avenir/AvenirLTStd-BlackOblique.woff')
+      format('woff');
 }
 
 /* style  */
@@ -141,7 +141,7 @@ p {
 }
 
 .background-design {
-  background-image: url("../images/login-bg.svg");
+  background-image: url('../images/login-bg.svg');
   height: 100%;
   width: 100%;
   z-index: -1;
@@ -219,14 +219,14 @@ p {
   font-weight: 400;
   color: #fbfeff;
   margin-bottom: 1rem;
-  background-color: #3785FF;
+  background-color: #3785ff;
   padding: 18px 15px;
 }
 .header_background {
   font-size: 15px;
   font-weight: 400;
   color: #fff;
-  background-color: #3785FF;
+  background-color: #3785ff;
   margin-bottom: 1rem;
   padding: 7px 1rem;
 }
@@ -239,18 +239,18 @@ p {
 }
 .saving-balance-title {
   font-size: 12px;
-  font-family: "Montserrat-Regular";
+  font-family: 'Montserrat-Regular';
   font-weight: 400;
   color: #fff;
 }
 .saving-balance-amount {
   font-size: 24px;
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
   color: #fff;
 }
 .saving-balance-balance {
   font-size: 12px;
-  font-family: "Montserrat-Regular";
+  font-family: 'Montserrat-Regular';
   font-weight: 400;
   color: #fff;
 }
@@ -260,18 +260,18 @@ p {
 }
 .loan-balance-title {
   font-size: 12px;
-  font-family: "Montserrat-Regular";
+  font-family: 'Montserrat-Regular';
   font-weight: 400;
   color: #0373bb;
 }
 .loan-balance-amount {
   font-size: 24px;
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
   color: #0373bb;
 }
 .loan-balance-balance {
   font-size: 12px;
-  font-family: "Montserrat-Regular";
+  font-family: 'Montserrat-Regular';
   font-weight: 400;
   color: #0373bb;
 }
@@ -286,6 +286,18 @@ p {
   width: 100%;
   border-radius: 38px;
   padding: 0 0 0 2rem;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  grid-auto-rows: 100px;
 }
 
 .trans-history {
@@ -361,7 +373,7 @@ p {
   font-size: 12px;
 }
 .profile-balance-amount {
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
   font-size: 20px;
   color: #fff;
   letter-spacing: 0.43px;
@@ -425,14 +437,14 @@ p {
 
 .header-title {
   font-size: 26px;
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
   color: #121272;
   margin-left: 5px;
 }
 .date-item {
   color: #c6bdbd;
   font-size: 15px;
-  font-family: "Montserrat-regular";
+  font-family: 'Montserrat-regular';
 }
 .dropdown-menu {
   border: none !important;
@@ -448,13 +460,12 @@ p {
   color: rgba(0, 0, 0, 0.5);
   font-size: 12px !important;
   /* margin-right: 35px; */
-  font-family: "Montserrat-SemiBold";
-
+  font-family: 'Montserrat-SemiBold';
 }
 .chevron-nav-dropdown-link {
   color: rgba(0, 0, 0, 0.5);
   font-size: 12px !important;
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
 }
 
 .nav-link:hover {
@@ -494,7 +505,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -518,7 +529,7 @@ input[type="number"] {
   width: 120px;
   background-color: #0373bb !important;
   font-weight: 600 !important;
-  font-family: "Montserrat-SemiBold";
+  font-family: 'Montserrat-SemiBold';
 }
 
 @media only screen and (max-width: 767px) and (min-width: 280px) {

@@ -63,21 +63,7 @@
                 ></b-form-select>
                 </b-col>
                 </b-row> 
-                <!-- <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="DateExpected"
-                    >Date Expected <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`DateExpected`"
-                    type="date"
-                    ></b-form-input>
-                </b-col>
-                </b-row> -->
+                
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
                     <label
@@ -88,14 +74,14 @@
                 </b-col>
                 <b-col sm="4">
                     <b-form-select
-                    v-model="effectiveMonth" disabled
+                    v-model="effectMonth" disabled
                     :options="Months"
                     value-field="value"
                     text-field="name"
-                ></b-form-select></b-col>
+                ></b-form-select></b-col>{{this.effectMonth}}
                     <b-col sm="3"><b-form-input
                     :id="`DateExpected`"
-                    v-model="effectiveYear" disabled
+                    v-model="effectYear" disabled
                     type="text"
                     ></b-form-input>
                 </b-col>
@@ -179,7 +165,7 @@
                     :options="Months"
                     value-field="value"
                     text-field="name"
-                ></b-form-select></b-col>
+                ></b-form-select></b-col>{{this.effectiveMonth}}
                     <b-col sm="3"><b-form-input
                     :id="`DateExpected`"
                     v-model="effectiveYear" disabled
@@ -224,11 +210,11 @@
                 </b-row>
             </div>
 
-            <div v-if="(mType === 2 && loanAmount.length > 0) || (selectedLoan === 4) || (selectedLoan === 1)" >              
-              <div class="header_2">Guarantors</div>
+            <div v-if="(mType === 2 && loanAmount.length > 9) || (selectedLoan === 4) || (selectedLoan === 1)" >              
+             
               
               <span v-if="guarant.data !== 0">
-                
+                 <div class="header_2">Guarantors</div>
                 <div class="content" id='#gt' v-for="n in guarant.data" :key="n">          
                   <b-row class="my-1 form-row mb-3">
                   <b-col sm="4">
@@ -382,9 +368,11 @@ export default {
       garantorEmpNo : "",
       garantorName : "",
       accountName : "",      
-      beneficiary : "",
+      beneficiary : "", 
+      effectMonth: "",
+      effectYear: moment.utc(new Date).format("YYYY"),     
       effectiveMonth: "",
-      effectiveYear: moment(new Date().toLocaleString()).format("YYYY"),
+      effectiveYear: moment.utc(new Date).format("YYYY"),
       form: {
         accountNumber:"",
         bankcode:"",
@@ -483,32 +471,31 @@ export default {
 
     LumpSumDate(value) {
       const current = new Date();
-      const currentYear = current.getFullYear();
-          console.log("Year is ", currentYear );      
+      const currentYear = current.getFullYear();    
       if (value == 1) {
         if ( current.getMonth() > 0) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
-        this.effectiveMonth = 0;
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
+        this.effectMonth = 0;
       }
       else if (value == 2) {
-        this.effectiveMonth = 3;
+        this.effectMonth = 3;
         if ( current.getMonth() > 3) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
       }
       else if (value == 3) {
-        this.effectiveMonth = 8;
+        this.effectMonth = 8;
         if ( current.getMonth() > 8) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
       }
       else if (value == 4) {
-        this.effectiveMonth = 10;
+        this.effectMonth = 10;
         if ( current.getMonth() > 8) {
-          this.effectiveYear = currentYear+1;
-      }else { this.effectiveYear = currentYear; }
-      }else { this.effectiveMonth = "";}
+          this.effectYear = currentYear+1;
+      }else { this.effectYear = currentYear; }
+      }else { this.effectMonth = "";}
       
       
     },
@@ -749,11 +736,14 @@ export default {
 
     async saveLoan() {
 
-      this.AmountValidation()
-      this.RepaymentValidation()
-
-      let repay = parseInt(this.minMonthlyRepayPeriod)
-      if (repay == null) { repay = 0}
+      let Month = this.effectiveMonth
+      let Year = parseInt(this.effectiveYear)
+      let repay = parseInt(this.minMonthlyRepayPeriod)      
+      if (this.mType === 1) {
+        Month = this.effectMonth
+        Year = parseInt(this.effectYear)
+        repay = 0
+      }
 
       let rawData = {
         LoanId : this.details.loanId,
@@ -761,8 +751,8 @@ export default {
         InterestRate: this.details.intrestRate,
         LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
         RepaymntPeriod: repay,
-        EffectiveMonth:this.effectiveMonth,
-        EffectiveYear: parseInt(this.effectiveYear),
+        EffectiveMonth: Month,
+        EffectiveYear: Year,
         BankCode: this.form.bankcode,
         MethodOfCollection: 2,
         AccountNumber: this.form.accountNumber,

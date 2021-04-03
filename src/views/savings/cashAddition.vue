@@ -3,6 +3,7 @@
           <div class="content-header">Cash Addition</div>
       <div class="content-sub">Make a cash addition</div>
                       <div >
+                        <b-form @submit="onSubmit" @reset="onReset" v-if="show">
                         <strong>
                           <b-form-group
                             label-cols="2"
@@ -47,21 +48,8 @@
                             label="Effective Date"
                             label-for="example-datepicker"
                           >
-                          <!-- <b-row class="my-1 form-row mb-3">
-                          <b-col sm="3">
-                    <b-form-select
-                    v-model="effectiveMonth" disabled
-                    :options="Months"
-                    value-field="value"
-                    text-field="name"
-                ></b-form-select></b-col>
-                    <b-col sm="3"><b-form-input
-                    :id="`DateExpected`"
-                    v-model="effectiveYear" disabled
-                    type="text"
-                    ></b-form-input>
-                </b-col></b-row> -->
-                            <date-picker class='input-group date down' :state="effectiveDate"
+                          
+                            <date-picker class='input-group date down'
                                  v-model="effectiveDate" :config="options"></date-picker>
                           </b-form-group>
 
@@ -73,8 +61,10 @@
                             label-for="input-sm"
                           ><b-form-select
                               id="input-3"
-                              v-model="account"
+                              name="input-account"
+                              v-model="form.account"
                               :options="accountTypes"
+                              required
                             ></b-form-select
                           ></b-form-group>
 
@@ -84,19 +74,28 @@
                             label-size="sm"
                             label="Amount Desired"
                             label-for="input-sm"
+                            required
                           ><b-form-input
                               id="input-4"
-                              v-model.trim="amount"
+                              v-model.trim="form.amount"
                               :formatter="numberFormat"
+                              placeholder="Enter amount desired"
+                              required                              
                             ></b-form-input >
-                          <span v-if="amount != ''"><code>
-    {{parseFloat(this.amount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                          <span v-if="form.amount != ''"><code>
+    {{parseFloat(this.form.amount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
                     </code></span>
                           </b-form-group>
                         </strong>
+                        <div class="form-buttons">
+                        <b-button type="submit" variant="primary">Submit</b-button>
+                        <b-button type="reset" variant="danger">Reset</b-button>
+                        </div>
+                        </b-form>
 
                        <div style="margin-top:50px;" class="button-group">
-           <button type="submit" @click="onSubmit" style="display:inline-block" class="app-form-button">Submit</button>
+           <!-- <button type="submit" @click="onSubmit" style="display:inline-block" class="app-form-button">Submit</button> -->
+           
     </div>
                       </div>
       </div>

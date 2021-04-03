@@ -6,7 +6,7 @@
       </div>
       <div class="div-block">
         <div class="profile-photo"></div>
-        <div class="profile-header"> {{user.lastName + ", " + user.firstName +" "}}</div>
+        <div class="profile-header"> {{user.person.lastName +", " + user.person.firstName+" "}}</div>
         <div class="profile-sub">Employee Number: {{user.employeeNumber}}</div>
       </div>
       <div class="admin-divider"></div>
@@ -27,10 +27,10 @@ import axios from "axios";
 export default {
     data() {
         return {
-            user : {}
+            user : null
         };
   },
-  async created() {    
+  async mounted() {    
       await this.initUser();
   },
   methods: {
@@ -44,7 +44,7 @@ export default {
           },
         })
         .then((response) => {
-          this.user = response.data.data.person;
+          this.user = response.data.data;
           const memberId = response.data.data.id;
           localStorage.setItem('memberId', memberId)
 

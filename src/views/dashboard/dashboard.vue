@@ -9,7 +9,7 @@
           <div class="settings-icon"></div>
         </div>
         <div class="admin-top-bar-right">
-          <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
+          <div class="admin-topbar-date">{{new Date().utc | humanize}}</div>
         </div>
       </div>
             <div class="content-header">Hii there! <span>{{ user.person.firstName }}</span></div>

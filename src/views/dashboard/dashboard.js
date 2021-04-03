@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      user: {},
+      user: null,
     userType: localStorage.getItem('userType'),
       transactionHistory: [
         { amount: "0", type: "Loan", date: `20-12-2020 9:00pm` },
@@ -21,7 +21,7 @@ export default {
       ]
     };
   },
-  async created() {    
+  async mounted() {    
     await this.initUser();
 },
   methods: {
@@ -38,7 +38,11 @@ export default {
           this.user = response.data.data;
         })
         .catch((error) => {
-          error.alert('Error');
+          if (error.response.status == 401) {
+            // auto logout if 401 response returned from api
+            localStorage.removeItem('token')
+            this.$router.push('/')
+        }
         });
     }
   }

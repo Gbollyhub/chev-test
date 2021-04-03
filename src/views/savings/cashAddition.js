@@ -25,8 +25,10 @@ export default {
       user: {},
       employeeNumber: '',
       name: '',
-      account: null,
-      amount: '',
+      form: {
+        account: null,
+        amount: '',
+      },
       effectiveDate: new Date(),
       effectiveMonth: "",
       effectiveYear: moment(new Date().toLocaleString()).format("YYYY"),
@@ -67,9 +69,7 @@ export default {
       }
       else {
        return  this.effectiveMonth = current.getMonth() +1;
-      }
-      
-      
+      }    
     },
 
     numberFormat(value) {
@@ -86,12 +86,27 @@ export default {
         autoHideDelay: 5000
       });
     },
-    async onSubmit() {
+
+    onReset(event) {
+      event.preventDefault()
+      // Reset our form values
+      this.form.amount = ''
+      this.form.account = null
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+
+    async onSubmit(event) {
+      event.preventDefault()
+
       let rawData = {
         TransactionDate: this.effectiveDate,
         MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.amount.replace(/,/g, '')),
-        SavingsType: this.account,
+        DepositAmount: parseInt(this.form.amount.replace(/,/g, '')),
+        SavingsType: this.form.account,
         TransactionTypeId: 3,
       };
       rawData = JSON.stringify(rawData);
