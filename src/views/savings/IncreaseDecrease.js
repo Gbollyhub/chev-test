@@ -16,13 +16,21 @@ export default {
     return {
       show: true,
       notify:0,
+      options: {
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        showClear: true,
+        showClose: true,
+      },
       user: {},
         employeeNumber: "",
         name: "",
-        effectiveDate: "",
-        account: null,
-        amount:"",
-        inc_dec: null,
+        effectiveDate: new Date(),
+        form:{
+          account: null,
+          amount:"",
+          inc_dec: null,
+        },
       accountTypes: [
         { text: "---Select Account Type---", value: null, disabled: true },
         { value: 1, text: "Savings " },
@@ -56,14 +64,29 @@ export default {
       });
     },
 
-     async onSubmit() {
+
+    onReset(event) {
+      event.preventDefault()
+      // Reset our form values
+      this.form.amount = ''
+      this.form.account = null
+      this.form.inc_dec = null
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+
+    async onSubmit(event) {
+      event.preventDefault()
       let rawData = {
 
         TransactionDate: this.effectiveDate,
         MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.amount.replace(/,/g, '')),
-        SavingsType: this.account,        
-        TransactionTypeId: this.inc_dec
+        DepositAmount: parseInt(this.form.amount.replace(/,/g, '')),
+        SavingsType: this.form.account,        
+        TransactionTypeId: this.form.inc_dec
         }
       rawData = JSON.stringify(rawData);
       await axios

@@ -2,22 +2,31 @@
 <div>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
-          <div v-if="this.errors != ''">
-            <!-- <b-alert show variant="danger" fade dismissible >
-                {{this.errors}}
-            </b-alert> -->
+          <div v-if="this.errors != ''">            
             <b-alert
                 variant="danger"
                 dismissible
                 fade
                 :show="showDismissibleAlert"
                 @dismissed="showDismissibleAlert=false"
-            >
-                {{this.errors}}
+            >{{this.errors}} 
             </b-alert>
             </div>
-
-            <b-form class="form">
+             <div v-if="!this.result">
+                <b-alert variant="danger"
+                    dismissible
+                    fade
+                    :show="showDismissibleAlert"
+                    @dismissed="showDismissibleAlert=false" >
+                    <ul>
+                        <li v-for="item in result.errors" :key="item.errors">
+                            {{item.errorMessage}}
+                        </li>
+                    </ul>              
+                </b-alert>
+             </div>
+            
+            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group
             class="pt-1 form-label"
             label-cols="4"
@@ -47,7 +56,7 @@
             <div v-if="mType === 1">
                 <b-row class="my-1 form-row mb-3 ">
                 <b-col sm="4">
-                <label class="pt-1 form-label" :for="lumpSum"
+                <label class="pt-1 form-label"
                     >Expected Lump Sum Type<code>*</code></label
                 >
                 </b-col>
@@ -59,39 +68,24 @@
                 ></b-form-select>
                 </b-col>
                 </b-row> 
-                <!-- <b-row class="my-1 form-row mb-3">
-                <b-col sm="4">
-                    <label
-                    class="pt-1 form-label"
-                    :for="DateExpected"
-                    >Date Expected <code>*</code></label
-                    >
-                </b-col>
-                <b-col sm="8">
-                    <b-form-input
-                    :id="`DateExpected`"
-                    type="date"
-                    ></b-form-input>
-                </b-col>
-                </b-row> -->
+                
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    for="DateExpected"
                     >Date Expected MM/YY <code>*</code></label
                     >
                 </b-col>
                 <b-col sm="4">
                     <b-form-select
-                    v-model="effectiveMonth" disabled
+                    v-model="effectMonth" disabled
                     :options="Months"
                     value-field="value"
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
-                    id="DateExpected"
-                    v-model="effectiveYear" disabled
+                    :id="`DateExpected`"
+                    v-model="effectYear" disabled
                     type="text"
                     ></b-form-input>
                 </b-col>
@@ -100,7 +94,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="AmountExpected"
                     >Amount Expected <code>*</code></label
                     >
                 </b-col>
@@ -120,7 +113,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    :for="AmountDesire"
                     >Amount Desired <code>*</code></label
                     >
                 </b-col>
@@ -130,6 +122,8 @@
                     type="text"
                     v-model.trim="loanAmount"                                                                                
                     :formatter="numberFormat"
+                    @blur="AmountValidation"
+                    required
                     ></b-form-input>
                     <span v-if="loanAmount != ''"><code>
     {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
@@ -154,6 +148,7 @@
                     @change="getGuarantor"
                     type="text"                                                                               
                     :formatter="numberFormat"
+                    required
                     ></b-form-input>
                     <span v-if="loanAmount != ''"><code>
     {{parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
@@ -165,7 +160,6 @@
                 <b-col sm="4">
                     <label
                     class="pt-1 form-label"
-                    for="DateExpected"
                     >Effective Date MM/YY <code>*</code></label
                     >
                 </b-col>
@@ -177,7 +171,7 @@
                     text-field="name"
                 ></b-form-select></b-col>
                     <b-col sm="3"><b-form-input
-                    id="DateExpected"
+                    :id="`DateExpected`"
                     v-model="effectiveYear" disabled
                     type="text"
                     ></b-form-input>
@@ -205,14 +199,14 @@
 
                 <b-row class="my-1 form-row mb-3">
                 <b-col sm="4">
-                    <label class="pt-1 form-label" for="Rate"
+                    <label class="pt-1 form-label"
                     >Rate (%) <code>*</code></label
                     >
                 </b-col>
                 <b-col sm="8">
                     <b-form-input
                     disabled
-                    id="Rate"
+                    :id="`Rate`"
                     v-model="details.intrestRate"
                     type="text"
                     ></b-form-input>
@@ -220,53 +214,68 @@
                 </b-row>
             </div>
 
-            <div v-if="(mType === 2 && loanAmount.length > 0) || (selectedLoan === 4) || (selectedLoan === 1)" >              
-              <div class="header_2">Guarantors</div>
-              
-              <span v-if="guarantorArray.length !== 0">
+            <div v-if="(mType === 2 && loanAmount.length > 9) || (selectedLoan === 4) || (selectedLoan === 1)" >              
+                            
+              <span v-if="guarant.data !== 0">
+                  <div class="header_2">Guarantors</div>
                 
-                <div class="content" v-for="(guarantor, index) in guarantorArray" :key="index">          
+                <div class="wrapper" id='#gt' v-for="n in guarant.data" :key="n">          
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"                                       
                       >Employee Number<code>*</code></label
                       >
-                  </b-col>
+                  </b-col> -->
                   <!-- {{ this.guarantorNumber }} -->
                   <b-col sm="8">
+                      <label
+                      class="pt-1 form-label"                                       
+                      >Employee Number<code>*</code></label
+                      >
                       <b-form-input
-                      v-model.lazy.trim="guarantor.guarantorNumber"
-                      @blur="getGuarantorInfo(guarantor.guarantorNumber, index)"
+                      :id="`guarantorNumber${n}`"
+                      v-model.lazy.trim="grant.guarantorNumber[n]"
+                      @blur="getGuarantorInfo(grant.guarantorNumber[n])"
                       type="number"
+                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Name <code>*</code></label>
-                  </b-col>
+                  </b-col> -->
                   <b-col sm="8">
+                      <label
+                      class="pt-1 form-label"
+                      >Name <code>*</code></label>
                       <b-form-input
-                      readonly
-                      :value="guarantor.guarantorName"
+                      v-bind:id="`name-${n}`"
+                      v-model="grant.guarantorName[n]"
                       type="text"
+                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <b-col sm="4">
+                  <!-- <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Email Address  <code>*</code></label>
-                  </b-col>
-                  <b-col sm="8">
+                  </b-col> -->
+                  <b-col sm="10">
+                      <label
+                      class="pt-1 form-label"
+                      >Email Address  <code>*</code></label>
                       <b-form-input
-                      readonly
-                     :value="guarantor.guarantorEmail"
+                      v-bind:id="`name-${n}`"
+                      v-model="grant.guarantorEmail[n]"
                       type="text"
+                      required
+                      @blur="addGrant(grant.guarantorNumber[n],grant.guarantorName[n],grant.guarantorEmail[n])"
                       ></b-form-input>
                   </b-col>
                   </b-row>
@@ -286,10 +295,26 @@
                 >
                 </b-col>
                 <b-col sm="8">
-                <b-form-select
+                <!-- <b-form-select
                     v-model="form.bankcode"
                     :options="banks"
-                ></b-form-select>
+                    required
+                ></b-form-select> -->
+                <b-form-select
+                id="banks"
+                v-model="form.bankcode"
+                required
+            >                                               
+                <b-form-select-option :value="null" disabled>
+                    -- Select Bank -- 
+                </b-form-select-option>
+                <b-form-select-option 
+                v-for="item in banks.data" 
+                :value="item.bankCode"
+                :key="item.id">
+                    {{item.bankName}} 
+                </b-form-select-option>
+            </b-form-select >
                 </b-col>
             </b-row>
             <b-row class="my-1 form-row mb-3">
@@ -302,16 +327,15 @@
                 <b-form-input
                     id="`Account Number`"
                     v-model="form.accountNumber"
-                    :max="10"
                     @blur="verifyAcc"
                     type="number"
-                    :state="accNum"
                     aria-describedby="input-live-help input-live-feedback"
                     trim
+                    required
                 ></b-form-input>
-                <b-form-invalid-feedback id="input-live-feedback">
-                  Account Number must be 10 digits
-                </b-form-invalid-feedback>
+               <div v-if="form.accountNumber.length !== 10 && form.accountNumber !== ''">
+                  <p style="color:red;font-size:12px;" >Account Number must be 10 digits</p>
+                </div>
                 </b-col>
             </b-row>
             <b-row class="my-1 form-row mb-3">
@@ -327,14 +351,15 @@
                     id="`Beneficiary`"
                     v-model="name.data"
                     type="text"
+                    required
                 ></b-form-input>
                 </b-col>
             </b-row>
-            </b-form>
     <div style="margin-top:50px;" class="button-group">
-          <button @click="reset" style="background:#c00;display:inline-block;margin-right:30px" class="app-form-button">Reset</button>
-           <button @click="saveLoan" style="display:inline-block" class="app-form-button">Submit</button>
+          <button type="reset" style="background:#c00;display:inline-block;margin-right:30px" class="app-form-button">Reset</button>
+           <button type="submit" style="display:inline-block" class="app-form-button">Submit</button>
     </div>
+            </b-form>
       </div>
     </template>
 
