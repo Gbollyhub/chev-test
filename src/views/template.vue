@@ -12,13 +12,8 @@
           <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
         </div>
       </div>
-            <div class="content-header">Schedule</div>
+            <div class="content-header">Page Name</div>
               <div class="content-sub2"> Page Description</div>
-
-              <ViewPlan @setParamResp="Onset"></ViewPlan>
-                      {{this.set.data}}
-                      {{this.set.message}}
-                      {{this.set.errors}}
 
             </div>
             <div class="app-admin-col-3">
@@ -31,28 +26,11 @@
 <script>
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
-import ViewPlan from "../../components/viewSchedule.vue";
 export default {
   components: {
     Leftbar,
-    Rightbar,
-    ViewPlan
+    Rightbar
   },
-  data () {
-    return {
-      set:{
-        data: "",
-        message:"",
-        errors: ""
-      }
-    }
-
-  },
-  methods: {
-    async Onset(result) {
-    this.set = await result;
-    console.log(result);
-  }}
 }
 
 </script>
