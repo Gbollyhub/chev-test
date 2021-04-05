@@ -31,19 +31,20 @@ export default {
            .then(() => {       
             this.loader = false;
 
-            // if (this.$route.query){
-            //     let path = this.$route.query.path.toLowerCase()
-            //     console.log("Path", path)
-            //     this.$router.push(`/${path}`)               
-            //     return
-            //  }
-
-            if ((localStorage.getItem('userType')) == 2) {
-                 this.$router.push('/overview') 
+            if (this.$route.query){
+                let path = this.$route.query.path.toLowerCase()
+                console.log("Path", path)
+                this.$router.push(`/${path}`)
+                return
+             }
+             if ((localStorage.getItem('userType')) == 2) {
+                this.$router.go({path:'/overview'}) 
+                return
             }
             else  if ((localStorage.getItem('userType')) == 3) {
-                this.$router.push('/view_approval') 
-           }
+                this.$router.go({path:'/view_approval'}) 
+                return
+            } 
                 
 
             // console.log(localStorage.getItem('userType'))

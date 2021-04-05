@@ -17,7 +17,7 @@ export default {
       showDismissibleAlert: false,
       selectedLoan: "",
       errors: "",
-      result : {},
+      result : [],
       errorMsg:"",
       
       id:0,
@@ -401,7 +401,8 @@ export default {
 
     async onSubmit(event) {
       event.preventDefault()
-
+      
+      this.showDismissibleAlert = !this.showDismissibleAlert;
       if (this.AmountValidation()) {
         return this.errors;
       }
@@ -446,7 +447,6 @@ export default {
         )
         .then((response) => {          
           if (response.data.data === null){
-            this.showDismissibleAlert = !this.showDismissibleAlert;
             this.result = response.data;
           }else {
             this.result = response.data;

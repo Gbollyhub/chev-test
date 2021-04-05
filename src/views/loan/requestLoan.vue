@@ -12,7 +12,7 @@
             >{{this.errors}} 
             </b-alert>
             </div>
-             <div v-if="!this.result">
+             <div v-if="this.result !=''">
                 <b-alert variant="danger"
                     dismissible
                     fade
@@ -189,7 +189,7 @@
                 <b-col sm="8">
                     <b-form-input
                     :id="`payment period`"
-                    v-model.lazy="minMonthlyRepayPeriod"
+                    v-model.lazy.trim="minMonthlyRepayPeriod"
                     :max="this.MaxRepayPeriod" :min="this.MinRepayPeriod"
                     type="number"
                     @blur="RepaymentValidation" 
