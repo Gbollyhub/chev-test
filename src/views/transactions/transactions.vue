@@ -31,8 +31,8 @@
 <script>
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
-import Transfer from './transfer'
-import Withdrawal from './withdrawal'
+import Transfer from './transfer.vue'
+import Withdrawal from './withdrawal.vue'
 export default {
   name: "Home",
   components: {

@@ -6,7 +6,7 @@
             <div class="app-admin-col-2">
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
+          <div class="settings-icon" @click="$router.go(-1)"></div>
         </div>
         <div class="admin-top-bar-right">
           <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
@@ -564,7 +564,7 @@ export default {
       };
       rawData = JSON.stringify(rawData);
       await axios
-        .post(`${process.env.VUE_APP_API_URL}/add/employee`, rawData, {
+        .post(`${process.env.VUE_APP_API_URL}/employee`, rawData, {
           headers: {
             "Content-Type": "application/json;charset=utf-8"
           }

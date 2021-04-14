@@ -31,6 +31,7 @@ export default {
         marital: null,        
         DoB: new Date(),
         empDate : new Date(),
+        RetDate: new Date(),
         email: "",
         Personalemail:"",
         location: null,
@@ -164,10 +165,16 @@ export default {
         return;
       }
 
+      let RetDate = null
+      if (this.login.userTypeCategory == 2){
+        RetDate = this.form.RetDate
+      }
+
       let rawData = {
         EmployeeNumber: this.login.userName,
         MemberType: parseInt(this.login.userTypeCategory),
         EmploymentDate: this.form.empDate,
+        RetirementDate : RetDate,
         Location: this.form.location,
         SavingsAmount: parseInt(this.form.minSaving.replace(/,/g, '')),
         Person: {
@@ -214,6 +221,16 @@ export default {
                 autoHideDelay: 5000
             })
         });
+        await axios
+        .post(`${process.env.VUE_APP_API_URL}/Members/CreatePending`, rawData, {
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+             Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
+        .then(() =>{  this.makeToast(`success`);    })
+
+
     },
     async initMinSavings() {        
      await axios

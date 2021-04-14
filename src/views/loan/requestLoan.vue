@@ -2,7 +2,7 @@
 <div>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
-          <div v-if="this.errors != ''">            
+        <div v-if="this.errors != ''">            
             <b-alert
                 variant="danger"
                 dismissible
@@ -11,20 +11,20 @@
                 @dismissed="showDismissibleAlert=false"
             >{{this.errors}} 
             </b-alert>
-            </div>
-             <div v-if="!this.result">
-                <b-alert variant="danger"
-                    dismissible
-                    fade
-                    :show="showDismissibleAlert"
-                    @dismissed="showDismissibleAlert=false" >
-                    <ul>
-                        <li v-for="item in result.errors" :key="item.errors">
-                            {{item.errorMessage}}
-                        </li>
-                    </ul>              
-                </b-alert>
-             </div>
+        </div>
+        <div v-if="this.result.errors.length !=''">
+            <b-alert variant="danger"
+                dismissible
+                fade
+                :show="showDismissibleAlert"
+                @dismissed="showDismissibleAlert=false" >
+                <ul>
+                    <li v-for="item in result.errors" :key="item.errors">
+                        {{item.errorMessage}}
+                    </li>
+                </ul>              
+            </b-alert>
+        </div>
             
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
             <b-form-group
@@ -216,66 +216,51 @@
 
             <div v-if="(mType === 2 && loanAmount.length > 9) || (selectedLoan === 4) || (selectedLoan === 1)" >              
                             
-              <span v-if="guarant.data !== 0">
-                  <div class="header_2">Guarantors</div>
+              <span v-if="guarantorArray.length !== 0">
+              <div class="header_2">Guarantors</div>
                 
-                <div class="wrapper" id='#gt' v-for="n in guarant.data" :key="n">          
+                <div class="wrapper" v-for="(guarantor, index) in guarantorArray" :key="index">          
                   <b-row class="my-1 form-row mb-3">
-                  <!-- <b-col sm="4">
+                  <b-col sm="4">
                       <label
                       class="pt-1 form-label"                                       
                       >Employee Number<code>*</code></label
                       >
-                  </b-col> -->
+                  </b-col>
                   <!-- {{ this.guarantorNumber }} -->
                   <b-col sm="8">
-                      <label
-                      class="pt-1 form-label"                                       
-                      >Employee Number<code>*</code></label
-                      >
                       <b-form-input
-                      :id="`guarantorNumber${n}`"
-                      v-model.lazy.trim="grant.guarantorNumber[n]"
-                      @blur="getGuarantorInfo(grant.guarantorNumber[n])"
+                      v-model.lazy.trim="guarantor.guarantorNumber"
+                      @blur="getGuarantorInfo(guarantor.guarantorNumber, index)"
                       type="number"
-                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <!-- <b-col sm="4">
+                  <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Name <code>*</code></label>
-                  </b-col> -->
+                  </b-col>
                   <b-col sm="8">
-                      <label
-                      class="pt-1 form-label"
-                      >Name <code>*</code></label>
                       <b-form-input
-                      v-bind:id="`name-${n}`"
-                      v-model="grant.guarantorName[n]"
+                      readonly
+                      :value="guarantor.guarantorName"
                       type="text"
-                      required
                       ></b-form-input>
                   </b-col>
                   </b-row>
                   <b-row class="my-1 form-row mb-3">
-                  <!-- <b-col sm="4">
+                  <b-col sm="4">
                       <label
                       class="pt-1 form-label"
                       >Email Address  <code>*</code></label>
-                  </b-col> -->
-                  <b-col sm="10">
-                      <label
-                      class="pt-1 form-label"
-                      >Email Address  <code>*</code></label>
+                  </b-col>
+                  <b-col sm="8">
                       <b-form-input
-                      v-bind:id="`name-${n}`"
-                      v-model="grant.guarantorEmail[n]"
+                      readonly
+                     :value="guarantor.guarantorEmail"
                       type="text"
-                      required
-                      @blur="addGrant(grant.guarantorNumber[n],grant.guarantorName[n],grant.guarantorEmail[n])"
                       ></b-form-input>
                   </b-col>
                   </b-row>

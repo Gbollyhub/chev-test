@@ -92,6 +92,21 @@
                                  v-model="form.empDate" :config="options"></date-picker>
                                 </b-form-group>
 
+                                <span v-if="login.userTypeCategory == 2">
+                                  <b-form-group
+                                  label-cols="4"
+                                  label-cols-lg="3"
+                                  label-size="sm"
+                                  label="Date Of Retirement"
+                                  label-for="example-datepicker"
+                                  invalid-feedback="Date of Retirement is required"
+                                  :state="nameState">
+
+                                  <date-picker class='input-group date down' :state="nameState"
+                                  v-model="form.RetDate" :config="options"></date-picker>
+                                  </b-form-group>
+                                </span>
+
 
                               <b-form-group
                                 label-cols="4"

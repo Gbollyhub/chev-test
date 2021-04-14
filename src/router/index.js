@@ -7,7 +7,7 @@ import Transfer_ from "../views/tranfer/transfer_.vue";
 import Withdrawal from "../views/withdrawal/withdrawal.vue";
 import Members from "../views/registration/members.vue";
 import Loan from "../views/loans/loans.vue";
-import Plan from "../views/loans/viewSchedule.vue";
+import Plan from "../views/loan/repaymentPlan.vue";
 import Setup from "../views/loanSetUp/setup.vue";
 import Config from "../views/loanSetUp/config.vue";
 import PriCon from "../views/loanSetUp/pry_con_setup.vue";
@@ -69,7 +69,6 @@ const routes = [
     path: "/confirmation",
     name: "Confirmation",
     component: Confirmation,
-    meta: {requiresAuth: true},
   },
   {
     path: "/overview",
