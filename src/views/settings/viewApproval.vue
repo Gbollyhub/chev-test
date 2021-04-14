@@ -1,87 +1,86 @@
-<template>
-            <div class="app-admin-section">
-            <div class="app-admin-col-1">
-            <Leftbar/>
-            </div>
-            <div class="app-admin-col-2">
-            <div class="admin-top-bar">
-        <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
-        </div>
-        <div class="admin-top-bar-right">
-          <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
-        </div>
-      </div>
+<template><div>
        <div class="content-header">Approval Details</div>
-                        <div>
-                            <div>
-                                <b-row class="my-1 form-row mb-3 ">
-                                  <b-col sm="4">
-                                    <b-form-select
-                                      v-model="selectedLoan"
-                                      @change="initapprove(selectedLoan)"
-                                      :options="options"
-                                    ></b-form-select>
-                                  </b-col>
-                                </b-row>
-                            </div>
-                                <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
-                                    <template #cell(index)="data">
-                                        {{ data.index + 1 }}
-                                    </template>
-                                    <template #cell(name)="data">
-                                        <b class="text-info">{{ data.item.person.lastName.toUpperCase() }}</b>,
-                                        <b>{{ data.item.person.firstName}}</b>
-                                    </template>
-                                    <template #cell(employeeNumber)="data">
-                                        {{ data.item.employeeNumber }}
-                                    </template>
-                                    <template #cell(active)="data">
-                                        <span v-if="!data.item.approved">Not-Approved</span>
-                                        <span v-if="data.item.approved">Approved</span>
-                                    </template>
-                                    <template #cell(memberType)="data">
-                                        <span v-if="data.item.memberType === 1">Regular Member</span>
-                                        <span v-if="data.item.memberType === 2">Retiree Member</span>
-                                        <span v-if="data.item.memberType === 3">Expatriate Member</span>
-                                    </template>
-                                    <template #cell(show_details)="data">
-                                        <span v-if="!data.item.approved">
-                                          <b-button variant="primary" @click="updatePending" class="float-sm-left">Approve</b-button>                                    
-                                        </span>
-                                        <span v-if="data.item.approved">
-                                          <b-button variant="primary" @click="updatePending" class="float-sm-left">Pending</b-button>                                    
-                                        </span>
-                                        </template>
-                                </b-table>
-                            <!-- </div> -->
-                          </div>
-    </div>
-      <div class="app-admin-col-3">
-              <Rightbar />
+          <div>
+            <div style="margin-top:50px;" class="button-group">
+              <!-- <div>
+                  <b-row class="my-1 form-row mb-3 ">
+                    <b-col sm="4">
+                      <b-form-select
+                        v-model="selectedOpt"
+                        :options="options"
+                      ></b-form-select>
+                    </b-col>
+                  </b-row>
+              </div> -->
+              <div>
+                <b-row class="my-1 form-row mb-3 ">
+                  <b-col sm="4">
+                    <b-form-select
+                      :id="`modules`"
+                      v-model="selectedModule"
+                      @change="initapprove()"
+                      required>
+                      <b-form-select-option :value="null" disabled>
+                        -- Select Module -- 
+                      </b-form-select-option>
+                      <b-form-select-option 
+                      v-for="item in modules.data" 
+                      :value="item.id"
+                      :key="item.id">
+                        {{item.name}} 
+                      </b-form-select-option>                      
+                    </b-form-select>
+                  </b-col>
+                </b-row>
+              </div>
             </div>
+            <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
+                <template #cell(index)="data">
+                    {{ data.index + 1 }}
+                </template>
+                <template #cell(name)="data">
+                    <b class="text-info">{{ data.item.itemData.person.lastName.toUpperCase() }}</b>,
+                    <b>{{ data.item.itemData.person.firstName}}</b>
+                </template>
+                <template #cell(employeeNumber)="data">
+                    {{ data.item.itemData.employeeNumber }}
+                </template>
+                <template #cell(active)="data">
+                    <span v-if="!data.item.itemData.approved">Not-Approved</span>
+                    <span v-if="data.item.itemData.approved">Approved</span>
+                </template>
+                <template #cell(memberType)="data">
+                    <span v-if="data.item.itemData.memberType === 1">Regular Member</span>
+                    <span v-if="data.item.itemData.memberType === 2">Retiree Member</span>
+                    <span v-if="data.item.itemData.memberType === 3">Expatriate Member</span>
+                </template>
+                <template #cell(show_details)="data">
+                    <span v-if="!data.item.itemData.approved">
+                      <b-button variant="primary" @click="updatePending" class="float-sm-left">Approve</b-button>                                    
+                    </span>
+                    <span v-if="data.item.itemData.approved">
+                      <b-button variant="primary" @click="updatePending" class="float-sm-left">Pending</b-button>                                    
+                    </span>
+                    </template>
+            </b-table>
+      </div>
 </div>
 </template>
 
 
 <script>
-import Leftbar from '../../components/leftbar/leftbar'
-import Rightbar from '../../components/rightbar/rightbar'
 import axios from 'axios'
 
 export default {
-  name: "Home",
-  components: {
-    Leftbar,
-    Rightbar
-  },
   data() {
     return {
+       modules: [],
+      selectedModule:null,
       approve: [],      
       approveData: {
         aprroved:Boolean
       },      
-      selectedLoan: null,  
+      selectedOpt: null,  
       fields: [
         {key: 'index', label: 'S/N'},
         { key: 'name', label: 'Full Name' },
@@ -99,6 +98,10 @@ export default {
   },
   async created() {    
     await this.getAll();
+    await this.initModules();
+    await this.initapprove();
+
+
   },
   methods: {
     async getAll() {        
@@ -116,8 +119,33 @@ export default {
           error.alert("Error");
         });
     }, 
-    // async initapprove(selectedLoan) {  
-      async initapprove() {        
+
+    async initModules() {        
+     await axios
+        .get(`${process.env.VUE_APP_API_URL}/ModuleApprovers/Modules`,{
+          headers: {
+            "Content-Type": "application/json;charset=utf-8"
+          }
+        })
+        .then(response => {
+          this.modules = response.data;
+        })
+        .catch(error => {
+            this.$bvToast.toast(error, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+          });
+    },
+    // async initapprove(selected) {  
+      async initapprove() {
+
+        // if (selectedModule == 2){
+
+        // }
+
      await axios
         // .get( `${process.env.VUE_APP_API_URL}/Members/Approved/${selectedLoan}`,{
           // -----for pending------
@@ -161,5 +189,3 @@ export default {
 };
   
 </script>
-
-<style src=".././global.css"></style>

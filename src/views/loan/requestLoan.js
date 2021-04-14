@@ -3,7 +3,6 @@ import moment from 'moment'
 
 
 export default {
-  el:'#gt',
   name: "Home",
   components: {
   },
@@ -15,9 +14,11 @@ export default {
       dismissSecs: 5,
       dismissCountDown: 0,
       showDismissibleAlert: false,
-      selectedLoan: "",
+      selectedLoan: null,
       errors: "",
-      result : [],
+      result : {
+        errors:{}
+      },
       errorMsg:"",
       
       id:0,
@@ -26,7 +27,7 @@ export default {
       MemberId:"",
       InterestRate:"",
         name:{data:""},
-        guarant: {data:0},
+      guarant: {data:0},
       loanAmount:"",
       amountDesire:"",
       amountExpected: "",
@@ -88,7 +89,7 @@ export default {
         { value: 10, name: "November" },
         { value: 11, name: "December"}
       ],
-       
+      guarantorArray: []       
     };
   },
 
@@ -100,15 +101,7 @@ export default {
     this.$store.dispatch('getAllMembers')
   },
   computed: {
-      // accNum() {
-      //   return this.form.accountNumber.length == 10 ? true : false
-      // },
-      // getAllmembers () {
-      //     return this.$store.state.Allmember
-      // },
-      // memNumbers () {
-      //     return this.$store.state.memberNum
-      // }
+      
     },
   methods: {
 
@@ -149,9 +142,12 @@ export default {
         this.effectMonth = 10;
         if ( current.getMonth() > 8) {
           this.effectYear = currentYear+1;
+          console.log(this.effectYear)
       }else { this.effectYear = currentYear; }
       }else { this.effectMonth = "";}
     },
+
+    
 
     
     numberFormat(value) {
@@ -186,7 +182,7 @@ export default {
       } 
       if (this.mType == 1) {
         if (amount > mAmountDesire) {
-          return this.errors = `Sorry, Maximum loan value is 75% of your Amount Expected ₦ ${Number(this.amountExpected).toLocaleString()}`
+          return this.errors = `Enter a value less than or equal to 75% (${Number(mAmountDesire).toLocaleString()}) of Amount Expected ₦ ${Number(expectedAmount).toLocaleString()}`
         }  
       }
       return this.errors = "";
@@ -252,15 +248,15 @@ export default {
     
     //.............................................Start................................
     async getGuarantor() {
+      this.guarantorArray = []
       let guarantor = {            
             MemberId: parseInt(localStorage.getItem('memberId')),
             LoanId: this.details.loanId,
             LoanAmount: parseInt(this.loanAmount.replace(/,/g, ''))
           }; 
           guarantor = JSON.stringify(guarantor);           
-              await axios      
-     await axios
-        .post(`${process.env.VUE_APP_API_URL}/LoanConfig/Guarantors/count`, guarantor, {
+            
+     await axios.post(`${process.env.VUE_APP_API_URL}/LoanConfig/Guarantors/count`, guarantor, {
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -268,6 +264,16 @@ export default {
         })
         .then(response => {
           this.guarant = response.data;
+          for (let index = 0; index < response.data.data; index++) {
+            this.guarantorArray.push({
+              id: index,
+              guarantorNumber : 0,
+              guarantorName : "",
+              guarantorEmail : "", 
+          });
+          }
+          console.log('guarant>>>>>>', response.data.data)
+          console.log('guarantArray>>>>>>', this.guarantorArray)
         })
         .catch(error => {
           this.$bvToast.toast(error, {
@@ -279,38 +285,11 @@ export default {
         });
     },
 
-    addGrant(gNo,gName,gMail){
-      let index = null
-      console.log(this.grantData.length)
-      for (let i = 0; i < this.grantData.length; i++) {
-              console.log("Lenght is " + this.grantData.length)
-              console.log("gData is " + JSON.stringify(this.grantData))
-              console.log("Gno is " + gNo)
-        if (this.grantData[i].EmployeeNumber === gNo) {
-          console.log("Index is ", index)
-          console.log("i is ",i)
-          index = i
-          break
-        }
-      }
-      console.log("Last index is ",index)
-      // this.grantData.splice(index, 1)
-
-      this.grantData.push({
-        EmployeeNumber : gNo,
-        GuarantorName: gName,
-        GuarantorEmail: gMail
-      });
-    },
-    
-
-
-       async getGuarantorInfo(gNo) {
+      async getGuarantorInfo(gNo, index) {
+        //  console.log("Gotten Number", gNo)
       let guarantor = {            
             EmployeeNumber: gNo
-          }; 
-          guarantor = JSON.stringify(guarantor);           
-              await axios      
+          };    
      await axios
         .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
           headers: {
@@ -320,6 +299,10 @@ export default {
         })
         .then(response => {
           this.Info = response.data.data;
+          console.log('gInfo>>>>>>>>>>>>', response.data.data)
+          this.guarantorArray[index].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
+          this.guarantorArray[index].guarantorEmail = response.data.data.person.email
+
         })
         .catch(error => {
           this.$bvToast.toast(error.message, {
@@ -401,8 +384,7 @@ export default {
 
     async onSubmit(event) {
       event.preventDefault()
-      
-      this.showDismissibleAlert = !this.showDismissibleAlert;
+
       if (this.AmountValidation()) {
         return this.errors;
       }
@@ -431,7 +413,7 @@ export default {
         MethodOfCollection: 2,
         AccountNumber: this.form.accountNumber,
         AccountName: this.name.data,
-        LoanGuarantors: this.grantData
+        LoanGuarantors: this.guarantorArray
       }
       rawData = JSON.stringify(rawData);
       await axios
@@ -447,6 +429,7 @@ export default {
         )
         .then((response) => {          
           if (response.data.data === null){
+            this.showDismissibleAlert = !this.showDismissibleAlert;
             this.result = response.data;
           }else {
             this.result = response.data;
