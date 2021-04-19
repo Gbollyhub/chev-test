@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 // import Home from "../views/Home.vue";
-import Dashboard from "../views/dashboard/dashboard.vue";
+import Overview from "../views/dashboard/dashboard.vue";
 import Transfer from "../views/tranfer/transfer.vue";
 import Transfer_ from "../views/tranfer/transfer_.vue";
 import Withdrawal from "../views/withdrawal/withdrawal.vue";
@@ -72,8 +72,8 @@ const routes = [
   },
   {
     path: "/overview",
-    name: "Dashboard",
-    component: Dashboard,    
+    name: "Overview",
+    component: Overview,    
     meta: {requiresAuth: true},
   },
   {

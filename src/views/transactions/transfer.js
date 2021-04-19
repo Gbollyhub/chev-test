@@ -30,9 +30,9 @@ export default {
           showClose: true,
         },
       user: {},
+      balance:{},
       employeeNumber: '',
       name: '',
-      balance:'',
       amount:'',
       sourceAccount: 0,
       destAccount: 0,
@@ -60,6 +60,14 @@ export default {
 
   async mounted() {
     await this.initUser();
+  },
+  computed: {
+    memberBalance() {
+      return this.$store.state.balance
+    }
+  },
+  created() {
+    this.$store.dispatch('memberBalance');
   },
   methods: {
     closeModal(){

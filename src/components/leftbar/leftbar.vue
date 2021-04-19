@@ -7,13 +7,25 @@
       <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Dashboard</div>
       </div>
-      </router-link> 
-      <router-link class= "active-link" to="/loan-option"> 
+      </router-link>
+      <router-link class="active-link" to="#">
+        <div class="admin-col-link-div">
+        <div class="admin-col-1-links"></div>
+        <div class="admin-col-link-text">Loan Guidelines</div>
+      </div>
+      </router-link>
+      <router-link class= "active-link" to="/loan-option">
  <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Loan</div>
       </div>
-      </router-link> 
+      </router-link>
+      <router-link class= "active-link" to="#">
+        <div class="admin-col-link-div">
+        <div class="admin-col-1-links"></div>
+        <div class="admin-col-link-text">Loan Calculator</div>
+      </div>
+      </router-link>
 <router-link class= "active-link" to="/savings"> 
  <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>

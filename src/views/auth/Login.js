@@ -23,8 +23,7 @@ export default {
     //     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     //     this.$store.dispatch('memberDetails')
     //   },
-        methods: {
-    
+        methods: {    
             login () {  
                 this.loader = true          
             this.$store.dispatch('login', this.user)
@@ -46,15 +45,7 @@ export default {
               
             } 
              }
-            
-                
-
-            // console.log(localStorage.getItem('userType'))
-            // if ((localStorage.getItem('userType')) == 2) 
-            //          window.location.replace('/overview')
-            // if ((localStorage.getItem('userType')) == 3)
-            //          window.location.replace('/view_approval')
-                   
+                 
            })
            .catch(err => 
            { 

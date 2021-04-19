@@ -1,3 +1,4 @@
+import axios from 'axios';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   const currencyMask = createNumberMask({
     prefix: '',
@@ -19,7 +20,10 @@ export default {
             },
            waiverDetails: []
         };
-    }, 
+    },
+    async mounted() {
+        await this.paymentMode();
+      },
     methods: {
         addWaiver(event) {
             event.preventDefault()
@@ -29,6 +33,18 @@ export default {
             console.log("d?>>>", value)
             this.waiverDetails.push(value)
             console.log(this.waiverDetails)
-        }
+        },
+
+        async paymentMode() {
+            await axios
+              .get(`${process.env.VUE_APP_API_URL}/Payments/modes/All`, {
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8'
+                },
+              })
+              .then((response) => {
+                this.modeOfPay = response.data.data;
+              })
+          },
     }, 
 };

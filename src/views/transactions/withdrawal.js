@@ -51,6 +51,14 @@ export default {
     await this.initUser();
     await this.getAllBanks();
   },
+  computed: {
+    memberBalance() {
+      return this.$store.state.balance
+    }
+  },
+  created() {
+    this.$store.dispatch('memberBalance');
+  },
   methods: {
 
     numberFormat(value) {

@@ -13,6 +13,8 @@ export default new Vuex.Store({
     email: '',
     user : {},
     member: {},
+    memberName:{},
+    balance:{},
     memberId : '',
     Allmember:{},
     memberNum:{}
@@ -43,14 +45,15 @@ export default new Vuex.Store({
 
     memberDetails(){
       return new Promise((resolve, reject) => {
-        axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET'})
+        axios({url: `${process.env.VUE_APP_API_URL}/Members/Usertype`, method: 'GET',headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        })
         .then(response => {         
           // const member = response.data JSON.parse(localStorage.getItem("LoanPlan"));
-          const member = response.data
-          const memberId = response.data.id
-          localStorage.setItem('memberId', memberId)
-          this.commit('setMember', member, memberId)
-          console.log(memberId);    
+          const member = response.data.data
+          this.commit('member', member)    
           resolve(response)
         })
         .catch(err => {
@@ -59,21 +62,23 @@ export default new Vuex.Store({
       })
     },
 
-    getAllMembers(){
+    memberBalance(){
       return new Promise((resolve, reject) => {
-        axios({url: `${process.env.VUE_APP_API_URL}/Members/All`, method: 'GET'})
+        axios({url: `${process.env.VUE_APP_API_URL}/MemberBalances/balance`, method: 'GET',headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
         .then(response => {
-          const Allmember = response.data
-          const memberNum = response.data.data.employeeNumber
-          this.commit('AllMembers', Allmember,memberNum)  
+          const balance = response.data.data
+          this.commit('balance', balance) 
           resolve(response)
         })
         .catch(err => {
               reject(err)
         });      
       })
-    },
-    
+    },    
     createAccout({commit}, Newuser){
       return new Promise((resolve, reject) => {
         commit('auth_request')
@@ -160,13 +165,11 @@ export default new Vuex.Store({
       state.status = ''
       state.token = ''
     },
-    setMember(state, member, memberId) {
+    member(state, member) {
       state.member =  member;
-      state.memberId =  memberId;
     },
-    AllMembers(state, Allmember, memberNum) {
-      state.Allmember =  Allmember.data;
-      state.memberNum =  memberNum.data;
+    balance(state,balance) {
+      state.balance = balance;
     },
     AppLoanId(state, appLoan){
       state.appLoan = appLoan.data
@@ -182,7 +185,8 @@ export default new Vuex.Store({
     authStatus: state => state.status,
     variant: state => state.variant,
     message: state => state.message,
-    showAlert: state => state.showAlert
+    showAlert: state => state.showAlert,
+    balance:state => state.balance
 
   }, 
 

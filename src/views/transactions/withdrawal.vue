@@ -26,6 +26,13 @@
               :options="accountTypes" required disabled>
             </b-form-select>
           </div>
+          <div class="form-flex-col">
+            <label class="login-label">Balance</label>
+            <input type="text" class="app-text-field w-input" 
+            v-model="memberBalance.specialDepositBalance" v-mask="mask" required disabled />
+            <span v-if="memberBalance.specialDepositBalance != ''"><p style="color:red;font-size:12px;" >
+                  {{memberBalance.specialDepositBalance | NumbersToWords | capitalize}} Naira Only</p></span>
+          </div>
           
           <div class="form-flex-col">
               <label class="login-label">Amount</label>
