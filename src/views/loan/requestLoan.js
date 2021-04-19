@@ -15,6 +15,7 @@ export default {
       dismissCountDown: 0,
       showDismissibleAlert: false,
       selectedLoan: null,
+      selectedRadio:"",
       errors: "",
       result : {
         errors:{}
@@ -24,7 +25,7 @@ export default {
       id:0,
       Loanid:"",
       LoanId:"",
-      MemberId:"",
+      MemberId: "",
       InterestRate:"",
         name:{data:""},
       guarant: {data:0},
@@ -94,18 +95,17 @@ export default {
   },
 
   async created() {
+    this.$store.dispatch('memberDetails');
     await this.initialize();
     await this.getAllBanks();
     this.effectiveDate();
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    this.$store.dispatch('getAllMembers')
   },
   computed: {
-      
-    },
-  methods: {
-
-   
+  memberLogin() {
+    return this.$store.state.member
+  }
+},
+  methods: {   
     effectiveDate () {
       const current = new Date();
       const currentDate = current.getDate();      
@@ -146,9 +146,6 @@ export default {
       }else { this.effectYear = currentYear; }
       }else { this.effectMonth = "";}
     },
-
-    
-
     
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
@@ -167,37 +164,39 @@ export default {
     },    
 
     AmountValidation() {      
-      this.showDismissibleAlert = !this.showDismissibleAlert;
       let amount = parseFloat(this.loanAmount.replace(/,/g, ''))
       let expectedAmount = parseFloat(this.amountExpected.replace(/,/g, ''))
       let mAmountDesire = expectedAmount * 0.75
 
       if (this.mType == 3 || this.mType == 2) {
         if(amount < this.minLoanAmount && this.minLoanAmount != 0){
+              this.showDismissibleAlert = !this.showDismissibleAlert;
               return this.errors = `Loan Amount must be Minimum of ₦ ${Number(this.minLoanAmount).toLocaleString()} only`
         }
         if(this.maxLoanAmount != 0 && amount > this.maxLoanAmount){
+              this.showDismissibleAlert = !this.showDismissibleAlert;
               return this.errors = `Loan Amount must be Maximum of ₦ ${Number(this.maxLoanAmount).toLocaleString()} only`
         }
       } 
       if (this.mType == 1) {
         if (amount > mAmountDesire) {
+          this.showDismissibleAlert = !this.showDismissibleAlert;
           return this.errors = `Enter a value less than or equal to 75% (${Number(mAmountDesire).toLocaleString()}) of Amount Expected ₦ ${Number(expectedAmount).toLocaleString()}`
         }  
       }
       return this.errors = "";
     },
 
-    RepaymentValidation() {
-      
+    RepaymentValidation() {      
       // this.dismissCountDown = this.dismissSecs
-      this.showDismissibleAlert = !this.showDismissibleAlert;
       if (this.mType == 3 || this.mType == 2) {
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod < this.MinRepayPeriod) {
+        this.showDismissibleAlert = !this.showDismissibleAlert;
           return this.errors = `Minimum Repayment Period supplied is not valid, enter a value greater than 
           ${this.MinRepayPeriod}, less than or equal to ${this.MaxRepayPeriod}` 
         }
         if (this.MinRepayPeriod != 0 && this.minMonthlyRepayPeriod > this.MaxRepayPeriod) {
+        this.showDismissibleAlert = !this.showDismissibleAlert;
           return this.errors = `Maximum Repayment Period supplied is not valid, enter a value greater than
           ${this.MinRepayPeriod}, less than or equal to ${this.MaxRepayPeriod}`
         }
@@ -250,7 +249,7 @@ export default {
     async getGuarantor() {
       this.guarantorArray = []
       let guarantor = {            
-            MemberId: parseInt(localStorage.getItem('memberId')),
+            MemberId: this.memberLogin.id,
             LoanId: this.details.loanId,
             LoanAmount: parseInt(this.loanAmount.replace(/,/g, ''))
           }; 
@@ -403,7 +402,7 @@ export default {
 
       let rawData = {
         LoanId : this.details.loanId,
-        MemberId: this.details.memberTypeId,
+        MemberId: this.memberLogin.id,
         InterestRate: this.details.intrestRate,
         LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
         RepaymntPeriod: repay,
@@ -463,7 +462,8 @@ export default {
         this.form.bankcode = "";
         this.form.accountNumber = "";
         this.name.data = "";
-        this.grantData = null
+        this.grantData = null,
+        this.errors = ""
 
         this.show = false
       this.$nextTick(() => {

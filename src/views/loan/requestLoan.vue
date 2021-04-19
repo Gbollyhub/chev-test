@@ -12,7 +12,7 @@
             >{{this.errors}} 
             </b-alert>
         </div>
-        <div v-if="this.result.errors.length !=''">
+        <div v-if="result.errors.length > 0">
             <b-alert variant="danger"
                 dismissible
                 fade
@@ -340,9 +340,23 @@
                 ></b-form-input>
                 </b-col>
             </b-row>
+            
+            <div class="form-flex"><b>
+                I hereby agree to repay this loan through direct monthly deductions from my salary until the loan principal is fully repaid.
+                In addition to my shares in the Credit Society, I hereby pledge all my Chevron entitlements as security for this loan.
+            </b><div>
+                <b-form-radio v-model="selectedRadio" name="some-radios" 
+                    value="Yes">Yes</b-form-radio></div>
+                <div><b-form-radio v-model="selectedRadio" name="some-radios" 
+                    value="No">No</b-form-radio></div>
+            </div>
     <div style="margin-top:50px;" class="button-group">
           <button type="reset" style="background:#c00;display:inline-block;margin-right:30px" class="app-form-button">Reset</button>
-           <button type="submit" style="display:inline-block" class="app-form-button">Submit</button>
+           <span v-if="selectedRadio === 'No'">
+           <button type="submit" style="display:inline-block" class="app-form-button" disabled>Submit</button></span>
+            <span v-if="selectedRadio === 'Yes'">
+           <button type="submit" style="display:inline-block" class="app-form-button">Submit</button></span>
+    
     </div>
             </b-form>
       </div>

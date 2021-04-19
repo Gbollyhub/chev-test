@@ -32,7 +32,8 @@
       <div class="app-login-divider"></div>
       <div class="app-login-notice">
         <div class="app-login-notice-col-1"></div>
-        <div class="app-login-notice-col-2">Experiencing any problem with loging into your account ? Kindly contact the super admin to help resolve your issues.</div>
+        <!-- <div class="app-login-notice-col-2">Experiencing any problem with loging into your account ? Kindly contact the super admin to help resolve your issues.</div> -->
+        <div class="app-login-notice-col-2">For support kindly contact  the Administrator (admin-email@whereever.com).</div>
       </div>
     </div>
   </div>
