@@ -28,29 +28,24 @@ export default {
                 this.loader = true          
             this.$store.dispatch('login', this.user)
            .then(() => {       
-            this.loader = false;            
-            //  if ((localStorage.getItem('userType')) == 2) {
-            //     this.$router.go({path:'/overview'}) 
-            //     return
-            // }
-            // else  if ((localStorage.getItem('userType')) == 3) {
-            //     this.$router.go({path:'/view_approval'}) 
-            //     return
-            // }
-            if (this.$route.query){
+            this.loader = false;  
+
+            if (this.$route.query.path){
                 let path = this.$route.query.path.toLowerCase()
                 console.log("Path", path)
-                this.$router.push(`/${path}`)
-                return
+                this.$router.push(path)
              }
-                
-
-            // console.log(localStorage.getItem('userType'))
-            // if ((localStorage.getItem('userType')) == 2) 
-            //          window.location.replace('/overview')
-            // if ((localStorage.getItem('userType')) == 3)
-            //          window.location.replace('/view_approval')
-                   
+             else{
+                  if ((localStorage.getItem('userType')) == 2) {
+                this.$router.go({path:'/overview'}) 
+              
+            }
+            else  if ((localStorage.getItem('userType')) == 3) {
+                this.$router.go({path:'/view_approval'}) 
+              
+            } 
+             }
+                 
            })
            .catch(err => 
            { 

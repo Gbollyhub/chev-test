@@ -18,6 +18,6 @@
 }
 
 .loader-img {
- width: 150px;
+ width: 120px;
 }
 </style>

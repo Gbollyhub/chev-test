@@ -1,8 +1,12 @@
 <template>
-<div>
+<div>        
+  <div v-show="loader">
+         <Loader/>
+      </div>
+       <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>
           <div class="content-header">Make a Withdrawal</div>
       <div class="content-sub">  Withdraw From Special Deposit or Fixed Deposit Account</div>
-      <form>
+      <form @submit.prevent="onSubmit">
               <div class="form-flex">
                 
           <!-- <div class="form-flex-col">

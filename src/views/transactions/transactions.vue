@@ -51,10 +51,8 @@ export default {
 methods:{
     
     switchView( selected ){
-        console.log("HEEIE")
-
         if(selected == "transfer"){
-            console.log('transferView')
+        
          this.transferView = true
          this.withdrawalView = false
         }
