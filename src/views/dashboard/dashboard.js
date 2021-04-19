@@ -1,6 +1,6 @@
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
-import axios from 'axios';
+// import axios from 'axios';
 
 
 export default {
@@ -12,6 +12,8 @@ export default {
   data() {
     return {
       user: null,
+      balance:null,
+      firstName:"",
     userType: localStorage.getItem('userType'),
       transactionHistory: [
         { amount: "0", type: "Loan", date: `20-12-2020 9:00pm` },
@@ -21,29 +23,17 @@ export default {
       ]
     };
   },
-  async mounted() {    
-    await this.initUser();
-},
-  methods: {
-
-    async initUser() {
-      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((response) => {
-          this.user = response.data.data;
-        })
-        .catch((error) => {
-          if (error.response.status == 401) {
-            // auto logout if 401 response returned from api
-            localStorage.removeItem('token')
-            this.$router.push('/')
-        }
-        });
-    }
+computed: {
+  memberBalance() {
+    return this.$store.state.balance
+  },
+  memberLogin() {
+    return this.$store.state.member
   }
+},
+created() {
+  this.$store.dispatch('memberBalance');
+  this.$store.dispatch('memberDetails');
+},
+  methods: {}
 }

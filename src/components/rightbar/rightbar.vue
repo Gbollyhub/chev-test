@@ -5,9 +5,9 @@
         <div class="settings-icon"></div>
       </div>
       <div class="div-block">
-        <div class="profile-photo"></div>
-        <div class="profile-header"> {{user.person.lastName +", " + user.person.firstName+" "}}</div>
-        <div class="profile-sub">Employee Number: {{user.employeeNumber}}</div>
+        <!-- <div class="profile-photo"></div> -->
+        <div class="profile-header"> {{memberLogin.person.lastName +", " + memberLogin.person.firstName+" "}}</div>
+        <div class="profile-sub">Employee Number: {{memberLogin.employeeNumber}}</div>
       </div>
       <div class="admin-divider"></div>
       <div class="admin-calender-div"></div>
@@ -22,38 +22,23 @@
 
 <script>
 
-import axios from "axios";
 
 export default {
     data() {
         return {
-            user : null
+            user : null,
+            lastName:"",
+            firstName:"",
         };
   },
-  async mounted() {    
-      await this.initUser();
-  },
-  methods: {
-
-    async initUser() {
-      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((response) => {
-          this.user = response.data.data;
-          const memberId = response.data.data.id;
-          localStorage.setItem('memberId', memberId)
-
-        })
-        .catch((error) => {
-          error.alert('Error');
-        });
-    },
+computed: {
+  memberLogin() {
+    return this.$store.state.member
   }
+},
+created() {
+  this.$store.dispatch('memberDetails');
+},
     
 };
 </script>

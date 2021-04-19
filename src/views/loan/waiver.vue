@@ -4,20 +4,22 @@
       <div class="content-sub">Fill the following to continue</div>
       <form @submit="addWaiver">
               <div class="form-flex">
-          <div class="form-flex-col">
+          <!-- <div class="form-flex-col">
                <label class="login-label">Applicant Number</label>
         <input type="number" class="app-text-field w-input" required placeholder="Type Here" />
           </div>
            <div class="form-flex-col">
                 <label class="login-label">Applicant Name</label>
         <input type="text" class="app-text-field w-input" required placeholder="Type Here" />
-          </div>
+          </div> -->
           <div class="form-flex-col">
                 <label class="login-label">Payment Mode</label>
                 <select onChange= "formState" class="app-select w-input">
-                <option value="">Select Payment Mode</option>
-                 <option value="">Cash</option>
-                  <option value="">Transfer</option>
+                <option value="" disabled>Select Payment Mode</option>
+                 <option v-for="item in modeOfPay" 
+                                :value="item.id"
+                                :key="item.id">
+                                  {{item.description}}</option>
                 </select>
           </div>
             <div class="form-flex-col">

@@ -21,9 +21,9 @@ export default {
           showClose: true,
         },
       user: {},
+      balance:{},
       employeeNumber: '',
       name: '',
-      balance:'',
       amount:'',
       sourceAccount:2,
       destAccount:1,
@@ -37,6 +37,14 @@ export default {
   },
   async mounted() {
     await this.initUser();
+  },
+  computed: {
+    memberBalance() {
+      return this.$store.state.balance
+    }
+  },
+  created() {
+    this.$store.dispatch('memberBalance');
   },
   methods: {
 

@@ -16,22 +16,22 @@
                <label class="login-label">Date</label>
         <input type="date" class="app-text-field w-input" required placeholder="Type Here" />
           </div>
-           <div class="form-flex-col">
+           <!-- <div class="form-flex-col">
                 <label class="login-label">Applicant Number</label>
         <input type="number" class="app-text-field w-input" required placeholder="Type Here" />
           </div>
              <div class="form-flex-col">
                 <label class="login-label">Applicant Name</label>
         <input type="text" class="app-text-field w-input" required placeholder="Type Here" />
-          </div>
+          </div> -->
             <div class="form-flex-col">
                 <label class="login-label">Location</label>
         <input type="text" class="app-text-field w-input" required placeholder="Type Here" />
           </div>
-            <div class="form-flex-col">
+            <!-- <div class="form-flex-col">
                 <label class="login-label">Tel. Extention</label>
         <input type="text" class="app-text-field w-input" required placeholder="Type Here" />
-          </div>
+          </div> -->
             <div class="form-flex-col">
                 <label class="login-label">Repayment Period</label>
         <input type="text" class="app-text-field w-input" required placeholder="Type Here" />
@@ -95,18 +95,18 @@
           </div>
              <div class="form-flex-col">
                <label class="login-label">Savings Balance</label>
-        <input type="text" v-model="form.balance" v-mask="mask" 
+        <input type="text" v-model="memberBalance.savingsBalance" v-mask="mask" 
         class="app-text-field w-input" required placeholder="Type Here" />
-        <span v-if="form.balance != ''"><code>
-    {{parseFloat(this.form.balance.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+        <span v-if="memberBalance.savingsBalance != ''"><code>
+    {{parseFloat(this.memberBalance.savingsBalanc) | NumbersToWords | capitalize}} Naira Only
                     </code></span>
           </div>
            <div class="form-flex-col">
                <label class="login-label">Special Deposit Balance</label>
-        <input type="text" v-model="form.depositBalance" v-mask="mask"
+        <input type="text" v-model="memberBalance.specialDepositBalance" v-mask="mask"
         class="app-text-field w-input" required placeholder="Type Here" />
-        <span v-if="form.depositBalance != ''"><code>
-    {{parseFloat(this.form.depositBalance.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+        <span v-if="memberBalance.specialDepositBalance != ''"><code>
+    {{parseFloat(memberBalance.specialDepositBalance) | NumbersToWords | capitalize}} Naira Only
                     </code></span>
           </div>
           

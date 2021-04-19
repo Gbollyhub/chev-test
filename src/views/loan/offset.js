@@ -23,7 +23,15 @@ export default {
             },
            waiverDetails: []
         };
-    }, 
+    },
+    computed: {
+      memberBalance() {
+        return this.$store.state.balance
+      }
+    },
+    created() {
+      this.$store.dispatch('memberBalance');
+    },
     methods: {
 
         onReset(event) {

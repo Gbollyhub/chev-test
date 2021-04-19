@@ -12,14 +12,14 @@
           <div class="admin-topbar-date">{{new Date().utc | humanize}}</div>
         </div>
       </div>
-            <div class="content-header">Hii there! <span>{{ user.person.firstName }}</span></div>
+            <div class="content-header">Hii there! <span>{{ memberLogin.person.firstName }}</span></div>
               <div class="content-sub2"> Here are the latest report on account</div>
               <div class="summary-flex">
                                    <div class="content-slide-box">
                       <div class="content-info-card">
                         <div class="div-block-2">
-                          <div class="slide-card-header">Total Savings</div>
-                          <div class="slide-card-value">N0</div>
+                          <div class="slide-card-header">Savings Balance</div>
+                          <div class="slide-card-value">NGN 0</div>
                         </div>
                         <div class="slide-card-icon green"></div>
                       </div>
@@ -27,8 +27,8 @@
                      <div class="content-slide-box">
                       <div class="content-info-card">
                         <div class="div-block-2">
-                          <div class="slide-card-header">Loan Requests</div>
-                          <div class="slide-card-value">N0</div>
+                          <div class="slide-card-header">Loan Balance</div>
+                          <div class="slide-card-value">NGN {{memberBalance.totalLoanBalance | price}}</div>
                         </div>
                         <div class="slide-card-icon green"></div>
                       </div>
@@ -36,8 +36,8 @@
                       <div class="content-slide-box">
                       <div class="content-info-card">
                         <div class="div-block-2">
-                          <div class="slide-card-header">Total Transactions</div>
-                          <div class="slide-card-value">N0</div>
+                          <div class="slide-card-header">Special Savings Balance</div>
+                          <div class="slide-card-value">NGN 0</div>
                         </div>
                         <div class="slide-card-icon green"></div>
                       </div>
