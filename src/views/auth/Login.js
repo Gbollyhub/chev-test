@@ -29,22 +29,24 @@ export default {
                 this.loader = true          
             this.$store.dispatch('login', this.user)
            .then(() => {       
-            this.loader = false;
+            this.loader = false;  
 
-            if (this.$route.query){
+            if (this.$route.query.path){
                 let path = this.$route.query.path.toLowerCase()
                 console.log("Path", path)
-                this.$router.push(`/${path}`)
-                return
+                this.$router.push(path)
              }
-             if ((localStorage.getItem('userType')) == 2) {
+             else{
+                  if ((localStorage.getItem('userType')) == 2) {
                 this.$router.go({path:'/overview'}) 
-                return
+              
             }
             else  if ((localStorage.getItem('userType')) == 3) {
                 this.$router.go({path:'/view_approval'}) 
-                return
+              
             } 
+             }
+            
                 
 
             // console.log(localStorage.getItem('userType'))

@@ -7,7 +7,7 @@
       <div class="div-block">
         <div class="profile-photo"></div>
         <div class="profile-header"> {{user.person.lastName +", " + user.person.firstName+" "}}</div>
-        <div class="profile-sub">Employee Number: {{user.employeeNumber}}</div>
+        <div class="profile-sub">Employee Number: {{user.employeeNumber}} | {{ user.id }}</div>
       </div>
       <div class="admin-divider"></div>
       <div class="admin-calender-div"></div>

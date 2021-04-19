@@ -1,4 +1,5 @@
-
+import Loader from '../../components/ui/loader/loader.vue'
+import Status from '../../components/ui/state/state.vue'
 import axios from 'axios';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   const currencyMask = createNumberMask({
@@ -9,8 +10,16 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
     allowNegative: false,
   });
 export default {
+  components: {
+    Loader,
+    Status
+},
   data() {
     return {
+      state: 'failed',
+      status: false,
+      message: '',
+      loader: false,
         show: true,
         mask: currencyMask,
         notify: 0,
@@ -77,7 +86,8 @@ export default {
                });
            });
        },
-       async verifyAcc() {     
+       async verifyAcc() {    
+        this.loader = true; 
         let verifyData = {            
           destbankcode: this.bankcode,
           recipientaccount: this.accountNumber,
@@ -90,6 +100,7 @@ export default {
         }
       })
       .then(response => {
+        this.loader = false;
         this.name = response.data;          
       })   
   }, 
@@ -106,20 +117,38 @@ export default {
       })
     },
 
+    clearForm(){
+  
+      this.account = ""
+      this.location = ""
+      this.effectiveDate= new Date()
+      this.bankcode= null
+      this.amount= ""
+      this.accountNumber= ""
+      this.account= 2
+     },
+     closeModal(){
+      this.status = false
+  },
+
     async onSubmit(event) {
       event.preventDefault()
-
+       this.loader = true;
       let rawData = {
-        TransactionDate: this.effectiveDate,
-        MemberId: this.user.data.id,
-        DepositAmount: parseInt(this.form.amount.replace(/,/g, '')),
-        SavingsType: this.form.account,
-        TransactionTypeId: 3,
+         MemberId: this.user.data.id,
+         DebitAccountType: this.account,
+         MethodOfCollectionId: 1,
+         CollectionLocation: this.location,
+         EffectiveDate : this.effectiveDate,
+         BankCode : this.bankcode,
+         Amount : parseInt(this.amount.replace(/,/g, '')),
+         AccountNumber : this.accountNumber,
+         AccountName :this.name.data,
       };
       rawData = JSON.stringify(rawData);
       await axios
         .post(
-          `${process.env.VUE_APP_API_URL}/SavingDepositTransactions`,
+          `${process.env.VUE_APP_API_URL}/SavingDepositTransactions/Withdrawal`,
           rawData,
           {
             headers: {
@@ -128,14 +157,34 @@ export default {
           }
         )
         .then((response) => {
-          this.rawData = response.data;
-          this.makeToast(`success`);
-          if (this.form.MemberType != 2) {
-            window.history.length >
-              this.$router.push(`/payment}`);
-          }
+          
+          if(response.data.success == true){
+            this.message = 'The withdrawal operation was successful'
+            this.loader = false;
+            this.state = 'success';
+            this.status = true;
+            this.clearForm();
+         let memberType = localStorage.getItem('userType')
+         this.rawData = response.data;
+         this.makeToast(`success`);
+         if (memberType != 2) {
+             this.$router.push(`/payment}`);
+         }
+         }
+         else{
+          this.clearForm();
+          this.message = response.data.errors[0].errorMessage
+          this.loader = false;
+          this.status = true;
+          this.state = 'failed';
+         }
         })
         .catch(error => {
+          this.clearForm();
+          this.message = error.message
+          this.loader = false;
+          this.status = true;
+          this.state = 'failed';
           this.$bvToast.toast(error.message, {
                 title: "Error",
                 variant: "danger",
