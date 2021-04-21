@@ -88,20 +88,12 @@ export default new Vuex.Store({
           const memType = resp.data.userType
           const empNum = resp.data.userName
           const email = resp.data.email
-          localStorage.setItem('token', token)
-          localStorage.setItem('memType', memType)
-          localStorage.setItem('empNum', empNum)
-          localStorage.setItem('email', email)
           axios.defaults.headers.common['Authorization'] = token
           commit('auth_success', token, empNum,email,memType)
           resolve(resp)
         })
         .catch(err => {
           commit('auth_error', err)
-          localStorage.removeItem('token')
-          localStorage.removeItem('memType')
-          localStorage.removeItem('empNum')
-          localStorage.removeItem('email')
           reject(err)
         })
       })

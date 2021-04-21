@@ -20,7 +20,7 @@
         <div class="admin-col-link-text">Loan</div>
       </div>
       </router-link>
-      <router-link class= "active-link" to="#">
+      <router-link class= "active-link" to="/loanplanner">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Loan Calculator</div>

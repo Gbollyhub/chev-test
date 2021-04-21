@@ -7,17 +7,7 @@
           <div class="content-header">Make a Transfer</div>
       <div class="content-sub">Transfer to own Account</div>
       <form @submit.prevent="onSubmit">
-        <div class="form-flex">          
-          <div class="form-flex-col">
-            <label class="login-label">Balance</label>
-            <input readonly type="text" class="app-text-field w-input" 
-            v-model="balance" v-mask="mask" required />
-            <span v-if="balance != ''"><p style="color:red;font-size:12px;" >
-    {{parseFloat(this.balance.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
-                    </p></span>
-      <form>
-        <div class="form-flex"> 
-
+        <div class="form-flex">
           <div class="form-flex-col">
             <label class="login-label">Balance</label>
             <input type="text" class="app-text-field w-input" 
