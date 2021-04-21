@@ -44,20 +44,6 @@ export default {
       ],
     };
   },
-
-  created(){
-  axios.get(`${process.env.VUE_APP_API_URL}/MemberBalances/balance`, {
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    }).then(response=>{
-      this.balance = response.data.data.specialDepositBalance
-    })
-
-  
-  },
-
   async mounted() {
     await this.initUser();
   },
