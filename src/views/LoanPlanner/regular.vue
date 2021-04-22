@@ -2,10 +2,10 @@
     <div>
         <div class="content-header">Regular Loan Planner</div>
         <div class="form-flex">
-             <div v-show="loader">
+             <!-- <div v-show="loader">
                 <Loader/>
             </div>
-            <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>          
+            <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>           -->
             <div class="col-md-4">
                 <div class="form-flex-col">
                     <label class="login-label">Loan Amount</label>
@@ -38,10 +38,10 @@
                     <input type="text" v-model="loanData.oneThirdRepaymentPeriod" v-mask="mask" class="app-text-field w-input" disabled />
                 </div>         
             </div>
-            <div class="col-md-8">
+            <!-- <div class="col-md-8">
                 <input type="number" class="app-text-field w-input" required placeholder="Type Here" />
-            </div>
-            <!-- <div class="line"></div> -->
+            </div> -->
+            <div class="line"></div>
             <div class="col-md-4">
                 <div class="form-flex-col">
                     <label class="login-label">Min Savings Per Month(3%) on Loan</label>
@@ -59,10 +59,10 @@
                     <label class="login-label">Monthly Interest</label>
                     <input type="text" v-model="loanData.interest" v-mask="mask" class="app-text-field w-input" disabled />
                 </div>
-                <div class="form-flex-col">
+                <!-- <div class="form-flex-col">
                     <label class="login-label">Total Monthly Repayment</label>
                     <input type="text" v-model="loanData.totalMonthly" v-mask="mask" class="app-text-field w-input" disabled />
-                </div>
+                </div> -->
                 <div class="form-flex-col">
                     <label class="login-label">Total</label>
                     <input type="text" class="app-text-field w-input" disabled />
@@ -73,8 +73,8 @@
 </template>
 <script>
 import axios from "axios";
-import Loader from '../../components/ui/loader/loader.vue'
-import Status from '../../components/ui/state/state.vue'
+// import Loader from '../../components/ui/loader/loader.vue'
+// import Status from '../../components/ui/state/state.vue'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
     let currencyMask = createNumberMask({
     prefix: '',
@@ -84,10 +84,10 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
     allowNegative: false,
     });
 export default {
-    components: {
-    Loader,
-    Status
-    },
+    // components: {
+    // Loader,
+    // Status
+    // },
     data() {
         return {
             mask: currencyMask,
@@ -110,6 +110,14 @@ export default {
             // totalRepayment:''
         };
     },
+    watch:{
+        loanAmount(){
+            if (this.loanAmount == '' && this.loanPeriod =='') {
+                this.clearForm();
+                this.loanData.interestRate = '';
+            }
+        }
+    },
     methods: {
         planner() {
             let Body = {
@@ -119,32 +127,17 @@ export default {
             }            
             Body = JSON.stringify(Body); 
             if (this.loanPeriod != ''){
-                this.loader = true;
                 axios.post(`${process.env.VUE_APP_API_URL}/LoanConfig/planner`,Body, {
                 headers: {"Content-Type": "application/json;charset=utf-8",
                 Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
                 }).then((response) => {
                     if(response.data.success == true){
-                        this.message = response.data.message
-                        this.loader = false;
-                        this.state = 'success';
-                        this.status = true;
-                        this.clearForm();
                         this.loanData = response.data.data;
-                    }else {
-                        this.message = response.data.errors[0].errorMessage
-                        this.loader = false;
-                        this.status = true;
-                        this.state = 'failed';
-                        this.clearForm();
                     }
                 }).catch(error => {
                     this.clearForm();
                     this.message = error.message
-                    this.loader = false;
-                    this.status = true;
-                    this.state = 'failed';
                 });
             }
         },

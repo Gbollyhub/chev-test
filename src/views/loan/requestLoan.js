@@ -1,15 +1,20 @@
 import axios from "axios";
 import moment from 'moment'
+import Loader from '../../components/ui/loader/loader.vue'
+import Status from '../../components/ui/state/state.vue'
 
 
 export default {
   name: "Home",
   components: {
-  },
+    Loader,
+    Status
+},
   data() {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
       show: true,
+      loader: false,
       checked: false,
       dismissSecs: 5,
       dismissCountDown: 0,
@@ -316,7 +321,8 @@ export default {
 
 
     //..........................................End Guarantor Info.............................
-  async verifyAcc() {     
+    async verifyAcc() {
+          this.loader = true;
           let verifyData = {            
             destbankcode: this.form.bankcode,
             recipientaccount: this.form.accountNumber,
@@ -329,6 +335,7 @@ export default {
           }
         })
         .then(response => {
+        this.loader = false;
           this.name = response.data;          
         })   
     },    
