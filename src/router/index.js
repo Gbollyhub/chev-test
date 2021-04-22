@@ -44,7 +44,7 @@ const routes = [
     meta: { guest: true },
   },
   {
-    path: "/ExternalLogin?ext=CODE",
+    path: "/ExternalLogin",
     name: "ExternalLogin",
     component: ExternalLogin,
   },
@@ -204,7 +204,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn && !store.getters.memberId) {
+    if (store.getters.isLoggedIn) {
       next();
       return;
     }else if (to.name !== 'Login') {            
