@@ -37,7 +37,7 @@ export default {
              }
              else{
                   if ((localStorage.getItem('userType')) == 2) {
-                this.$router.go({path:'/overview'}) 
+                this.$router.go({path:'/user-dashboard'}) 
               
             }
             else  if ((localStorage.getItem('userType')) == 3) {
