@@ -7,11 +7,10 @@
             </div>
             <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>           -->
             
-            <div class="col-md-4">
                 <div class="form-flex-col">
                     <label class="login-label">Lump Sum Type</label>
                     <b-form-select class="app-text-field w-input"
-                        v-model="selectedLumpSum"
+                        v-model="selectedLumpSum" @change="getLumpSumPeriod"
                         :options="lumpSums" required>
                     </b-form-select>
                 </div>
@@ -33,9 +32,7 @@
                 <div class="form-flex-col">
                     <label class="login-label">Loan Period  (Months)</label>
                     <input type="text" v-model="loanPeriod" @blur="planner"
-                    class="app-text-field w-input" required placeholder="Type Here" />
-                    <span v-if="loanPeriod != ''"><p style="color:red;font-size:12px;" >
-                  {{loanPeriod | NumbersToWords | capitalize}} Months</p></span>
+                    class="app-text-field w-input" disabled />
                 </div>
                 <div class="form-flex-col">
                     <label class="login-label">Interest Rate pa:</label>
@@ -48,8 +45,7 @@
                 <div class="form-flex-col">
                     <label class="login-label">Total Interest Over Tenor</label>
                     <input type="text" v-model="loanData.totalMonthly" class="app-text-field w-input" disabled />
-                </div>       
-            </div>
+                </div>
             <!-- <div class="col-md-8">
                 <input type="number" class="app-text-field w-input" placeholder="Type Here" />
             </div> -->
@@ -116,6 +112,19 @@ export default {
                 });
             }
         },
+
+        getLumpSumPeriod() {
+            if (this.selectedLumpSum === 1) {
+                return this.loanPeriod = 10
+            }else if (this.selectedLumpSum === 2) {
+                return this.loanPeriod = 1
+            }else if (this.selectedLumpSum === 3) {
+                return this.loanPeriod = 6
+            }else if (this.selectedLumpSum === 4) {
+                return this.loanPeriod = 8
+            }
+
+        }
         
     }   
 };

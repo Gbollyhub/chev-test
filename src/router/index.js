@@ -32,6 +32,7 @@ import Savings from "../views/savings/savings.vue";
 import LoanOption from "../views/loan/loan.vue";
 import Settings from "../views/settings/settings.vue";
 import LoanPlanner from "../views/LoanPlanner/loanplanner.vue";
+import LoanGuidelines from "../views/loanGuidelines/loanGuidelines.vue";
 import ExternalLogin from "../views/externalLogin.vue";
 
 Vue.use(VueRouter);
@@ -76,6 +77,12 @@ const routes = [
     path: "/loanplanner",
     name: "LoanPlanner",
     component: LoanPlanner,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/guidelines",
+    name: "LoanGuidelines",
+    component: LoanGuidelines,
     meta: {requiresAuth: true},
   },
   {
