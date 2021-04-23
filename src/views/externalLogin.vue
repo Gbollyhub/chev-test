@@ -11,6 +11,9 @@ export default {
     mounted() {
         this.externalLogin()
     },
+    // created() {
+    //     this.code = atob(this.$route.query.ext);
+    // },
     methods: {
        async externalLogin() {
             let code = this.$route.query.ext
@@ -27,6 +30,7 @@ export default {
           const userType = resp.data.userType
          await localStorage.setItem('token', token)
          await localStorage.setItem('userType', userType)
+         
          if(localStorage.getItem('token')){
             this.$router.push("/user-dashboard")
          }

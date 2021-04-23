@@ -9,15 +9,9 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    empNum: '',
-    email: '',
     user : {},
     member: {},
-    memberName:{},
     balance:{},
-    memberId : '',
-    Allmember:{},
-    memberNum:{}
   },  
   actions: {
     login({commit}, user){
@@ -173,22 +167,13 @@ export default new Vuex.Store({
   },
   getters : {
     isLoggedIn: state => !!state.token,
-    member: state => state.memberId,
     authStatus: state => state.status,
-    variant: state => state.variant,
-    message: state => state.message,
-    showAlert: state => state.showAlert,
-    balance:state => state.balance
+    balance:state => state.balance,
+    member:state => state.member
+    // variant: state => state.variant,
+    // message: state => state.message,
+    // showAlert: state => state.showAlert,
 
   }, 
 
 });
-
-// Vue.use(Vuex);
-
-// export default new Vuex.Store({
-//   state: {},
-//   mutations: {},
-//   actions: {},
-//   modules: {}
-// });

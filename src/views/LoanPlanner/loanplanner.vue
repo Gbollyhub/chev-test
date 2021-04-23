@@ -7,8 +7,8 @@
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
           <div class="settings-icon"></div>
-          <div @click = "switchView('Regular')" class="admin-top-barlinks admin-active-top-link">Regular</div>
-          <div @click = "switchView('Target')" class="admin-top-barlinks">Target</div>
+          <div @click = "switchView('Regular')" class="admin-top-barlinks admin-active-top-link">Loan Planner</div>
+          <!-- <div @click = "switchView('Target')" class="admin-top-barlinks">Target</div> -->
 
         </div>
         <div class="admin-top-bar-right">

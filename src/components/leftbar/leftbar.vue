@@ -8,7 +8,7 @@
         <div class="admin-col-link-text">Dashboard</div>
       </div>
       </router-link>
-      <router-link class="active-link" to="#">
+      <router-link class="active-link" to="/guidelines">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Loan Guidelines</div>
@@ -23,7 +23,7 @@
       <router-link class= "active-link" to="/loanplanner">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Loan Calculator</div>
+        <div class="admin-col-link-text">Loan Planner</div>
       </div>
       </router-link>
 <router-link class= "active-link" to="/savings"> 
