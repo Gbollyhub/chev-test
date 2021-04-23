@@ -115,7 +115,7 @@
 
                 <div class="deals-slider">
                     <!-- Owl Carousel Slider -->
-                                    <carousel :autoplay="true" :nav="false" :responsive="responsive" items= 1>
+                                    <carousel :autoplay="true" :nav="false" :responsive="responsive" :items= "items">
 
          <img src="../../assets/images/owl/chevron-cemcs-slide1.jpeg" alt="CEMCS Co-oprative">
 
@@ -146,20 +146,7 @@ export default {
     components: { carousel },
     data () {
       return {
-        items: [
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-          },
-          {
-            src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-          },
-        ],
+        items: 1,
       }
     },
   }

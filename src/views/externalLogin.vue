@@ -1,10 +1,15 @@
 <template>
   <div>
+      <Loader/>
   </div>
 </template>
 <script>
 import axios from "axios";
+import Loader from '../components/ui/loader/loader.vue'
 export default {
+        components: {
+        Loader
+    },
     data(){
         return {code:"" };
     },
@@ -32,7 +37,8 @@ export default {
          await localStorage.setItem('userType', userType)
          
          if(localStorage.getItem('token')){
-            this.$router.push("/user-dashboard")
+              window.location.href = "http://localhost:8080/user-dashboard"
+            // this.$router.push("/user-dashboard")
          }
            
           }

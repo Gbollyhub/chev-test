@@ -1,5 +1,5 @@
 <template>
-         <div style="position: relative">
+         <div style="position: relative;" >
          <div class="app-admin-brand" style="text-align:center"><img height="60px" src="../../assets/images/chevron-cemcs-logo.png"  alt="" /></div>
       <nav>       
       <router-link class= "active-link" to="/overview"> 
