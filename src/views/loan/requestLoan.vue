@@ -1,5 +1,8 @@
 <template>
 <div>
+    <div v-show="loader">
+         <Loader/>
+      </div>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
         <div v-if="this.errors != ''">            

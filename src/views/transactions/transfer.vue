@@ -25,7 +25,7 @@
           </div>
           <div class="form-flex-col">
             <label class="login-label">Effective Date</label>
-            <date-picker class='input-group date down'
+            <date-picker class='input-group date'
               v-model="effectiveDate" :config="options"></date-picker>
           </div>
           <div class="form-flex-col">

@@ -24,8 +24,8 @@ export default {
       mask: currencyMask,
       notify: 0,
       options: {
-      format: 'YYYY-MM-DD',
-      useCurrent: false,
+          format: 'YYYY-MM-DD',
+          useCurrent: false,
           showClear: true,
           showClose: true,
         },
@@ -34,13 +34,13 @@ export default {
       employeeNumber: '',
       name: '',
       amount:'',
-      sourceAccount: 0,
-      destAccount: 0,
+      sourceAccount: 1,
+      destAccount: 2,
       effectiveDate: new Date(),
       accountTypes: [
-        { text: "---Select Account Type---", value: 0},
-        { value: 1, text: "Savings ", },
-        { value: 2, text: "Special Deposit " }
+        { text: "---Select Account Type---", value: null, disabled: true},
+        { value: 1, text: "Savings", },
+        { value: 2, text: "Special Deposit" }
       ],
     };
   },
@@ -88,8 +88,8 @@ export default {
     },
 
     clearForm(){
-     this.sourceAccount = 0
-     this.destAccount = 0
+     this.sourceAccount = null
+     this.destAccount = null
      this.effectiveDate =  new Date()
     this.amount = ''
     },
@@ -115,8 +115,7 @@ export default {
             }
           }
         )
-        .then((response) => {
-          
+        .then((response) => {          
           if(response.data.success == true){
             this.message = 'The transfer operation was successful'
             this.loader = false;
