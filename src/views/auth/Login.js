@@ -36,14 +36,7 @@ export default {
                 this.$router.push(path)
              }
              else{
-                  if ((localStorage.getItem('userType')) == 2) {
                 this.$router.go({path:'/overview'}) 
-              
-            }
-            else  if ((localStorage.getItem('userType')) == 3) {
-                this.$router.go({path:'/view_approval'}) 
-              
-            } 
              }
                  
            })

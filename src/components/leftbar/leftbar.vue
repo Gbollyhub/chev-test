@@ -33,20 +33,20 @@
       </div>
       </router-link> 
       <router-link class= "active-link" to="/transactions"> 
- <div class="admin-col-link-div">
+        <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Transactions</div>
       </div>
-      </router-link> 
+      </router-link>      
+          <!-- <div v-if="userType== 3" > -->
       <router-link class= "active-link" to="/settings"> 
       <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Settings</div>
-      </div>
-      </router-link> 
+        </div>
+      </router-link>
+      <!-- </div> -->
       </nav>
-         
-
       <div @click="logout" class="admin-col-logout" style="cursor:pointer"><span class="text-span-3"></span> Logout</div>
     </div>
 </template>
