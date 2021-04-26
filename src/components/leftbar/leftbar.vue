@@ -1,6 +1,6 @@
 <template>
-         <div style="position: relative">
-         <div class="app-admin-brand" style="text-align:center"><img height="60px" src="../../assets/images/chevron-cemcs-logo.png"  alt="" /></div>
+         <div style="position: relative;">
+         <div class="app-admin-brand" style="text-align:center"><img height="60px" src="../../assets/images/chevron-cemcs-logo.png" /></div>
       <nav>       
       <router-link class= "active-link" to="/overview"> 
  <div class="admin-col-link-div">

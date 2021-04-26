@@ -1,15 +1,17 @@
 <template>
   <div>
-    <div class="right-side-bar">
-
-    </div>
+      <Loader/>
   </div>
 </template>
 <script>
 import axios from "axios";
+import Loader from '../components/ui/loader/loader.vue'
 export default {
-    data() {
-        return {code:this.$route.query.ext };
+        components: {
+        Loader
+    },
+    data(){
+        return {code:"" };
     },
     mounted() {
         this.externalLogin()
@@ -18,19 +20,38 @@ export default {
     //     this.code = atob(this.$route.query.ext);
     // },
     methods: {
-        externalLogin() { 
-            let Body = {code: this.code, ReturnUrl:"http://localhost:8080/overview"}
+       async externalLogin() {
+            let code = this.$route.query.ext
+            console.log("fgfg",code)
+            let Body = {code: code, ReturnUrl:"http://localhost:8080/user-dashboard"}
             Body = JSON.stringify(Body);
-            axios.post(`${process.env.VUE_APP_API_URL}/Users/ExternalLogin`,Body, {
+            try {
+                const resp = await axios.post(`${process.env.VUE_APP_API_URL}/Users/ExternalLogin`, Body, {
             headers: {"Content-Type": "application/json;charset=utf-8"}
-            }).then().catch(error => {
-            this.$bvToast.toast(error, {
+            })
+
+          if(resp.status == 200){
+               const token = resp.data.token
+          const userType = resp.data.userType
+         await localStorage.setItem('token', token)
+         await localStorage.setItem('userType', userType)
+         
+         if(localStorage.getItem('token')){
+              window.location.href = "http://localhost:8080/user-dashboard"
+            // this.$router.push("/user-dashboard")
+         }
+           
+          }
+         
+            } catch (error) {
+                this.$bvToast.toast(error, {
                     title: "Error",
                     variant: "danger",
                     solid: true,
                     autoHideDelay: 5000
                 });
-            });
+            }
+        
         },
     }  
 };

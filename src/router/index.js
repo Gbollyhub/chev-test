@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 // import Home from "../views/Home.vue";
 import Overview from "../views/dashboard/dashboard.vue";
+import Dashboard from "../views/dashboard/userDashboard.vue";
 import Transfer from "../views/tranfer/transfer.vue";
 import Transfer_ from "../views/tranfer/transfer_.vue";
 import Withdrawal from "../views/withdrawal/withdrawal.vue";
@@ -94,6 +95,12 @@ const routes = [
     path: "/overview",
     name: "Overview",
     component: Overview,    
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/user-dashboard",
+    name: "Dashboard",
+    component: Dashboard,    
     meta: {requiresAuth: true},
   },
   {
@@ -228,7 +235,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.guest)) {
     if (store.getters.isLoggedIn) {
-      next("/overview");
+      next("/user-dashboard");
       return;
     }
     next();
