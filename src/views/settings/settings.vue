@@ -6,13 +6,13 @@
             <div class="app-admin-col-2">
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
-          <div @click = "switchView('Members')" class="admin-top-barlinks admin-active-top-link">Members</div>
-          <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks">Approval Route</div>
-             <div @click = "switchView('ViewPending')" class="admin-top-barlinks">Pending Approvals</div>
-           <div @click = "switchView('CreateLoan')" class="admin-top-barlinks">Create Loan</div>
-            <div @click = "switchView('Employees')" class="admin-top-barlinks">Employees</div>
-             <div @click = "switchView('LoanConfig')" class="admin-top-barlinks">Loan Config</div>
+          <div @click="goBack" class="settings-icon"></div>
+          <div @click = "switchView('Members')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Members</div>
+          <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Approval Route</div>
+             <div @click = "switchView('ViewPending')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Pending Approvals</div>
+           <div @click = "switchView('CreateLoan')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Create Loan</div>
+            <div @click = "switchView('Employees')" class="admin-top-barlinks" :class="[currentTab == 5 ? currentClass : '']">Employees</div>
+             <div @click = "switchView('LoanConfig')" class="admin-top-barlinks" :class="[currentTab == 6 ? currentClass : '']">Loan Config</div>
 
         </div>
         <div class="admin-top-bar-right">
@@ -75,20 +75,24 @@ export default {
         CreateLoan: false,
         Employees: false,
         LoanConfig:false,
-        ViewPending:false
+        ViewPending:false,
+        currentTab: 1,
+        currentClass: 'admin-active-top-link'
       }
   },
 methods:{
-    
+            goBack(){
+    this.$router.go(-1)
+  },
     switchView( selected ){
         if(selected == "Members"){
-      
          this.Members = true
          this.ApprovalRate = false
           this.CreateLoan = false
            this.Employees = false
            this.ViewPending = false
            this.LoanConfig = false
+            this.currentTab = 1
         }
         else if(selected == 'ApprovalRate') {
            this.Members = false
@@ -97,6 +101,7 @@ methods:{
            this.Employees = false
            this.ViewPending = false
            this.LoanConfig = false
+            this.currentTab = 2
         }
         else if(selected == 'ViewPending') {
            this.Members = false
@@ -105,6 +110,7 @@ methods:{
            this.CreateLoan = false
            this.Employees = false
            this.LoanConfig = false
+            this.currentTab = 3
         }
          else if(selected == 'CreateLoan') {
            this.Members = false
@@ -113,6 +119,7 @@ methods:{
            this.Employees = false
            this.ViewPending = false
            this.LoanConfig = false
+            this.currentTab = 4
         }
          else if(selected == 'Employees') {
            this.Members = false
@@ -121,6 +128,7 @@ methods:{
            this.Employees = true
            this.ViewPending = false
            this.LoanConfig = false
+            this.currentTab = 5
         }
          else if(selected == 'LoanConfig') {
            this.Members = false
@@ -129,6 +137,7 @@ methods:{
            this.Employees = false
            this.ViewPending = false
            this.LoanConfig = true
+            this.currentTab = 6
         }
 
     },

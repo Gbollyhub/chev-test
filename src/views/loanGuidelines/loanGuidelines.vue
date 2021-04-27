@@ -6,11 +6,11 @@
             <div class="app-admin-col-2">
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
-          <div @click = "switchView('regular')" class="admin-top-barlinks admin-active-top-link">Regular</div>
-          <div @click = "switchView('retiree')" class="admin-top-barlinks">Retiree</div>
-          <div @click = "switchView('expatriate')" class="admin-top-barlinks">Expatriate</div>
-          <div @click = "switchView('allLoans')" class="admin-top-barlinks">All Loans</div>
+          <div @click="goBack" class="settings-icon"></div>
+          <div @click = "switchView('regular')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Regular</div>
+          <div @click = "switchView('retiree')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Retiree</div>
+          <div @click = "switchView('expatriate')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Expatriate</div>
+          <div @click = "switchView('allLoans')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">All Loans</div>
 
         </div>
         <div class="admin-top-bar-right">
@@ -62,34 +62,43 @@ export default {
         regular: true,
         retiree: false,
         expatriate: false,
-        allLoans: false
+        allLoans: false,
+        currentTab: 1,
+        currentClass: 'admin-active-top-link',
       }
   },
 methods:{    
+  goBack(){
+    this.$router.go(-1)
+  },
     switchView( selected ){
         if(selected == 'regular'){      
          this.regular = true
         this.retiree= false
         this.expatriate= false
         this.allLoans= false
+        this.currentTab = 1
         }
         else if(selected == 'retiree') {
            this.regular = false
            this.retiree= true
         this.expatriate= false
         this.allLoans= false
+          this.currentTab = 2
         }
         else if(selected == 'expatriate') {
            this.regular = false
            this.retiree= false
         this.expatriate= true
         this.allLoans= false
+          this.currentTab = 3
         }
         else if(selected == 'allLoans') {
            this.regular = false
           this.retiree= false
         this.expatriate= false
         this.allLoans= true
+          this.currentTab = 4
         }
     },
 

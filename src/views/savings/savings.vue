@@ -6,9 +6,9 @@
             <div class="app-admin-col-2">
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
-          <div @click = "switchView('cashAddition')" class="admin-top-barlinks admin-active-top-link">Cash Addition</div>
-          <div @click = "switchView('IncreaseDecrease')" class="admin-top-barlinks">Increase/Decrease Savings</div>
+          <div  @click="goBack" class="settings-icon"></div>
+          <div  @click = "switchView('cashAddition')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Cash Addition</div>
+          <div @click = "switchView('IncreaseDecrease')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Increase/Decrease Savings</div>
         </div>
         <div class="admin-top-bar-right">
           <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
@@ -46,19 +46,24 @@ export default {
         selectedTab: '',
         cashAddition: true,
         IncreaseDecrease: false,
+        currentTab: 1,
+        currentClass: 'admin-active-top-link'
       }
   },
 methods:{
-    
+            goBack(){
+    this.$router.go(-1)
+  },
     switchView( selected ){
         if(selected == "cashAddition"){
-      
          this.cashAddition = true
          this.IncreaseDecrease = false
+         this.currentTab = 1
         }
         else if(selected == 'IncreaseDecrease') {
              this.cashAddition = false
          this.IncreaseDecrease = true
+          this.currentTab = 2
         }
 
     },
