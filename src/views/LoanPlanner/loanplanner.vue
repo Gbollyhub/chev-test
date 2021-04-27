@@ -6,9 +6,9 @@
             <div class="app-admin-col-2">
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
-          <div class="settings-icon"></div>
-          <div @click = "switchView('Regular')" class="admin-top-barlinks admin-active-top-link">Loan Planner</div>
-          <!-- <div @click = "switchView('Target')" class="admin-top-barlinks">Target</div> -->
+          <div @click="goBack" class="settings-icon"></div>
+          <div @click = "switchView('Regular')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Loan Planner</div>
+          <!-- <div @click = "switchView('Target')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Target</div> -->
 
         </div>
         <div class="admin-top-bar-right">
@@ -48,17 +48,24 @@ export default {
         selected: '',
         regular: true,
         target: false,
+        currentTab: 1,
+        currentClass: 'admin-active-top-link',
       }
   },
 methods:{    
+    goBack(){
+    this.$router.go(-1)
+  },
     switchView( selected ){
         if(selected == 'Regular'){      
          this.regular = true
          this.target = false
+          this.currentTab = 1
         }
         else if(selected == 'Target') {
            this.regular = false
            this.target = true
+            this.currentTab = 2
         }
     },
 
