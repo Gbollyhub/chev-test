@@ -221,8 +221,13 @@
                             
               <span v-if="guarantorArray.length !== 0">
               <div class="header_2">Guarantors</div>
-                
-                <div class="wrapper" v-for="(guarantor, index) in guarantorArray" :key="index">          
+                <div style="font-weight:600;font-size:14px;margin-bottom:20px">Fill in your guarantor details or <span v-if="togglePastGuarantors" @click="toggleGuarantors" style="color:#c00;cursor:pointer;text-decoration:underline">Hide recent guarantors / Edit guarantors</span> <span v-else @click="toggleGuarantors" style="color:#c00;cursor:pointer;text-decoration:underline">Select from recent guarantors</span></div>
+                <div style="margin-bottom:20px;" v-show="togglePastGuarantors">
+                    <div style="margin-bottom:10px">Click to select a guarantor from the list below</div>
+                    <div @click="selectGuarantor(result.employeeNumber)" class="guarantor-chip" v-for="(result,index) in pastGuarantors" :key="index">Guarantor: {{ result.employeeNumber }}</div>
+                </div>
+                <div >
+                <div  class="wrapper" v-for="(guarantor, index) in guarantorArray" :key="index">          
                   <b-row class="my-1 form-row mb-3">
                   <b-col sm="4">
                       <label
@@ -233,6 +238,7 @@
                   <!-- {{ this.guarantorNumber }} -->
                   <b-col sm="8">
                       <b-form-input
+                      :readonly="togglePastGuarantors"
                       v-model.lazy.trim="guarantor.guarantorNumber"
                       @blur="getGuarantorInfo(guarantor.guarantorNumber, index)"
                       type="number"
@@ -267,6 +273,7 @@
                       ></b-form-input>
                   </b-col>
                   </b-row>
+                </div>
                 </div>
               </span>
               <!-- <span v-if="guarant.data === 0">
@@ -367,3 +374,10 @@
 
 
 <script src="./requestLoan.js"></script>
+
+<style scoped>
+.guarantor-chip{
+cursor:pointer;background:#57B4DC;color:white;display:inline-block;padding:0 10px;height:30px;line-height:30px;margin-right:15px
+}
+.guarantor-chip:hover{ background: #c00; color: white;}
+</style>

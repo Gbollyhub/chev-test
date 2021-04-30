@@ -95,7 +95,10 @@ export default {
         { value: 10, name: "November" },
         { value: 11, name: "December"}
       ],
-      guarantorArray: []       
+      guarantorArray: [],
+      pastGuarantors:[],
+      togglePastGuarantors: false,
+      pastGuarantorCount:0
     };
   },
 
@@ -104,13 +107,97 @@ export default {
     await this.initialize();
     await this.getAllBanks();
     this.effectiveDate();
+    await this.getPastGuarantors()
   },
   computed: {
   memberLogin() {
     return this.$store.state.member
   }
 },
-  methods: {   
+
+  methods: {  
+  async selectGuarantor(gNo){
+      let guarantor = {            
+        EmployeeNumber: gNo
+      }; 
+
+      this.loader = true;
+      
+ await axios
+    .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(response => {
+      this.loader = false
+     
+      if(response.data.data != null) {
+
+      if(this.pastGuarantorCount == 0 ){
+        this.pastGuarantorCount = 1
+        this.guarantorArray[0].guarantorNumber = gNo
+      this.guarantorArray[0].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
+      this.guarantorArray[0].guarantorEmail = response.data.data.person.email
+      }
+      else if(this.pastGuarantorCount == 1){
+        this.pastGuarantorCount = 2
+        this.guarantorArray[1].guarantorNumber = gNo
+        this.guarantorArray[1].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
+        this.guarantorArray[1].guarantorEmail = response.data.data.person.email
+      }
+      else if(this.pastGuarantorCount == 2){
+        this.guarantorArray[2].guarantorNumber = gNo
+        this.guarantorArray[2].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
+        this.guarantorArray[2].guarantorEmail = response.data.data.person.email
+      }
+      else { return false;}
+      }
+      else{
+        this.$bvToast.toast("Invalid Guarantor", {
+          title: "Error",
+          variant: "danger",
+          solid: true,
+          autoHideDelay: 5000
+      });
+      }
+     
+
+    })
+    .catch(error => {
+      this.$bvToast.toast(error.message, {
+            title: "Error",
+            variant: "danger",
+            solid: true,
+            autoHideDelay: 5000
+        });
+    });
+    },
+    toggleGuarantors(){
+      this.togglePastGuarantors ? this.togglePastGuarantors = false : this.togglePastGuarantors = true
+    },
+    async getPastGuarantors() {        
+      await axios
+          .get(`${process.env.VUE_APP_API_URL}/Loans/guarantor`,{
+            headers: {
+              "Content-Type": "application/json;charset=utf-8",
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
+          .then(response => {
+            this.pastGuarantors = response.data.data
+           console.log("g>>>",response.data)
+          })
+          .catch(error => {
+            this.$bvToast.toast(error, {
+                title: "Error",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000
+            });
+          });
+    },
     effectiveDate () {
       const current = new Date();
       const currentDate = current.getDate();      
@@ -349,6 +436,7 @@ export default {
             }
           })
           .then(response => {
+            console.log(response.data)
             this.details = response.data;
             this.mType = response.data.loan.loanType;
             this.mLoanCode = response.data.loan.loanCode;
