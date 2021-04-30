@@ -27,7 +27,7 @@
                                 <a class="nav-link" href="https://chevron.mykovi.com/news">NEWS</a>
                             </li>
                             <li class="nav-item register_btn">
-                                <a class="nav-link" href="register.html">Adefemi Micheal</a>
+                                <a class="nav-link" href="register.html">{{ memberLogin.person.firstName+" "+memberLogin.person.lastName }}</a>
                             </li>
                         </ul>
                     </div>
@@ -50,7 +50,7 @@
                                 </router-link> 
                                 </div>
                                 <div class="col-4">
-                                    <router-link to="/overview">
+                                    <router-link to="#">
                                     <div class="icons-grid green-bg hvr-bob">
                                         <img style="margin-bottom: 25px;" src="../../assets/images/icons/ecommerce.svg" alt="CEMCS Co-oprative">
                                         <p>E-COMMERCE</p>
@@ -147,8 +147,18 @@ export default {
     data () {
       return {
         items: 1,
+        firstName:"",
+        lastName:"",
       }
     },
+    computed: {
+  memberLogin() {
+    return this.$store.state.member
+  }
+},
+created() {
+  this.$store.dispatch('memberDetails');
+},
   }
 </script>
 
