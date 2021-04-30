@@ -96,7 +96,7 @@ export default {
         { value: 11, name: "December"}
       ],
       guarantorArray: [],
-      pastGuarantors:[{employeeNumber: "43332"}],
+      pastGuarantors:[],
       togglePastGuarantors: false,
       pastGuarantorCount:0
     };
@@ -107,7 +107,7 @@ export default {
     await this.initialize();
     await this.getAllBanks();
     this.effectiveDate();
-    // await this.getPastGuarantors()
+    await this.getPastGuarantors()
   },
   computed: {
   memberLogin() {
