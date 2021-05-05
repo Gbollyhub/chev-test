@@ -56,11 +56,12 @@
                 </template>
                 <template #cell(show_details)="data">
                     <span v-if="!data.item.itemData.approved">
-                      <b-button variant="primary" @click="updatePending" class="float-sm-left">Approve</b-button>                                    
+                      <b-button variant="primary" @click="ApproveModuleRequest(data.item.id, data.item.moduleApproverId, data.item.itemId,)" 
+                      class="float-sm-left">Approve</b-button>                                    
                     </span>
-                    <span v-if="data.item.itemData.approved">
-                      <b-button variant="primary" @click="updatePending" class="float-sm-left">Pending</b-button>                                    
-                    </span>
+                    <!-- <span v-if="data.item.itemData.approved">
+                      <b-button variant="primary" @click="ApproveModuleRequest" class="float-sm-left">Pending</b-button>                                    
+                    </span> -->
                     </template>
             </b-table>
       </div>
@@ -139,16 +140,8 @@ export default {
             });
           });
     },
-    // async initapprove(selected) {  
-      async initapprove() {
-
-        // if (selectedModule == 2){
-
-        // }
-
+    async initapprove() {
      await axios
-        // .get( `${process.env.VUE_APP_API_URL}/Members/Approved/${selectedLoan}`,{
-          // -----for pending------
         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
@@ -163,13 +156,16 @@ export default {
         });
     },
 
-    async updatePending() { 
+    async ApproveModuleRequest(Id,ModuleApproverId,itemId) { 
       let rawData = {
-        approved : true
+        Id: Id,
+        ModuleApproverId:ModuleApproverId,
+        itemId:itemId,
+        Approved : true
       };
       rawData = JSON.stringify(rawData);       
      await axios
-        .post( `${process.env.VUE_APP_API_URL}/Members`, rawData,{
+        .post( `${process.env.VUE_APP_API_URL}/PendingApproval/Approve`, rawData,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`

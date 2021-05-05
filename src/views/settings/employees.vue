@@ -78,7 +78,8 @@ export default {
      await axios
         .get( `${process.env.VUE_APP_API_URL}/employees`,{
           headers: {
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {

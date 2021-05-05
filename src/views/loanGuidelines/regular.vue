@@ -25,7 +25,7 @@
             offset is desired.<br>
             (m) Cash and savings allowed for full loan offset.<br>
             (n) Partial loan offset is not allowed.<br>
-            (o) that will be paid together with
+            (o) There is an Administrative charge of one month's Interest of the current loan that will be paid together with
             the offset.<br>
             (p) No more than one Long Term Loan can be in operation at a time.<br>
             (q) Long Term Loan and Car Loan can runconcurrently.<br>
