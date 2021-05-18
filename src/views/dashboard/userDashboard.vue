@@ -58,7 +58,7 @@
                                     </router-link>
                                 </div>
                                 <div class="col-4">
-                                    <router-link to="/overview">
+                                    <router-link to="/insurance">
                                     <div class="icons-grid green2-bg hvr-bob">
                                         <img style="margin-bottom: 25px;" src="../../assets/images/icons/insurance.svg" alt="CEMCS Co-oprative">
                                         <p>INSURANCE</p>
@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="row no-gutters">
                                 <div class="col-4">
-                                    <router-link to="/overview">
+                                    <router-link to="#">
                                     <div class="icons-grid blue-bg hvr-bob">
                                         <img style="margin-bottom: 25px;" src="../../assets/images/icons/deals.svg" alt="CEMCS Co-oprative">
                                         <p>DEALS</p>
@@ -79,7 +79,7 @@
                                     </router-link>
                                 </div>
                                 <div class="col-4">
-                                    <router-link to="/overview">
+                                    <router-link to="#">
                                     <div class="icons-grid blue2-bg hvr-bob">
                                         <img style="margin-bottom: 25px;" src="../../assets/images/icons/travels.svg" alt="CEMCS Co-oprative">
                                         <p>TRAVELS</p>
@@ -87,7 +87,7 @@
                                     </router-link>
                                 </div>
                                 <div class="col-4">
-                                    <router-link to="/overview">
+                                    <router-link to="#">
                                     <div class="icons-grid blue3-bg hvr-bob">
                                         <img style="margin-bottom: 25px;" src="../../assets/images/icons/banking.svg" alt="CEMCS Co-oprative">
                                         <p>BANKING</p>
