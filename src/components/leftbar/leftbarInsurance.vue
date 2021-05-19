@@ -8,44 +8,30 @@
         <div class="admin-col-link-text">Dashboard</div>
       </div>
       </router-link>
-      <router-link class="active-link" to="/guidelines">
+      <router-link class="active-link" to="/vehicle">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Loan Guidelines</div>
+        <div class="admin-col-link-text">Vehicle Insurance</div>
       </div>
       </router-link>
-      <router-link class= "active-link" to="/loan-option">
+      <router-link class= "active-link" to="/house">
  <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Loan</div>
+        <div class="admin-col-link-text">House Insurance</div>
       </div>
       </router-link>
-      <router-link class= "active-link" to="/loanplanner">
+      <router-link class= "active-link" to="#">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Loan Planner</div>
+        <div class="admin-col-link-text">Claims</div>
       </div>
       </router-link>
-<router-link class= "active-link" to="/savings"> 
- <div class="admin-col-link-div">
-        <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Savings</div>
-      </div>
-      </router-link> 
-      <router-link class= "active-link" to="/transactions"> 
+      <router-link class= "active-link" to="/savings"> 
         <div class="admin-col-link-div">
-        <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Transactions</div>
-      </div>
-      </router-link>      
-          <div v-if="userType== 3" >
-      <router-link class= "active-link" to="/settings"> 
-      <div class="admin-col-link-div">
-        <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Settings</div>
+          <div class="admin-col-1-links"></div>
+          <div class="admin-col-link-text">Law Union and Rock Insurance</div>
         </div>
-      </router-link>
-      </div>
+      </router-link> 
       </nav>
       <div @click="logout" class="admin-col-logout" style="cursor:pointer"><span class="text-span-3"></span> Logout</div>
     </div>

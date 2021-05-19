@@ -25,6 +25,23 @@
                       label-cols="4"
                       label-cols-lg="2"
                       label-size="sm"
+                      label="Employee Number"
+                      label-for="input-sm"
+                      invalid-feedback="Employee Number is required"
+                    >
+                      <b-form-input
+                        id="emp-input"
+                        v-model="form.EmployeeNo"
+                        required
+                      ></b-form-input
+                      ><br
+                    /></b-form-group>
+          </div>
+          <div class="form-flex-col">
+                     <b-form-group
+                      label-cols="4"
+                      label-cols-lg="2"
+                      label-size="sm"
                       label="Job Title"
                       label-for="input-sm"
                       invalid-feedback="Job title is required"
@@ -422,6 +439,7 @@ export default {
       show: true,
       notify:0,
       showDecadeNav: true,
+      userId: "",
       form: {
         JobTitle:"",
         fname: "",
@@ -528,14 +546,18 @@ export default {
       }
 
       let empData = {
-        Username: this.form.email,
+        Username: this.form.EmployeeNo,
         Password: "Admin@01",
         Email: this.form.email,
         EmailConfirmed: true,
-        UserType: 3   
+        UserType: 3  
       };
-      this.$store.dispatch('createAccout', empData)
-      .then(() =>{  this.makeToast(`success`);    })
+      await this.$store.dispatch('createAccout', empData)
+      .then((rep) =>{  
+        this.userId = rep.data.userId
+          })
+
+
 
       let rawData = {
           JobTitle :this.form.JobTitle,
@@ -545,6 +567,7 @@ export default {
           BasicSalary: parseInt(this.form.BasicSalary),
           DepartmentId : this.form.dept,
           EmployeeTypeId : this.form.EmployeeType,
+          UserId: this.userId,
          Person: {
           FirstName :this.form.fname,
           LastName :this.form.lname,
@@ -566,7 +589,8 @@ export default {
       await axios
         .post(`${process.env.VUE_APP_API_URL}/employee`, rawData, {
           headers: {
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         })
         .then(response => {

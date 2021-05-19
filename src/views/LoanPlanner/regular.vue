@@ -4,7 +4,15 @@
             <div class="content-header">Target Loan Planner</div>
         </div>
         <div v-else>
-            <div class="content-header">Regular Loan Planner</div>
+            <span v-if="memberLogin.memberType === 1">
+            <div class="content-header">Regular Member Loan Planner</div>
+            </span>
+            <span v-if="memberLogin.memberType === 2">
+            <div class="content-header">Retiree Member Loan Planner</div>
+            </span>
+            <span v-if="memberLogin.memberType === 3">
+            <div class="content-header">Expatriate Member Loan Planner</div>
+            </span>            
         </div>
         <div class="form-flex-col">
                     <label class="login-label">Loan Type</label>
@@ -170,6 +178,7 @@ export default {
                 { value: 3, text: "Generator Maintenance/ Diesel Allowance" },
                 { value: 4, text: "Annual Productivity Bonus"}
             ], 
+            memberType:0,
             // interestRate:'',
             // availableLoan:'',
             // savingsRequired:'',
@@ -189,8 +198,14 @@ export default {
             }
         }
     },
+    computed: {
+  memberLogin() {
+    return this.$store.state.member
+  }
+},
     async created (){        
         await this.initialize();
+        this.$store.dispatch('memberDetails');
     },
     methods: {
         planner() {                

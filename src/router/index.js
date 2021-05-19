@@ -36,6 +36,11 @@ import LoanPlanner from "../views/LoanPlanner/loanplanner.vue";
 import LoanGuidelines from "../views/loanGuidelines/loanGuidelines.vue";
 import ExternalLogin from "../views/externalLogin.vue";
 
+import Insurance from "../views/insurance/dashboard/dashboard.vue";
+import vehicleInsurance from "../views/insurance/vehicleInsurance/options.vue";
+import houseInsurance from "../views/insurance/houseInsurance/options.vue";
+
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -95,6 +100,24 @@ const routes = [
     path: "/overview",
     name: "Overview",
     component: Overview,    
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/insurance",
+    name: "Insurance",
+    component: Insurance,    
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/vehicle",
+    name: "vehicleInsurance",
+    component: vehicleInsurance,    
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/house",
+    name: "houseInsurance",
+    component: houseInsurance,    
     meta: {requiresAuth: true},
   },
   {
