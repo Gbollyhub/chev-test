@@ -16,6 +16,10 @@ export default {
 },
   data() {
     return {
+      modeUnselected:"mode-unselected",
+      modeSelected:"mode-selected",
+      modeActive: "mode-active",
+      modeDefault: "mode-default",
       state: 'failed',
       status: false,
       message: '',
@@ -32,6 +36,7 @@ export default {
       user: {},
       balance:{},
       employeeNumber: '',
+      employeeName: '',
       name: '',
       amount:'',
       sourceAccount: 1,
@@ -42,6 +47,7 @@ export default {
         { value: 1, text: "Savings", },
         { value: 2, text: "Special Deposit" }
       ],
+      currentMode: 1
     };
   },
   async mounted() {
@@ -56,6 +62,40 @@ export default {
     this.$store.dispatch('memberBalance');
   },
   methods: {
+   async getGuarantorInfo(){
+     this.loader = true
+   let guarantor = {            
+      EmployeeNumber: this.employeeNumber
+    };    
+await axios
+  .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  })
+  .then(response => {
+    this.loader = false
+    this.employeeName= response.data.data.person.firstName + ' ' + response.data.data.person.lastName
+  })
+  .catch(error => {
+    this.loader = false
+    this.$bvToast.toast(error.message, {
+          title: "Error",
+          variant: "danger",
+          solid: true,
+          autoHideDelay: 5000
+      });
+  });
+},
+    toggleMode(mode){
+    if(mode == 1){
+     this.currentMode = 1
+    }
+    else if(mode == 2){
+      this.currentMode = 2
+    }
+    },
     closeModal(){
       this.status = false
   },
