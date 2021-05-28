@@ -97,7 +97,7 @@ export default {
         Email: this.form.email,
         UserTypeCategory: parseInt(this.form.UserTypeCategory),
         UserType: 2,
-        ReturnUrl: 'http://localhost:8080/confirmation'    
+        ReturnUrl: 'https://site.cemcscoop.com/confirmation'    
       };
       this.$store.dispatch('createAccout', rawData)
       .then(() =>{  
