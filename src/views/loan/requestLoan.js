@@ -2,17 +2,23 @@ import axios from "axios";
 import moment from 'moment'
 import Loader from '../../components/ui/loader/loader.vue'
 import Status from '../../components/ui/state/state.vue'
+import FileUpload from '../../components/fileUpload.vue'
 
 
 export default {
   name: "Home",
   components: {
     Loader,
-    Status
+    Status,
+    FileUpload
 },
   data() {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
+      file: '',
+      showPreview: false,
+      imagePreview: '',
+      progress: 0,
       show: true,
       loader: false,
       checked: false,
@@ -115,7 +121,29 @@ export default {
   }
 },
 
-  methods: {  
+  methods: {
+    
+    FileUpload() {
+      this.file = this.$refs.file.files[0];
+      let reader  = new FileReader();
+      reader.addEventListener("load", function () {
+        this.showPreview = true;
+        this.imagePreview = reader.result;
+      }.bind(this), false);
+      if( this.file ){
+        if ( /\.(jpe?g|png|gif)$/i.test( this.file.name ) ) {
+          /*Check for the required format(s)          */
+          // reader.readAsDataURL( this.file );
+          console.log('fileName',JSON.stringify(this.file.name))
+        }
+      }else {
+        this.message = 'File format not supported'
+        this.loader = false;
+        this.state = 'warning';
+        this.status = true;
+      }
+    },
+
   async selectGuarantor(gNo){
       let guarantor = {            
         EmployeeNumber: gNo
@@ -476,8 +504,19 @@ export default {
           });
     },
 
+    // Submit FormData
     async onSubmit(event) {
       event.preventDefault()
+      // let formData = new FormData();
+      // this.file = this.$refs.file.files[0];
+      this.progress = 0;
+
+      if (this.file == "") {
+        this.message = 'File upload cannot be empty'
+        this.loader = false;
+        this.state = 'warning';
+        this.status = true;
+      }
 
       if (this.AmountValidation()) {
         return this.errors;
@@ -507,24 +546,35 @@ export default {
         MethodOfCollection: 2,
         AccountNumber: this.form.accountNumber,
         AccountName: this.name.data,
-        LoanGuarantors: this.guarantorArray
+        LoanGuarantors: this.guarantorArray,
+        FormFile: this.file
       }
       rawData = JSON.stringify(rawData);
+      /* Add the form data we need to submit */
+      // formData.append('FormFile', this.file);
+      // formData.append('rawData',rawData)
       await axios
         .post(
-          `${process.env.VUE_APP_API_URL}/Loans/apply`,
+          `${process.env.VUE_APP_API_URL}/Loans/submit`,
           rawData,
           {
             headers: {
-              'Content-Type': 'application/json;charset=utf-8',
+              'Content-Type': 'application/json;charset=utf-8, multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
+            }
+            // ,  event => { this.progress = Math.round((100 * event.loaded) / event.total)   }
           }
         )
-        .then((response) => {          
-          if (response.data.data === null){
+        .then((response) => {
+                    
+          if (response.data.data === null && response.data.success == true){
             this.showDismissibleAlert = !this.showDismissibleAlert;
             this.result = response.data;
+            this.message = 'Loan Application was successful'
+            this.loader = false;
+            this.state = 'success';
+            this.status = true;
+            this.clearForm(); 
           }else {
             this.result = response.data;
             this.$emit("setParamResp", this.result);

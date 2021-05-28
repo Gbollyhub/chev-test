@@ -1,6 +1,5 @@
 <template>
   <div>
-
           <div class="content-header">Aprrovals</div>
                 <div >
                   <strong>
@@ -39,7 +38,7 @@
                   >
                     <b-form-input
                       id="name-input"
-                      type="number"
+                      type="text"
                       v-model.lazy.trim="approver"
                     ></b-form-input
                     ><br
@@ -55,10 +54,7 @@
                           <b-form-group id="input-3" label="Approvers">
                             
                           </b-form-group>
-                          <!-- <div v-if="approver !== ''"> -->
-                            <!-- <div id="#dept" v-for="(dept,ind) in (parseInt(this.approver))"
-                            :ind="ind" :key="ind"> -->
-                            <div v-for="(item,ind) in approversArray" :key="ind">
+                            <div v-for="item in approversArray" :key="item.id">
                               <b-row class="my-1 form-row mb-3">
                               <b-form-select
                                 :id="dept"
@@ -69,42 +65,27 @@
                                   -- Select Department -- 
                                 </b-form-select-option>
                                 <b-form-select-option 
-                                v-for="item in filteredDept" 
-                                :value="item.id"
-                                :key="item.id">
-                                  {{item.description}}
+                                v-for="department in departments" 
+                                :value="department.id"
+                                :key="department.id">
+                                  {{department.description}}
                                 </b-form-select-option>                      
-                              </b-form-select>
-                              <div v-if="item.department">
-                              <div v-for="(pair,index) in pairs" :key="index" >                                                       
+                              </b-form-select>                              
+                              <div v-for="pair in approvals" :key="pair.id" >
+                                <div v-if="item.department">                                                    
                                   <b-form-checkbox
-                                    v-model="pair.checkedPersons[index]"
+                                    v-model="item.usernames"
                                     class="mb-3"
-                                    :value="pair.email"
+                                    :value="pair.person.email"
                                     :name="`check-`"
                                     inline>
-                                    {{ pair.firstName }}
+                                    {{ pair.person.firstName }}
                                   </b-form-checkbox>
                               </div></div>
-                              </b-row>                             
-                              <!-- <div v-for="(item,index) in approverArray" :key="index" >                                                       
-                                  <b-form-checkbox v-for="person in departmentPersons[item.department]" :key="person"
-                                    v-model="selected[index]"
-                                    class="mb-3"
-                                    :value="item.Email"
-                                    :name="`check-${i}`"
-                                    :key="[i]"
-                                    inline>
-                                    {{ item.Name+' '+Name+" index "+ index }}
-                                  </b-form-checkbox>
-                              </div> -->
-                              
-                              selected  is {{selected}}
-                              dept {{item.department}}
-                                                           
-                            </div>                        
-                          <!-- </div> -->
-                           
+                              </b-row>                      
+                            </div>
+                             selected  is 
+                              <pre>{{approversArray}}</pre>                           
                           
                         </b-th>
                         <b-th colspan="3">
@@ -116,13 +97,11 @@
                               <b-form-input
                                 :id="`level-${i}`"
                                 v-model="level[i]"
-                                @blur="getParam(this.selected)"
                               ></b-form-input>
                               </b-row>
                             </div>
                           </div>                         
-                        </b-th>
-                       
+                        </b-th>                       
                       </b-tr>                
                     </b-table-simple>            
                     <button style="display:inline-block" class="app-form-button">Submit</button>
@@ -147,11 +126,8 @@ export default {
       id:0,
       department: [],
       depts:[],
-      approvals:[],
-      approvers:{
-        usernames:"",        
-        approvalLevel:"",
-      },
+      approvals:[],       
+      approvalLevel:"",
       person:{
         email:{},
         firstName:{},
@@ -175,8 +151,8 @@ export default {
         for (let i=0;i<this.approver;i++)
         {
           arr.push({
-            id: i,
-            checkedPersons: []
+            usernames: "",
+            level:this.level[i]
           });
         }
       }
@@ -185,29 +161,29 @@ export default {
     }
   },
   computed: {
-    pairs () {
-      return this.approvals.map((approve) => {
-        return {
-          Name: approve.person.firstName,
-          Email: approve.person.email
-        }
-      })
-    },
+    // pairs () {
+    //   return this.approvals.map((approve) => {
+    //     return {
+    //       Name: approve.person.firstName,
+    //       Email: approve.person.email
+    //     }
+    //   })
+    // },
 
-  filteredDept() {
-    console.log("department is", JSON.stringify(this.department))
-    console.log("departments are", JSON.stringify(this.departments))
+  // filteredDept() {
+  //   console.log("department is", JSON.stringify(this.department))
+  //   console.log("departments are", JSON.stringify(this.departments))
     
-    if (!this.department.length ) {
-      return this.departments
-    }else {
-      let dept = this.departments.filter(department => department.id !== department[department.length-1])
-      console.log("item dept", JSON.stringify(this.department.id))
-      console.log("department index is", JSON.stringify(this.department[this.department.length-1]))
+  //   if (!this.department.length ) {
+  //     return this.departments
+  //   }else {
+  //     let dept = this.departments.filter(department => department.id !== department[department.length-1])
+  //     console.log("item dept", JSON.stringify(this.department.id))
+  //     console.log("department index is", JSON.stringify(this.department[this.department.length-1]))
       
-      return dept
-    }
-  }
+  //     return dept
+  //   }
+  // }
 },
   methods: {
     async initDept() {        
@@ -246,7 +222,7 @@ export default {
           });
     },
 
-    async getApprovals(deptId,ind) {
+    async getApprovals(deptId) {
       await axios.get(`${process.env.VUE_APP_API_URL}/employee/dept/${deptId}`,{
         headers:{
           "Content-Type": "application/json;charaset=utf-8",
@@ -254,10 +230,10 @@ export default {
         }
       }).then (response => {
           this.approvals = response.data
-          this.approversArray[ind].email = response.data.person.email
-          this.approversArray[ind].firstName = response.data.person.firstName
-          // + " "+ response.data.person.lastName
-           console.log("firstName ", JSON.stringify(this.approversArray[ind].firstName))
+          // this.approversArray[ind].email = response.data.person.email
+          // this.approversArray[ind].firstName = response.data.person.firstName
+          // // + " "+ response.data.person.lastName
+          //  console.log("firstName ", JSON.stringify(this.approversArray[ind].firstName))
 
 
       }).catch(error => {

@@ -14,8 +14,9 @@
       </div>
             <div class="content-header">Hii there! <span>{{ memberLogin.person.firstName }}</span></div>
               <div class="content-sub2"> Here are the latest report on account</div>
+               <div v-if="userType < 3" >
               <div class="summary-flex">
-                                   <div class="content-slide-box">
+                    <div class="content-slide-box">
                       <div class="content-info-card">
                         <div class="div-block-2">
                           <div class="slide-card-header">Savings Balance</div>
@@ -42,7 +43,7 @@
                         <div class="slide-card-icon green"></div>
                       </div>
                     </div>
-              </div>
+              </div></div>
               <div class="basic-table-card">
                 <div class="table-header">
                   <div class="content-header-2">Recent Transactions</div>

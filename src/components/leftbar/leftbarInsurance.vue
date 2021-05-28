@@ -23,15 +23,15 @@
       <router-link class= "active-link" to="#">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Claims</div>
+        <div class="admin-col-link-text">House Claims</div>
       </div>
       </router-link>
-      <router-link class= "active-link" to="/savings"> 
+      <!-- <router-link class= "active-link" to="/savings"> 
         <div class="admin-col-link-div">
           <div class="admin-col-1-links"></div>
           <div class="admin-col-link-text">Law Union and Rock Insurance</div>
         </div>
-      </router-link> 
+      </router-link>  -->
       </nav>
       <div @click="logout" class="admin-col-logout" style="cursor:pointer"><span class="text-span-3"></span> Logout</div>
     </div>

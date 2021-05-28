@@ -63,11 +63,18 @@
           </div>
             <div class="form-flex-col">
                 <label class="login-label">Rate</label>
-                <input type="text" class="app-text-field w-input" />
+                <input type="text" class="app-text-field w-input"
+                v-model="rate" v-mask="mask" required placeholder="Type Here" />
+                <span v-if="rate != ''"><p style="color:red;font-size:12px;" >
+    {{parseFloat(this.rate.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    </p></span>
             </div>
             <div class="form-flex-col">
                 <label class="login-label">Value of Vehicle</label>
-                <input type="text" class="app-text-field w-input" />
+                <input type="text" class="app-text-field w-input" v-model="valueOfVehicle" v-mask="mask" required placeholder="Type Here" />
+                <span v-if="valueOfVehicle != ''"><p style="color:red;font-size:12px;" >
+    {{parseFloat(this.valueOfVehicle.replace(/,/g, '')) | NumbersToWords | capitalize}} Naira Only
+                    </p></span>
             </div>
             <div class="form-flex-col">
                 <label class="login-label">Premium</label>
