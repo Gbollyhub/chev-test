@@ -27,7 +27,6 @@
 </div>
 </template>
 
-
 <script>
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
