@@ -3,6 +3,7 @@
     <div v-show="loader">
          <Loader/>
       </div>
+       <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
         <div v-if="this.errors != ''">            
@@ -352,7 +353,7 @@
             </b-row>
             <span v-if="memberLogin.memberType == 2">
                 <div class="large-12 medium-12 small-12 cell">
-                    <div v-if="currentFile" class="progress">
+                    <div v-if="file" class="progress">
                         <div
                             class="progress-bar progress-bar-info progress-bar-striped"
                             role="progressbar"

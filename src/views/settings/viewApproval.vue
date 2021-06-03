@@ -18,7 +18,7 @@
                     <b-form-select
                       :id="`modules`"
                       v-model="selectedModule"
-                      @change="initapprove()"
+                      @change="init(selectedModule)"
                       required>
                       <b-form-select-option :value="null" disabled>
                         -- Select Module -- 
@@ -39,22 +39,22 @@
                     {{ data.index + 1 }}
                 </template>
                 <template #cell(name)="data">
-                    <b class="text-info">{{ data.item.itemData.person.lastName.toUpperCase() }}</b>,
-                    <b>{{ data.item.itemData.person.firstName}}</b>
+                    <b class="text-info">{{ data.item.itemData.member.person.lastName.toUpperCase() }}</b>,
+                    <b>{{ data.item.itemData.member.person.firstName}}</b>
                 </template>
                 <template #cell(employeeNumber)="data">
-                  <a type="button" @click="Details(approve.data,data.index)" variant="primary">
-                  <b class="text-info">{{ data.item.itemData.employeeNumber }}</b></a>
-                    
+                  <a type="button" @click="Details(approve.data, data.index)" variant="primary">
+                  <b class="text-info">{{ data.item.itemData.member.employeeNumber }}</b></a>                    
                 </template>
                 <template #cell(active)="data">
-                    <span v-if="!data.item.itemData.approved">Not-Approved</span>
-                    <span v-if="data.item.itemData.approved">Approved</span>
+                    <span v-if="data.item.approved == null">Not-Approved</span>
+                    <span v-if="data.item.approved == false">Rejected</span>
+                    <span v-if="data.item.approved == true">Approved</span>
                 </template>
                 <template #cell(memberType)="data">
-                    <span v-if="data.item.itemData.memberType === 1">Regular Member</span>
-                    <span v-if="data.item.itemData.memberType === 2">Retiree Member</span>
-                    <span v-if="data.item.itemData.memberType === 3">Expatriate Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 1">Regular Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 2">Retiree Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 3">Expatriate Member</span>
                 </template>
                 <template #cell(show_details)="data">
                     <span v-if="!data.item.itemData.approved">
@@ -82,7 +82,7 @@
       <b-container class="justify-content-md-center">
           <b-row class="mb-1 text-left">
           <b-col cols="5"><b>Member ID</b></b-col>          
-          <b-col cols="3"></b-col>
+          <!-- <b-col cols="3"></b-col> -->
           <b-col>
             <b>{{EmpNo}}</b>
           </b-col>          
@@ -90,41 +90,70 @@
 
         <b-row class="mb-1 text-left">
           <b-col cols="5">Full Name</b-col>       
-          <b-col cols="3"></b-col>
+          <!-- <b-col cols="3"></b-col> -->
           <b-col>
             <b class="text-info">{{ Name}}</b>
           </b-col>          
         </b-row>
         
         <b-row class="mb-1 text-left">
-          <b-col cols="5"> </b-col>       
-          <b-col cols="3"></b-col>
+          <b-col cols="5">Status</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
           <b-col>
             <span v-if="Paid === true">Paid</span>
             <span v-if="Paid === false">Not-Paid</span>
           </b-col>          
         </b-row>
+        <span v-if="selectedModule == 3">
         <b-row class="mb-1 text-left">
-          <b-col cols="5"> </b-col>       
-          <b-col cols="3"></b-col>
+          <b-col cols="5">Loan Amount </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
           <b-col>
-            <!-- {{Details.interest | price}} -->
+            {{LoanAmount | price}} <b/><b/>
+   ( {{parseFloat(LoanAmount) | NumbersToWords | capitalize}} Naira Only)
+
           </b-col>          
         </b-row>
         <b-row class="mb-1 text-left">
-          <b-col cols="5"> </b-col>       
-          <b-col cols="3"></b-col>
+          <b-col cols="5">Interest </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
           <b-col>
-              <!-- {{Details.repaymentPeriod}} -->
+            {{interest | price}}
           </b-col>          
         </b-row>
         <b-row class="mb-1 text-left">
-          <b-col cols="5"> </b-col>       
-          <b-col cols="3"></b-col>
+          <b-col cols="5">Principal </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            {{principal | price}}
+          </b-col>          
+        </b-row>
+        
+        <b-row class="mb-1 text-left">
+          <b-col cols="5"> Repayment</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+              {{repayment}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Date Submitted</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
           <b-col cols="4">
-            <!-- {{Details.dateSubmitted | hum}} -->
+            {{dateSubmitted | hum}}
           </b-col>          
         </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Effective from </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col cols="4">
+            {{effectiveDate | hum}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-button @click="download(fileDownload)">Download payslip </b-button>          
+        </b-row>
+        </span>
 
       </b-container>
 

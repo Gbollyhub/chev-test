@@ -10,7 +10,7 @@
           </p>
         </div>           
         <div class="profile-image">
-            <span><a href="https://site.cemcscoop.com/register">Click here to complete your CEMCS Membership Registration</a></span>
+            <span><a :href="`${process.evn.BASE_API_URL}/register`">Click here to complete your CEMCS Membership Registration</a></span>
         </div>
       </div>
     </div>

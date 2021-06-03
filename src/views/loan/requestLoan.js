@@ -16,10 +16,14 @@ export default {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
       file: '',
+      currentFile: undefined,
       showPreview: false,
       imagePreview: '',
       progress: 0,
       show: true,
+      state: 'failed',
+      status: false,
+      message: '',
       loader: false,
       checked: false,
       dismissSecs: 5,
@@ -106,6 +110,7 @@ export default {
       togglePastGuarantors: false,
       pastGuarantorCount:0
     };
+    
   },
 
   async created() {
@@ -122,9 +127,13 @@ export default {
 },
 
   methods: {
+    closeModal(){
+      this.status = false
+  },
     
     FileUpload() {
       this.file = this.$refs.file.files[0];
+      this.progress = 0;
       let reader  = new FileReader();
       reader.addEventListener("load", function () {
         this.showPreview = true;
@@ -133,8 +142,9 @@ export default {
       if( this.file ){
         if ( /\.(jpe?g|png|gif)$/i.test( this.file.name ) ) {
           /*Check for the required format(s)          */
-          // reader.readAsDataURL( this.file );
+          reader.readAsDataURL( this.file );
           console.log('fileName',JSON.stringify(this.file.name))
+          event => { this.progress = Math.round((100 * event.loaded) / event.total)   }
         }
       }else {
         this.message = 'File format not supported'
@@ -464,14 +474,21 @@ export default {
             }
           })
           .then(response => {
-            console.log(response.data)
-            this.details = response.data;
-            this.mType = response.data.loan.loanType;
-            this.mLoanCode = response.data.loan.loanCode;
-            this.minLoanAmount = response.data.minLoanAmount;
-            this.maxLoanAmount = response.data.maxLoanAmount;
-            this.MinRepayPeriod = response.data.minMonthlyRepayPeriod;
-            this.MaxRepayPeriod = response.data.maxMonthlyRepayPeriod
+            if(response.data.errorMessage != null){
+              this.message = response.data.errorMessage
+              this.loader = false;
+              this.status = true;
+              this.state = 'failed';
+            }else {
+              console.log(response.data)
+              this.details = response.data;
+              this.mType = response.data.loan.loanType;
+              this.mLoanCode = response.data.loan.loanCode;
+              this.minLoanAmount = response.data.minLoanAmount;
+              this.maxLoanAmount = response.data.maxLoanAmount;
+              this.MinRepayPeriod = response.data.minMonthlyRepayPeriod;
+              this.MaxRepayPeriod = response.data.maxMonthlyRepayPeriod
+            }
           })
           .catch(error => {
             this.$bvToast.toast(error, {
@@ -507,9 +524,9 @@ export default {
     // Submit FormData
     async onSubmit(event) {
       event.preventDefault()
-      // let formData = new FormData();
+      let formData = new FormData();
       // this.file = this.$refs.file.files[0];
-      this.progress = 0;
+      console.log("ImageFile",JSON.stringify(this.file));
 
       if (this.file == "") {
         this.message = 'File upload cannot be empty'
@@ -517,6 +534,7 @@ export default {
         this.state = 'warning';
         this.status = true;
       }
+      // formData.append('FormFile', this.file, this.file.name);
 
       if (this.AmountValidation()) {
         return this.errors;
@@ -534,35 +552,48 @@ export default {
         repay = 0
       }
 
-      let rawData = {
-        LoanId : this.details.loanId,
-        MemberId: this.memberLogin.id,
-        InterestRate: this.details.intrestRate,
-        LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
-        RepaymntPeriod: repay,
-        EffectiveMonth: Month,
-        EffectiveYear: Year,
-        BankCode: this.form.bankcode,
-        MethodOfCollection: 2,
-        AccountNumber: this.form.accountNumber,
-        AccountName: this.name.data,
-        LoanGuarantors: this.guarantorArray,
-        FormFile: this.file
-      }
-      rawData = JSON.stringify(rawData);
+      // let rawData = {
+        // LoanId = this.details.loanId,
+        // MemberId: this.memberLogin.id,
+        // InterestRate: this.details.intrestRate,
+        // LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
+        // RepaymntPeriod: repay,
+        // EffectiveMonth: Month,
+        // EffectiveYear: Year,
+        // BankCode: this.form.bankcode,
+        // MethodOfCollection: 2,
+        // AccountNumber: this.form.accountNumber,
+        // AccountName: this.name.data,
+        // LoanGuarantors: this.guarantorArray,
+        // FormFile: formData
+
+      formData.append('LoanId', this.details.loanId);
+      formData.append('MemberId', this.memberLogin.id);
+      formData.append('InterestRate', this.details.intrestRate);
+      formData.append('LoanAmount', parseInt(this.loanAmount.replace(/,/g, '')));
+      formData.append('RepaymntPeriod', repay);
+      formData.append('EffectiveMonth', Month);
+      formData.append('EffectiveYear', Year);
+      formData.append('BankCode', this.form.bankcode);
+      formData.append('MethodOfCollection', 2);
+      formData.append('AccountNumber', this.form.accountNumber);
+      formData.append('AccountName', this.name.data);
+      formData.append('LoanGuarantors', this.guarantorArray);
+      formData.append('FormFile', this.$refs.file.files[0]);
+      // }
+      // rawData = JSON.stringify(rawData);
       /* Add the form data we need to submit */
       // formData.append('FormFile', this.file);
       // formData.append('rawData',rawData)
       await axios
         .post(
           `${process.env.VUE_APP_API_URL}/Loans/submit`,
-          rawData,
+          formData,
           {
             headers: {
-              'Content-Type': 'application/json;charset=utf-8, multipart/form-data',
+              'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
-            // ,  event => { this.progress = Math.round((100 * event.loaded) / event.total)   }
           }
         )
         .then((response) => {
@@ -588,6 +619,10 @@ export default {
             localStorage.removeItem('token')
             this.$router.push('/')
         }
+            this.message = error.message
+            this.loader = false;
+            this.status = true;
+            this.state = 'failed';
             this.$bvToast.toast(error, {
                 title: "Error",
                 variant: "danger",

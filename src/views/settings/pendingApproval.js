@@ -18,6 +18,13 @@ export default {
       approve: [],
       EmpNo:"",
       Name:"",
+      LoanAmount:0,
+      dateSubmitted:"",
+      effectiveDate:"",
+      interest:0,
+      principal:0,
+      repayment:0,
+      fileDownload:"",
       Paid:Boolean,
       moduleApproverId:0,
       id:0,
@@ -44,20 +51,50 @@ export default {
   async created() {    
     await this.getAll();
     await this.initModules();
-    await this.initapprove();
+    // await this.initLoan();
+    // await this.initMember()
 
 
   },
   methods: {
     Details(detail,index) {
-        this.EmpNo = detail[index].itemData.employeeNumber
-        this.Name = detail[index].itemData.person.lastName.toUpperCase() +", " + detail[index].itemData.person.firstName
-        this.Paid = detail[index].itemData.hasPaidFee
-        this.id = detail[index].id
-        this.moduleApproverId = detail[index].moduleApproverId
-        this.itemId = detail[index].itemId
+        if (this.selectedModule == 2){
+          this.EmpNo = detail[index].itemData.employeeNumber
+          this.Name = detail[index].itemData.person.lastName.toUpperCase() +", " + detail[index].itemData.person.firstName
+          this.Paid = detail[index].itemData.hasPaidFee
+          this.id = detail[index].id
+          this.moduleApproverId = detail[index].moduleApproverId
+          this.itemId = detail[index].itemId
+          this.show=true
+        }
+        if (this.selectedModule == 3){
+          this.EmpNo = detail[index].itemData.member.employeeNumber
+          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName
+          this.Paid = detail[index].itemData.isPaid
+          this.id = detail[index].id
+          this.moduleApproverId = detail[index].moduleApproverId
+          this.itemId = detail[index].itemId
+          this.LoanAmount = detail[index].itemData.loanAmount
+          this.dateSubmitted = detail[index].itemData.dateSubmitted
+          this.effectiveDate = detail[index].itemData.effectiveDate
+          this.interest = detail[index].itemData.interest
+          this.principal = detail[index].itemData.principal
+          this.repayment = detail[index].itemData.repaymentPeriod
+          this.fileDownload = [detail[index].itemData.filePath]
+          console.log('file 1: ',JSON.stringify(this.fileDownload))
 
-        this.show=true
+          this.show=true
+        }
+      },
+      download(fileDownload) {
+        // new Blob(['{"name": "test"}'])
+        var file = (window.URL || window.webkitURL).createObjectURL(new Blob([fileDownload], {type: "image/png"}));
+        // ( /\.(pdf|jpe?g|png|gif)$/i.test( this.file.name ) )
+        var fileLink = document.createElement('a');   
+        fileLink.href = file;
+        fileLink.setAttribute('download', 'paySlip.png');
+        // document.body.appendChild(fileLink);
+        fileLink.click();
       },
     async getAll() {        
      await axios
@@ -94,7 +131,7 @@ export default {
             });
           });
     },
-    async initapprove() {
+    async initMember() {
      await axios
         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
           headers: {
@@ -109,6 +146,32 @@ export default {
           error.alert("Error");
         });
     },
+
+    async init(selectedModule) {
+      if (selectedModule == 2) {    
+        return await this.initMember();        
+      }
+      if (selectedModule == 3) {
+        return await this.initLoan();        
+      }
+    },
+
+    async initLoan() {
+      await axios
+         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Loan`, {          
+          headers: {
+             "Content-Type": "application/json;charset=utf-8",
+             Authorization: `Bearer ${localStorage.getItem('token')}`,
+             responseType: 'arraybuffer'
+           }
+         })
+         .then(response => {
+           this.approve = response.data;
+         })
+         .catch(error => {
+           alert(error);
+         });
+     },
 
     async ApproveModuleRequest(Id,ModuleApproverId,itemId) { 
       let rawData = {
@@ -127,7 +190,7 @@ export default {
         })
         .then(response => {
             this.approve = response.data;
-            this.initapprove();
+            this.init(this.selectedModule)       
             this.show=false
         })
         .catch(error => {
@@ -151,6 +214,7 @@ export default {
         })
         .then(response => {
             this.approve = response.data;
+            this.init(this.selectedModule)
             this.show=false
         })
         .catch(error => {
