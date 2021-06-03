@@ -18,7 +18,7 @@
                     <b-form-select
                       :id="`modules`"
                       v-model="selectedModule"
-                      @change="initapprove()"
+                      @change="init(selectedModule)"
                       required>
                       <b-form-select-option :value="null" disabled>
                         -- Select Module -- 
@@ -39,20 +39,22 @@
                     {{ data.index + 1 }}
                 </template>
                 <template #cell(name)="data">
-                    <b class="text-info">{{ data.item.itemData.person.lastName.toUpperCase() }}</b>,
-                    <b>{{ data.item.itemData.person.firstName}}</b>
+                    <b class="text-info">{{ data.item.itemData.member.person.lastName.toUpperCase() }}</b>,
+                    <b>{{ data.item.itemData.member.person.firstName}}</b>
                 </template>
                 <template #cell(employeeNumber)="data">
-                    {{ data.item.itemData.employeeNumber }}
+                  <a type="button" @click="Details(approve.data, data.index)" variant="primary">
+                  <b class="text-info">{{ data.item.itemData.member.employeeNumber }}</b></a>                    
                 </template>
                 <template #cell(active)="data">
-                    <span v-if="!data.item.itemData.approved">Not-Approved</span>
-                    <span v-if="data.item.itemData.approved">Approved</span>
+                    <span v-if="data.item.approved == null">Not-Approved</span>
+                    <span v-if="data.item.approved == false">Rejected</span>
+                    <span v-if="data.item.approved == true">Approved</span>
                 </template>
                 <template #cell(memberType)="data">
-                    <span v-if="data.item.itemData.memberType === 1">Regular Member</span>
-                    <span v-if="data.item.itemData.memberType === 2">Retiree Member</span>
-                    <span v-if="data.item.itemData.memberType === 3">Expatriate Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 1">Regular Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 2">Retiree Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 3">Expatriate Member</span>
                 </template>
                 <template #cell(show_details)="data">
                     <span v-if="!data.item.itemData.approved">
@@ -60,128 +62,128 @@
                       class="float-sm-left">Approve</b-button>                                    
                     </span>
                     <!-- <span v-if="data.item.itemData.approved">
-                      <b-button variant="primary" @click="ApproveModuleRequest" class="float-sm-left">Pending</b-button>                                    
+                      <b-button variant="primary" @click="ApproveModuleRequest" class="float-sm-left">Pending</b-button>
+                      
+                  <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
+                  <b class="text-info">{{ data.item.loanAmount | price }}</b></a>                                 
                     </span> -->
                     </template>
             </b-table>
       </div>
+  
+        <b-modal
+            v-model="show"
+            title="Approval"
+            :header-bg-variant="headerBgVariant"
+            :header-text-variant="headerTextVariant"
+            :body-bg-variant="bodyBgVariant"
+            :body-text-variant="bodyTextVariant"
+            >
+      <b-container class="justify-content-md-center">
+          <b-row class="mb-1 text-left">
+          <b-col cols="5"><b>Member ID</b></b-col>          
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            <b>{{EmpNo}}</b>
+          </b-col>          
+        </b-row>
+
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Full Name</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            <b class="text-info">{{ Name}}</b>
+          </b-col>          
+        </b-row>
+        
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Status</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            <span v-if="Paid === true">Paid</span>
+            <span v-if="Paid === false">Not-Paid</span>
+          </b-col>          
+        </b-row>
+        <span v-if="selectedModule == 3">
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Loan Amount </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            {{LoanAmount | price}} <b/><b/>
+   ( {{parseFloat(LoanAmount) | NumbersToWords | capitalize}} Naira Only)
+
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Interest </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            {{interest | price}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Principal </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            {{principal | price}}
+          </b-col>          
+        </b-row>
+        
+        <b-row class="mb-1 text-left">
+          <b-col cols="5"> Repayment</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+              {{repayment}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Date Submitted</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col cols="4">
+            {{dateSubmitted | hum}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Effective from </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col cols="4">
+            {{effectiveDate | hum}}
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-button @click="download(fileDownload)">Download payslip </b-button>          
+        </b-row>
+        </span>
+
+      </b-container>
+
+      <template #modal-footer>
+        <div class="w-100">
+
+          <b-button
+            variant="danger"
+            size="sm"
+            class="float-right"
+            @click="RejectModuleRequest(id,moduleApproverId,itemId)"
+          >Reject</b-button>
+
+          <b-button
+            variant="primary"
+            size="sm"
+            class="float-left"
+            @click="ApproveModuleRequest(id,moduleApproverId,itemId)"
+          >Approve</b-button>
+
+        </div>
+      </template>
+    </b-modal>
+
+
 </div>
 </template>
 
+<script src="./pendingApproval.js"></script>
 
-<script>
-import axios from 'axios'
-
-export default {
-  data() {
-    return {
-       modules: [],
-      selectedModule:null,
-      approve: [],      
-      approveData: {
-        aprroved:Boolean
-      },      
-      selectedOpt: null,  
-      fields: [
-        {key: 'index', label: 'S/N'},
-        { key: 'name', label: 'Full Name' },
-        { key: 'employeeNumber', label: 'Employee No.' },
-        { key: 'active', label: 'Status' },        
-        { key: 'memberType', label: 'Member Type' },
-        {key:'show_details', label: 'Action '}
-      ],
-      options: [
-        {value: null, text: "Select Option"},
-        { value: 0, text: "Pending Approval" },
-        { value: 1, text: "Approved Members" }
-      ]
-    };
-  },
-  async created() {    
-    await this.getAll();
-    await this.initModules();
-    await this.initapprove();
+<style src=".././global.css"></style>
 
 
-  },
-  methods: {
-    async getAll() {        
-     await axios
-        .get( `${process.env.VUE_APP_API_URL}/Members/All`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.approve = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    }, 
-
-    async initModules() {        
-     await axios
-        .get(`${process.env.VUE_APP_API_URL}/ModuleApprovers/Modules`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8"
-          }
-        })
-        .then(response => {
-          this.modules = response.data;
-        })
-        .catch(error => {
-            this.$bvToast.toast(error, {
-                title: "Error",
-                variant: "danger",
-                solid: true,
-                autoHideDelay: 5000
-            });
-          });
-    },
-    async initapprove() {
-     await axios
-        .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.approve = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    },
-
-    async ApproveModuleRequest(Id,ModuleApproverId,itemId) { 
-      let rawData = {
-        Id: Id,
-        ModuleApproverId:ModuleApproverId,
-        itemId:itemId,
-        Approved : true
-      };
-      rawData = JSON.stringify(rawData);       
-     await axios
-        .post( `${process.env.VUE_APP_API_URL}/PendingApproval/Approve`, rawData,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.approve = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    },
-
-
-  }
-
-};
-  
-</script>

@@ -3,6 +3,7 @@
     <div v-show="loader">
          <Loader/>
       </div>
+       <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>
           <div class="content-header">Apply for a Loan</div>
       <div class="content-sub">Make a loan request</div>
         <div v-if="this.errors != ''">            
@@ -350,7 +351,26 @@
                 ></b-form-input>
                 </b-col>
             </b-row>
-            
+            <span v-if="memberLogin.memberType == 2">
+                <div class="large-12 medium-12 small-12 cell">
+                    <div v-if="file" class="progress">
+                        <div
+                            class="progress-bar progress-bar-info progress-bar-striped"
+                            role="progressbar"
+                            :aria-valuenow="progress"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            :style="{ width: progress + '%' }">
+                            {{ progress }}%
+                        </div></div>
+                    <label>Upload a Document
+                        <br/><input type="file" id="file" ref="file" accept="image/*,.pdf"
+                        v-on:change="FileUpload()"/>
+                    </label>
+                        <!-- <img v-bind:src="imagePreview" v-show="showPreview"/> -->
+                </div>
+                <!-- <FileUpload/> -->
+            </span>
             <div class="form-flex"><b>
                 I hereby agree to repay this loan through direct monthly deductions from my salary until the loan principal is fully repaid.
                 In addition to my shares in the Credit Society, I hereby pledge all my Chevron entitlements as security for this loan.
@@ -376,6 +396,10 @@
 <script src="./requestLoan.js"></script>
 
 <style scoped>
+    div.container img{
+    max-width: 200px;
+    max-height: 200px;
+  }
 .guarantor-chip{
 cursor:pointer;background:#57B4DC;color:white;display:inline-block;padding:0 10px;height:30px;line-height:30px;margin-right:15px
 }

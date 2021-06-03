@@ -2,28 +2,18 @@ import axios from "axios";
 // import {invoice} from '@/InterfaceType/IVehicle';
 export default class VehicleService {
   constructor() {
-    this.API_URL = process.env.VUE_APP_API_URL;
-    this.token = localStorage.getItem("Token");
+    // this.API_URL = process.env.VUE_APP_API_URL;
+    this.token = localStorage.getItem('token');
   }
-  async getAllVehicle() {
-    let result = await axios.get(`${this.API_URL}/inventory/`, {
+  async upload(formData) {
+    const url = `${process.env.VUE_APP_API_URL}/photos/upload`;
+    return await axios.post(url, formData,{
       headers: { Authorization: `Bearer ${this.token}` }
-    });
-    localStorage.removeItem("Token");
-    return result.data;
-  }
-  async email(id) {
-    const formData = new FormData();
-    var request = new XMLHttpRequest();
-    request.open(`POST`, `${this.API_URL}/inventory/${id}`);
-    request.send(formData);
-  }
-  async postemail(id, file) {
-    const formData = new FormData();
-    formData.append("pdf", file, "Invoice");
-    var request = new XMLHttpRequest();
-    request.open(`POST`, `${this.API_URL}/inventory/${id}`, file);
-    request.send(formData);
-  }
+    })
+        // get data
+        .then(x => x.data)
+        // add url field
+        .then(x => x.map(img => Object.assign({},
+            img, { url: `${process.env.VUE_APP_API_URL}/images/${img.id}` })));
+  }  
 }
-//# sourceMappingURL=vehicle-service.js.map

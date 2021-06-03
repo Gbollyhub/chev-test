@@ -59,12 +59,12 @@ Vue.filter('price', function (number) {
   if (isNaN(number)) {
       return ' ';
   }
-  return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return '₦ '+ number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 });
 
 Vue.filter("humanize", date => moment(date).format("MMMM Do YYYY, h:mm a"));
 
-Vue.filter("hum", date => moment(date).format("MMMM Do YYYY"));
+Vue.filter("hum", date => moment(date).format("Do MMMM, YYYY"));
 
 
 Vue.filter("Month", date => moment(date).format("M"));

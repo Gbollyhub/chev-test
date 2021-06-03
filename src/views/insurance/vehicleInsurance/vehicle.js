@@ -38,11 +38,28 @@ export default {
       banks:[],
       name:{data:""},
       accountNumber:"",
-      amount:'',
+      rate:'',
+      valueOfVehicle:'',
       Subscription:null,
       purposeOfUse:null,
       vehicleType:null,
       paymentMode:null,
+      tenor:null,
+      proofOfOwner:null,
+      proofOfOwer:null,
+      tenors: [
+        { text: "---Select Tenor---", value: null, disabled: true },
+        { value: 1, text: "Q1" },
+        { value: 2, text: "Q2" },
+        { value: 2, text: "Q3" },
+        { value: 2, text: "Q4" }
+
+      ],
+      proofOfOwnerShip: [
+        { text: "---Select Proof---", value: null, disabled: true },
+        { value: 1, text: "VIN " },
+        { value: 2, text: "Model Number " }
+      ],
       Subscriptions: [
         { text: "---Select Subscription Type---", value: null, disabled: true },
         { value: 1, text: "Third Party " },
@@ -139,12 +156,12 @@ export default {
 
     clearForm(){
   
-      this.account = ""
-      this.location = ""
-      this.effectiveDate= new Date()
-      this.bankcode= null
-      this.amount= ""
-      this.accountNumber= ""
+      this.rate = ""
+      this.valueOfVehicle = ""
+      this.tenor= null
+      this.proofOfOwnerShip= null
+      this.purposeOfUse= null
+      this.Subscription= null
       this.account= 2
      },
      closeModal(){
@@ -154,65 +171,65 @@ export default {
     async onSubmit(event) {
       event.preventDefault()
        this.loader = true;
-      let rawData = {
-         MemberId: this.user.data.id,
-         DebitAccountType: this.account,
-         MethodOfCollectionId: 1,
-         CollectionLocation: this.location,
-         EffectiveDate : this.effectiveDate,
-         BankCode : this.bankcode,
-         Amount : parseInt(this.amount.replace(/,/g, '')),
-         AccountNumber : this.accountNumber,
-         AccountName :this.name.data,
-      };
-      rawData = JSON.stringify(rawData);
-      await axios
-        .post(
-          `${process.env.VUE_APP_API_URL}/SavingDepositTransactions/Withdrawal`,
-          rawData,
-          {
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
-          }
-        )
-        .then((response) => {
+      // let rawData = {
+      //    MemberId: this.user.data.id,
+      //    DebitAccountType: this.account,
+      //    MethodOfCollectionId: 1,
+      //    CollectionLocation: this.location,
+      //    EffectiveDate : this.effectiveDate,
+      //    BankCode : this.bankcode,
+      //    Amount : parseInt(this.amount.replace(/,/g, '')),
+      //    AccountNumber : this.accountNumber,
+      //    AccountName :this.name.data,
+      // };
+      // rawData = JSON.stringify(rawData);
+      // await axios
+      //   .post(
+      //     `${process.env.VUE_APP_API_URL}/SavingDepositTransactions/Withdrawal`,
+      //     rawData,
+      //     {
+      //       headers: {
+      //         'Content-Type': 'application/json;charset=utf-8',
+      //         Authorization: `Bearer ${localStorage.getItem('token')}`
+      //       },
+      //     }
+      //   )
+      //   .then((response) => {
           
-          if(response.data.success == true){
-            this.message = 'The withdrawal operation was successful'
+      //     if(response.data.success == true){
+            this.message = 'The Vehicle Insurance was successful'
             this.loader = false;
             this.state = 'success';
             this.status = true;
             this.clearForm();
-         let memberType = localStorage.getItem('userType')
-         this.rawData = response.data;
-         this.makeToast(`success`);
-         if (memberType != 2) {
-             this.$router.push(`/payment}`);
-         }
-         }
-         else{
-          this.clearForm();
-          this.message = response.data.errors[0].errorMessage
-          this.loader = false;
-          this.status = true;
-          this.state = 'failed';
-         }
-        })
-        .catch(error => {
-          this.clearForm();
-          this.message = error.message
-          this.loader = false;
-          this.status = true;
-          this.state = 'failed';
-          this.$bvToast.toast(error.message, {
-                title: "Error",
-                variant: "danger",
-                solid: true,
-                autoHideDelay: 5000
-            });
-        });
+      //    let memberType = localStorage.getItem('userType')
+      //    this.rawData = response.data;
+      //    this.makeToast(`success`);
+      //    if (memberType != 2) {
+      //        this.$router.push(`/payment}`);
+      //    }
+      //    }
+      //    else{
+      //     this.clearForm();
+      //     this.message = response.data.errors[0].errorMessage
+      //     this.loader = false;
+      //     this.status = true;
+      //     this.state = 'failed';
+      //    }
+      //   })
+      //   .catch(error => {
+      //     this.clearForm();
+      //     this.message = error.message
+      //     this.loader = false;
+      //     this.status = true;
+      //     this.state = 'failed';
+      //     this.$bvToast.toast(error.message, {
+      //           title: "Error",
+      //           variant: "danger",
+      //           solid: true,
+      //           autoHideDelay: 5000
+      //       });
+      //   });
     },    
   },
 };

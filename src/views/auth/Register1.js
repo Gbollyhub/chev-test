@@ -97,7 +97,7 @@ export default {
         Email: this.form.email,
         UserTypeCategory: parseInt(this.form.UserTypeCategory),
         UserType: 2,
-        ReturnUrl: 'http://localhost:8080/confirmation'    
+        ReturnUrl: `${process.evn.BASE_API_URL}/confirmation`    
       };
       this.$store.dispatch('createAccout', rawData)
       .then(() =>{  

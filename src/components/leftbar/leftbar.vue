@@ -5,9 +5,10 @@
       <router-link class= "active-link" to="/user-dashboard"> 
  <div class="admin-col-link-div">
       <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Dashboard</div>
+        <div class="admin-col-link-text">Dashboard </div>
       </div>
       </router-link>
+       <div v-if="userType== 2" >
       <router-link class="active-link" to="/guidelines">
         <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
@@ -37,8 +38,8 @@
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Transactions</div>
       </div>
-      </router-link>      
-          <div v-if="userType== 3" >
+      </router-link> </div>
+          <div v-if="userType== 3 || memberLogin.isCreditCommittee == true" >
       <router-link class= "active-link" to="/settings"> 
       <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
@@ -66,6 +67,14 @@ export default {
 	// computed : {
     //   isLoggedIn : function(){ return this.$store.getters.isAuthenticated}
     // },
+  computed: {
+    memberLogin() {
+    return this.$store.state.member
+  }
+},
+created() {
+  this.$store.dispatch('memberDetails');
+},
 	methods: {
         async logout (){
         await this.$store.dispatch('logout')

@@ -4,10 +4,10 @@
 
          <div>
                           <div>
-                            <div class="form-buttons">
+                            <!-- <div class="form-buttons">
                               <span></span>
                               <b-button to="/register" variant="primary" class="float-sm-left">+</b-button>
-                            </div>
+                            </div> -->
                             <b-table striped hover small :fields="fields" :items="items.data" responsive="sm">                              
                               <template #cell(index)="data">
                                 {{ data.index + 1 }}

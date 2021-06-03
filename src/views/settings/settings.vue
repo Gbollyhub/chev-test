@@ -8,11 +8,11 @@
         <div class="admin-top-bar-left">
           <div @click="goBack" class="settings-icon"></div>
           <div @click = "switchView('Members')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Members</div>
-          <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Approval Route</div>
+          <!-- <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Approval Route</div> -->
              <div @click = "switchView('ViewPending')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Pending Approvals</div>
-           <div @click = "switchView('CreateLoan')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Create Loan</div>
+           <!-- <div @click = "switchView('CreateLoan')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Create Loan</div> -->
             <div @click = "switchView('Employees')" class="admin-top-barlinks" :class="[currentTab == 5 ? currentClass : '']">Employees</div>
-             <div @click = "switchView('LoanConfig')" class="admin-top-barlinks" :class="[currentTab == 6 ? currentClass : '']">Loan Config</div>
+             <!-- <div @click = "switchView('LoanConfig')" class="admin-top-barlinks" :class="[currentTab == 6 ? currentClass : '']">Loan Config</div> -->
 
         </div>
         <div class="admin-top-bar-right">
