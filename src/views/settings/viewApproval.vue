@@ -81,7 +81,7 @@
             >
       <b-container class="justify-content-md-center">
           <b-row class="mb-1 text-left">
-          <b-col cols="5"><b>Member ID</b></b-col>          
+          <b-col cols="5"><b>Employees Number</b></b-col>          
           <!-- <b-col cols="3"></b-col> -->
           <b-col>
             <b>{{EmpNo}}</b>
@@ -95,7 +95,7 @@
             <b class="text-info">{{ Name}}</b>
           </b-col>          
         </b-row>
-        
+        <span v-if="selectedModule == 2">
         <b-row class="mb-1 text-left">
           <b-col cols="5">Status</b-col>       
           <!-- <b-col cols="3"></b-col> -->
@@ -104,6 +104,8 @@
             <span v-if="Paid === false">Not-Paid</span>
           </b-col>          
         </b-row>
+        </span>
+        <!-- ==========Loan Modal======= -->
         <span v-if="selectedModule == 3">
         <b-row class="mb-1 text-left">
           <b-col cols="5">Loan Amount </b-col>       
@@ -152,6 +154,26 @@
         </b-row>
         <b-row class="mb-1 text-left">
           <b-button @click="download(fileDownload)">Download payslip </b-button>          
+        </b-row>
+        </span>
+
+        <!-- ============SavingDeposit Modal============ -->
+        <span v-if="selectedModule == 4">
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">{{transactionTypeName}} Amount </b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col>
+            {{Amount | price}} <b/><b/>
+   ( {{parseFloat(Amount) | NumbersToWords | capitalize}} Naira Only)
+
+          </b-col>          
+        </b-row>
+        <b-row class="mb-1 text-left">
+          <b-col cols="5">Transaction Date</b-col>       
+          <!-- <b-col cols="3"></b-col> -->
+          <b-col cols="4">
+            {{transactionDate | hum}}
+          </b-col>          
         </b-row>
         </span>
 

@@ -26,8 +26,11 @@
                             <li class="nav-item ">
                                 <a class="nav-link" href="https://chevron.mykovi.com/news">NEWS</a>
                             </li>
+                            <li class="nav-item ">
+                                      <a class="nav-link" @click="logout" style="cursor:pointer">Logout</a>
+                            </li>
                             <li class="nav-item register_btn">
-                                <a class="nav-link" href="register.html">{{ memberLogin.person.firstName+" "+memberLogin.person.lastName }}</a>
+                                <a class="nav-link">{{ memberLogin.person.firstName+" "+memberLogin.person.lastName }}</a>
                             </li>
                         </ul>
                     </div>
@@ -159,6 +162,12 @@ export default {
 created() {
   this.$store.dispatch('memberDetails');
 },
+methods: {
+        async logout (){
+        await this.$store.dispatch('logout')
+		.then(() => this.$router.push('/'))        
+      }        
+    }
   }
 </script>
 

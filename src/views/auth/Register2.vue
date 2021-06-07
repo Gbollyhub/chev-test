@@ -339,6 +339,7 @@
                                 ></b-form-input
                                 >
                                 </b-form-group>
+
                               <b-form-group
                                 label-cols="4"
                                 label-cols-lg="3"
@@ -346,16 +347,24 @@
                                 label="State"
                                 label-for="input-sm"
                                 invalid-feedback="State is required"
-                                :state="nameState"
-                              >
-                                <b-form-select
+                                :state="nameState">
+                              <b-form-select
                                   id="name-input"
                                   v-model="form.state"
-                                  :options="states"
                                   :state="nameState"
-                                  required
-                                ></b-form-select
-                                ></b-form-group>
+                                  required>
+                              <b-form-select-option :value="null" disabled>
+                            -- Select State -- 
+                              </b-form-select-option>
+                              <b-form-select-option 
+                              v-for="item in states" 
+                              :value="item.id"
+                              :key="item.id">
+                                {{item.name}} 
+                            </b-form-select-option>                         
+                          </b-form-select>                        
+                                </b-form-group>
+
                               <b-form-group
                                 label-cols="3"
                                 label-cols-lg="3"

@@ -175,7 +175,6 @@ export default {
             this.clearForm();
          let memberType = localStorage.getItem('userType')
          this.rawData = response.data;
-         this.makeToast(`success`);
          if (memberType != 2) {
              this.$router.push(`/payment}`);
          }

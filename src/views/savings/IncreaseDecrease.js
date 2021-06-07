@@ -92,7 +92,8 @@ export default {
       await axios
         .post(`${process.env.VUE_APP_API_URL}/SavingDepositTransactions`, rawData, {
           headers: {
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((response) => {

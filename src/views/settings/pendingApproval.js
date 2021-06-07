@@ -19,11 +19,14 @@ export default {
       EmpNo:"",
       Name:"",
       LoanAmount:0,
+      Amount:0,
       dateSubmitted:"",
       effectiveDate:"",
       interest:0,
       principal:0,
       repayment:0,
+      transactionDate:"",
+      transactionTypeName:"",
       fileDownload:"",
       Paid:Boolean,
       moduleApproverId:0,
@@ -69,8 +72,7 @@ export default {
         }
         if (this.selectedModule == 3){
           this.EmpNo = detail[index].itemData.member.employeeNumber
-          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName
-          this.Paid = detail[index].itemData.isPaid
+          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName          
           this.id = detail[index].id
           this.moduleApproverId = detail[index].moduleApproverId
           this.itemId = detail[index].itemId
@@ -85,7 +87,19 @@ export default {
 
           this.show=true
         }
+        if (this.selectedModule == 4){
+          this.EmpNo = detail[index].itemData.member.employeeNumber
+          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName          
+          this.id = detail[index].id
+          this.moduleApproverId = detail[index].moduleApproverId
+          this.itemId = detail[index].itemId
+          this.Amount = detail[index].itemData.depositAmount
+          this.transactionDate = detail[index].itemData.transactionDate
+          this.transactionTypeName = detail[index].itemData.transactionType.name
+          this.show=true
+        }
       },
+
       download(fileDownload) {
         // new Blob(['{"name": "test"}'])
         var file = (window.URL || window.webkitURL).createObjectURL(new Blob([fileDownload], {type: "image/png"}));
@@ -131,6 +145,7 @@ export default {
             });
           });
     },
+    // Member Approval Pending Request
     async initMember() {
      await axios
         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
@@ -154,8 +169,12 @@ export default {
       if (selectedModule == 3) {
         return await this.initLoan();        
       }
+      if (selectedModule == 4) {
+        return await this.SavingDepositTransactions();
+      }
     },
 
+    // Loan Approval Pending Request
     async initLoan() {
       await axios
          .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Loan`, {          
@@ -163,6 +182,22 @@ export default {
              "Content-Type": "application/json;charset=utf-8",
              Authorization: `Bearer ${localStorage.getItem('token')}`,
              responseType: 'arraybuffer'
+           }
+         })
+         .then(response => {
+           this.approve = response.data;
+         })
+         .catch(error => {
+           alert(error);
+         });
+     },
+     // SavingDepositTransactions Approval Pending Request
+    async SavingDepositTransactions() {
+      await axios
+         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Savings-Increase-Decrease`, {          
+          headers: {
+             "Content-Type": "application/json;charset=utf-8",
+             Authorization: `Bearer ${localStorage.getItem('token')}`
            }
          })
          .then(response => {

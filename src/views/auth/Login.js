@@ -28,11 +28,11 @@ export default {
                 this.loader = true          
             this.$store.dispatch('login', this.user)
            .then(() => {       
-            this.loader = false;  
-
+            this.loader = false;
+            
             if (this.$route.query.path){
                 let path = this.$route.query.path.toLowerCase()
-                console.log("Path", path)
+                // console.log("Path", path)
                 this.$router.push(path)
              }
              else{
