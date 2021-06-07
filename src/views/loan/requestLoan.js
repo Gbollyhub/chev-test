@@ -596,21 +596,27 @@ export default {
             }
           }
         )
-        .then((response) => {
-                    
-          if (response.data.data === null && response.data.success == true){
+        .then((response) => {                    
+          if (response.data.data != null && response.data.success == true){
             this.showDismissibleAlert = !this.showDismissibleAlert;
             this.result = response.data;
             this.message = 'Loan Application was successful'
             this.loader = false;
             this.state = 'success';
             this.status = true;
-            this.clearForm(); 
-          }else {
-            this.result = response.data;
             this.$emit("setParamResp", this.result);
             localStorage.setItem("LoanPlan",JSON.stringify(this.result));
             this.$router.push('/repayment_plan');
+          }else {
+            this.message = response.data.errors[0].errorMessage
+            this.loader = false;
+            this.status = true;
+            this.state = 'failed';
+            this.clearForm(); 
+            // this.result = response.data;
+            // this.$emit("setParamResp", this.result);
+            // localStorage.setItem("LoanPlan",JSON.stringify(this.result));
+            // this.$router.push('/repayment_plan');
           }
         })
         .catch(error => {
@@ -623,12 +629,12 @@ export default {
             this.loader = false;
             this.status = true;
             this.state = 'failed';
-            this.$bvToast.toast(error, {
-                title: "Error",
-                variant: "danger",
-                solid: true,
-                autoHideDelay: 5000
-            });
+            // this.$bvToast.toast(error, {
+            //     title: "Error",
+            //     variant: "danger",
+            //     solid: true,
+            //     autoHideDelay: 5000
+            // });
           });
     },
 
