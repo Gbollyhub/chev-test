@@ -524,7 +524,7 @@ export default {
     // Submit FormData
     async onSubmit(event) {
       event.preventDefault()
-      let formData = new FormData();
+      // let formData = new FormData();
       // this.file = this.$refs.file.files[0];
       console.log("ImageFile",JSON.stringify(this.file));
 
@@ -552,43 +552,43 @@ export default {
         repay = 0
       }
 
-      // let rawData = {
-        // LoanId = this.details.loanId,
-        // MemberId: this.memberLogin.id,
-        // InterestRate: this.details.intrestRate,
-        // LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
-        // RepaymntPeriod: repay,
-        // EffectiveMonth: Month,
-        // EffectiveYear: Year,
-        // BankCode: this.form.bankcode,
-        // MethodOfCollection: 2,
-        // AccountNumber: this.form.accountNumber,
-        // AccountName: this.name.data,
-        // LoanGuarantors: this.guarantorArray,
-        // FormFile: formData
-
-      formData.append('LoanId', this.details.loanId);
-      formData.append('MemberId', this.memberLogin.id);
-      formData.append('InterestRate', this.details.intrestRate);
-      formData.append('LoanAmount', parseInt(this.loanAmount.replace(/,/g, '')));
-      formData.append('RepaymntPeriod', repay);
-      formData.append('EffectiveMonth', Month);
-      formData.append('EffectiveYear', Year);
-      formData.append('BankCode', this.form.bankcode);
-      formData.append('MethodOfCollection', 2);
-      formData.append('AccountNumber', this.form.accountNumber);
-      formData.append('AccountName', this.name.data);
-      formData.append('LoanGuarantors', this.guarantorArray);
-      formData.append('FormFile', this.$refs.file.files[0]);
-      // }
-      // rawData = JSON.stringify(rawData);
+      let rawData = {
+        LoanId : this.details.loanId,
+        MemberId: this.memberLogin.id,
+        InterestRate: this.details.intrestRate,
+        LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
+        RepaymntPeriod: repay,
+        EffectiveMonth: Month,
+        EffectiveYear: Year,
+        BankCode: this.form.bankcode,
+        MethodOfCollection: 2,
+        AccountNumber: this.form.accountNumber,
+        AccountName: this.name.data,
+        LoanGuarantors: this.guarantorArray,
+        FormFile: this.file
+      //   let rawData = JSON.stringify(this.guarantorArray);
+      // formData.append('LoanId', this.details.loanId);
+      // formData.append('MemberId', this.memberLogin.id);
+      // formData.append('InterestRate', this.details.intrestRate);
+      // formData.append('LoanAmount', parseInt(this.loanAmount.replace(/,/g, '')));
+      // formData.append('RepaymntPeriod', repay);
+      // formData.append('EffectiveMonth', Month);
+      // formData.append('EffectiveYear', Year);
+      // formData.append('BankCode', this.form.bankcode);
+      // formData.append('MethodOfCollection', 2);
+      // formData.append('AccountNumber', this.form.accountNumber);
+      // formData.append('AccountName', this.name.data);
+      // formData.append('LoanGuarantors', rawData);      
+      // formData.append('FormFile', this.$refs.file.files[0]);
+      }
+      rawData = JSON.stringify(rawData);
       /* Add the form data we need to submit */
       // formData.append('FormFile', this.file);
       // formData.append('rawData',rawData)
       await axios
         .post(
           `${process.env.VUE_APP_API_URL}/Loans/submit`,
-          formData,
+          rawData,
           {
             headers: {
               'Content-Type': 'multipart/form-data',
