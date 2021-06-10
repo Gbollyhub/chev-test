@@ -6,6 +6,8 @@ import moment from "moment";
 import VueCookies from 'vue-cookies';
 import Vuelidate from 'vuelidate';
 
+ 
+
 import "./utils/fontawesome";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -38,7 +40,8 @@ Vue.use(VueCookies)
 
 import VueMask from 'v-mask'
 Vue.use(VueMask)
-
+import { GridPlugin } from '@syncfusion/ej2-vue-grids';
+Vue.use(GridPlugin);
 
 Vue.use(converter);
 

@@ -46,6 +46,17 @@
                   <a type="button" @click="Details(approve.data, data.index)" variant="primary">
                   <b class="text-info">{{ data.item.itemData.member.employeeNumber }}</b></a>                    
                 </template>
+                <template #cell(loanAmount)="data">
+                <a
+                  type="button"
+                  @click="Details(approve.data, data.index)"
+                  variant="primary"
+                >
+                  <b class="text-info">{{
+                    data.item.itemData.loanAmount | price
+                  }}</b></a
+                >
+              </template>
                 <template #cell(active)="data">
                     <span v-if="data.item.approved == null">Not-Approved</span>
                     <span v-if="data.item.approved == false">Rejected</span>
@@ -186,14 +197,14 @@
             variant="danger"
             size="sm"
             class="float-right"
-            @click="RejectModuleRequest(id,moduleApproverId,itemId)"
+            @click="RejectModuleRequest(id,moduleApproverId,itemId,false)"
           >Reject</b-button>
 
           <b-button
             variant="primary"
             size="sm"
             class="float-left"
-            @click="ApproveModuleRequest(id,moduleApproverId,itemId)"
+            @click="RejectModuleRequest(id,moduleApproverId,itemId,true)"
           >Approve</b-button>
 
         </div>

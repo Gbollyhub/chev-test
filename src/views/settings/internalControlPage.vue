@@ -38,14 +38,7 @@
         <template #cell(index)="data">
           {{ data.index + 1 }}
         </template>
-        <template #cell(name)="data">
-          <b class="text-info">{{
-            data.item.member.person.lastName.toUpperCase()
-          }}</b
-          >,
-          <b>{{ data.item.member.person.firstName }}</b>
-        </template>
-        <template #cell(employeeNumber)="data">
+         <template #cell(employeeNumber)="data">
           <a
             type="button"
             @click="Details(approve.data, data.index)"
@@ -56,8 +49,27 @@
             }}</b></a
           >
         </template>
+        <template #cell(name)="data">
+          <b class="text-info">{{
+            data.item.member.person.lastName.toUpperCase()
+          }}</b
+          >,
+          <b>{{ data.item.member.person.firstName }}</b>
+        </template>
+       
+         <template #cell(loanAmount)="data">
+          <a
+            type="button"
+            @click="Details(approve.data, data.index)"
+            variant="primary"
+          >
+            <b class="text-info">{{
+              data.item.loanAmount | price
+            }}</b></a
+          >
+        </template>
         <template #cell(active)="data">
-          <span v-if="data.item.status == false">Rejected</span>
+          <span v-if="data.item.status == false">Pending</span>
           <span v-if="data.item.status == true">Approved</span>
         </template>
         <template #cell(memberType)="data">
@@ -125,14 +137,14 @@
             </b-col>
           </b-row>
           <b-row class="mb-1 text-left">
-            <b-col cols="5">Interest </b-col>
+            <b-col cols="5">Monthly Interest </b-col>
             <!-- <b-col cols="3"></b-col> -->
             <b-col>
               {{ interest | price }}
             </b-col>
           </b-row>
           <b-row class="mb-1 text-left">
-            <b-col cols="5">Principal </b-col>
+            <b-col cols="5">Monthly Principal </b-col>
             <!-- <b-col cols="3"></b-col> -->
             <b-col>
               {{ principal | price }}
@@ -249,8 +261,9 @@ export default {
       selectedOpt: null,
       fields: [
         { key: 'index', label: 'S/N' },
-        { key: 'name', label: 'Full Name' },
         { key: 'employeeNumber', label: 'Employee No.' },
+        { key: 'name', label: 'Full Name' },
+        { key: 'loanAmount', label: 'Amount' },
         { key: 'active', label: 'Status' },
         { key: 'memberType', label: 'Member Type' },
         { key: 'show_details', label: 'Action ' },

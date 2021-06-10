@@ -10,6 +10,9 @@
           <div v-if="userType== 3 && memberLogin.department.description == 'INTERNAL CONTROL'" >
              <div @click = "switchView('InternalControl')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Internal Control Pending Approvals</div>
           </div>
+          <div v-if="userType== 3 && memberLogin.department.description == 'ACCOUNTS'" >
+             <div @click = "switchView('Payments')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Payments</div>
+          </div>
           <div v-else>
           <!-- <div @click = "switchView('Members')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Members</div> -->
           <!-- <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Approval Route</div> -->
@@ -34,6 +37,9 @@
             </div>
              <div v-show="InternalControl">
            <InternalControl/>       
+            </div>
+            <div v-show="Payments">
+           <Payments/>       
             </div>
              <div v-show="CreateLoan">
            <CreateLoan/>       
@@ -62,6 +68,8 @@ import InternalControl from './internalControlPage'
 import CreateLoan from './createLoan.vue'
 import Employees from './employees.vue'
 import LoanConfig from './loanConfig.vue'
+import Payments from './memberPayments.vue'
+// import Payment from '../payment.vue'
 
 export default {
   name: "Home",
@@ -72,19 +80,22 @@ export default {
     ApprovalRate,
     ViewPending,
     InternalControl,
+    Payments,
     CreateLoan,
     Employees,
-    LoanConfig
+    LoanConfig,
+    // Payment
   },
   data(){
       return{        
         selectedTab: '',
-        Members: true,
+        Members: false,
         ApprovalRate: false,
         CreateLoan: false,
         Employees: false,
         LoanConfig:false,
         ViewPending:false,
+        Payments:false,
         currentTab: 1,
         currentClass: 'admin-active-top-link',
 		  	userType: localStorage.getItem('userType')
@@ -132,6 +143,17 @@ methods:{
         }
         else if(selected == 'InternalControl') {
           this.InternalControl=true
+           this.Members = false
+           this.ApprovalRate = false
+           this.ViewPending = false
+           this.CreateLoan = false
+           this.Employees = false
+           this.LoanConfig = false
+            this.currentTab = 3
+        }
+        else if(selected == 'Payments') {
+          this.Payments= true
+          this.InternalControl=false
            this.Members = false
            this.ApprovalRate = false
            this.ViewPending = false

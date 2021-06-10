@@ -17,6 +17,8 @@ import Register from "../views/auth/Register2.vue";
 // import Dec_Inc from "../views/cash/decrease_increase.vue";
 // import Register1 from "../views/registration/reg.vue";
 import NewAccount from "../views/auth/Register1.vue";
+import ForgotPassword from "../views/auth/resetLink.vue";
+import ResetPassword from "../views/auth/passwordReset.vue";
 import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/auth/Login.vue";
@@ -95,6 +97,11 @@ const routes = [
     path: "/confirmation",
     name: "Confirmation",
     component: Confirmation,
+  },
+  {
+    path: "/forgot_password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
   },
   {
     path: "/overview",
@@ -213,15 +220,20 @@ const routes = [
 
   },
   {
-    path: "/new_account",
+    path: "/new-account",
     name: "NewAccount",
     component: NewAccount
+  },
+  {
+    path: "/resetPassword",
+    name: "ResetPassword",
+    component: ResetPassword
   },
   {
     path: "/guarantor",
     name: "Gurantor",
     component: Guarantor,
-    meta: {requiresAuth: true},
+    // meta: {requiresAuth: true},
   },
   {
     path: "/payment",

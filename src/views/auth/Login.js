@@ -14,15 +14,6 @@ export default {
             userType : localStorage.getItem('userType')
         };
       },
-    //   computed: {
-    //       getMemId (){
-    //           return this.$store.state.memberId
-    //       }
-    //   },
-    //   async created() {
-    //     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    //     this.$store.dispatch('memberDetails')
-    //   },
         methods: {    
             login () {  
                 this.loader = true          

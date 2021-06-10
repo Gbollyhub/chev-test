@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       // amountToword: parseFloat(this.loanAmount.replace(/,/g, '')) | NumbersToWords,
-      file: '',
+      file: "",
       currentFile: undefined,
       showPreview: false,
       imagePreview: '',
@@ -63,7 +63,7 @@ export default {
       },
       grant: 
         {
-          guarantorNumber :{},
+          employeeNumber :{},
           guarantorName : {},
           guarantorEmail : {},      
        },
@@ -175,18 +175,18 @@ export default {
 
       if(this.pastGuarantorCount == 0 ){
         this.pastGuarantorCount = 1
-        this.guarantorArray[0].guarantorNumber = gNo
+        this.guarantorArray[0].employeeNumber = gNo
       this.guarantorArray[0].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
       this.guarantorArray[0].guarantorEmail = response.data.data.person.email
       }
       else if(this.pastGuarantorCount == 1){
         this.pastGuarantorCount = 2
-        this.guarantorArray[1].guarantorNumber = gNo
+        this.guarantorArray[1].employeeNumber = gNo
         this.guarantorArray[1].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
         this.guarantorArray[1].guarantorEmail = response.data.data.person.email
       }
       else if(this.pastGuarantorCount == 2){
-        this.guarantorArray[2].guarantorNumber = gNo
+        this.guarantorArray[2].employeeNumber = gNo
         this.guarantorArray[2].guarantorName = response.data.data.person.firstName + ' ' + response.data.data.person.lastName
         this.guarantorArray[2].guarantorEmail = response.data.data.person.email
       }
@@ -396,7 +396,7 @@ export default {
           for (let index = 0; index < response.data.data; index++) {
             this.guarantorArray.push({
               id: index,
-              guarantorNumber : 0,
+              employeeNumber : 0,
               guarantorName : "",
               guarantorEmail : "", 
           });
@@ -524,9 +524,11 @@ export default {
     // Submit FormData
     async onSubmit(event) {
       event.preventDefault()
-      // let formData = new FormData();
+      this.loader = true;
+
+      let formData = new FormData();
       // this.file = this.$refs.file.files[0];
-      console.log("ImageFile",JSON.stringify(this.file));
+      // formData.append('FormFile', this.file);
 
       if (this.file == "") {
         this.message = 'File upload cannot be empty'
@@ -534,7 +536,6 @@ export default {
         this.state = 'warning';
         this.status = true;
       }
-      // formData.append('FormFile', this.file, this.file.name);
 
       if (this.AmountValidation()) {
         return this.errors;
@@ -552,46 +553,57 @@ export default {
         repay = 0
       }
 
-      let rawData = {
-        LoanId : this.details.loanId,
-        MemberId: this.memberLogin.id,
-        InterestRate: this.details.intrestRate,
-        LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
-        RepaymntPeriod: repay,
-        EffectiveMonth: Month,
-        EffectiveYear: Year,
-        BankCode: this.form.bankcode,
-        MethodOfCollection: 2,
-        AccountNumber: this.form.accountNumber,
-        AccountName: this.name.data,
-        LoanGuarantors: this.guarantorArray,
-        FormFile: this.file
-      //   let rawData = JSON.stringify(this.guarantorArray);
-      // formData.append('LoanId', this.details.loanId);
-      // formData.append('MemberId', this.memberLogin.id);
-      // formData.append('InterestRate', this.details.intrestRate);
-      // formData.append('LoanAmount', parseInt(this.loanAmount.replace(/,/g, '')));
-      // formData.append('RepaymntPeriod', repay);
-      // formData.append('EffectiveMonth', Month);
-      // formData.append('EffectiveYear', Year);
-      // formData.append('BankCode', this.form.bankcode);
-      // formData.append('MethodOfCollection', 2);
-      // formData.append('AccountNumber', this.form.accountNumber);
-      // formData.append('AccountName', this.name.data);
-      // formData.append('LoanGuarantors', rawData);      
-      // formData.append('FormFile', this.$refs.file.files[0]);
-      }
-      rawData = JSON.stringify(rawData);
+      // let rawData = {
+      //   LoanId : this.details.loanId,
+      //   MemberId: this.memberLogin.id,
+      //   InterestRate: this.details.intrestRate,
+      //   LoanAmount: parseInt(this.loanAmount.replace(/,/g, '')),
+      //   RepaymntPeriod: repay,
+      //   EffectiveMonth: Month,
+      //   EffectiveYear: Year,
+      //   BankCode: this.form.bankcode,
+      //   MethodOfCollection: 2,
+      //   AccountNumber: this.form.accountNumber,
+      //   AccountName: this.name.data,
+      //   LoanGuarantors: this.guarantorArray,
+        // FormFile: this.file
+      // let rawData = JSON.stringify(this.guarantorArray);
+      formData.append('LoanId', this.details.loanId);
+      formData.append('MemberId', this.memberLogin.id);
+      formData.append('InterestRate', this.details.intrestRate);
+      formData.append('LoanAmount', parseInt(this.loanAmount.replace(/,/g, '')));
+      formData.append('RepaymntPeriod', repay);
+      formData.append('EffectiveMonth', Month);
+      formData.append('EffectiveYear', Year);
+      formData.append('BankCode', this.form.bankcode);
+      formData.append('MethodOfCollection', 2);
+      formData.append('AccountNumber', this.form.accountNumber);
+      formData.append('AccountName', this.name.data);
+      formData.append('Guarantors',JSON.stringify(this.guarantorArray));     
+      // formData.append('LoanGuarantors', this.guarantorArray);     
+      // for (let index = 0; index < this.guarantorArray; index++) {
+      //   this.LoanGuarantors.push({
+      //     LoanGuarantors: this.guarantorArray[index]
+      // });
+      // }
+    //   for (let i = 0; i < this.guarantorArray.length; i++) {
+    //     // let LoanGuarantors= (this.guarantorArray[i]);
+    //     formData.append(`${this.LoanGuarantors}[]` ,this.guarantorArray[i]);
+    // }
+      formData.append('FormFile', this.$refs.file.files[0]);
+      
+      // }
+      // rawData = JSON.stringify(rawData);
       /* Add the form data we need to submit */
       // formData.append('FormFile', this.file);
       // formData.append('rawData',rawData)
       await axios
         .post(
           `${process.env.VUE_APP_API_URL}/Loans/submit`,
-          rawData,
+          formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              'Content-Type': 'application/json;multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`
             }
           }

@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "@smartweb/vue-flash-message": "^0.6.10",
+    "@syncfusion/ej2-vue-grids": "^19.1.67",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.1",

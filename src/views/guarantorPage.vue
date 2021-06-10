@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <div class="background-design"></div>
-    <Menu></Menu>
+    <!-- <Menu></Menu> -->
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -9,14 +9,16 @@
             <div class="dashboard-greeting">
               <div class="overview-text">
                 <font-awesome-icon icon="exchange-alt" />
-                <div class="header-title">Request</div>
+                <div class="header-title">Approval</div>
               </div>
-              <div class="date">
-                <font-awesome-icon icon="clock" />
-                <div class="date-item ml-2">{{new Date().utc | humanize}}</div>
-              </div>
+              <i class="fa fa-sign-in" aria-hidden="true"></i>
+      <router-link to="/"> <div style="text-align:center;text-decoration:underline;">Log into your account</div> </router-link>              
             </div>
             <div class="line"></div>
+            <!-- <div class="date" align="left">
+                <font-awesome-icon icon="clock" />
+                <div class="date-item ml-2">{{new Date().utc | humanize}}</div>
+              </div> -->
             <div class="row">
               <div class="col-md-12">
                 <div class="overview-board">
@@ -112,7 +114,7 @@
 
 <script>
 // @ is an alias to /src
-import Menu from "../components/layout/headers/menus.vue";
+// import Menu from "../components/layout/headers/menus.vue";
 import Footer from "../components/layout/footer/footer.vue";
 
 import axios from "axios";
@@ -122,7 +124,7 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    Menu,
+    // Menu,
     Footer,
   },
   data () {
@@ -162,13 +164,14 @@ export default {
     // }
   },
   async created () {
-    this.code = atob(this.$route.query.code);    
+    this.code = window.atob(this.$route.query.code);    
+            console.log("fgfg",this.code)
     this.guarantorNo = this.code.split(':')[1];
     this.LoanId = this.code.split(':')[0];
     this.memberId = this.code.split(':')[2];    
     
 
-    await this.loanAppId();
+    await this.loanAppId(this.LoanId);
     // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     // this.$store.dispatch('getLoanApplication',this.LoanId)
 
@@ -253,9 +256,9 @@ export default {
           });
     },
 
-    async loanAppId() {        
+    async loanAppId(Id) {        
      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Loans/${this.LoanId}`,{
+        .get(`${process.env.VUE_APP_API_URL}/Loans/${Id}`,{
           headers: {
             "Content-Type": "application/json;charset=utf-8",
             Authorization: `Bearer ${localStorage.getItem('token')}`
