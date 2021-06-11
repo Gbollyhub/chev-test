@@ -23,7 +23,7 @@ export default {
        async externalLogin() {
             let code = this.$route.query.ext
             console.log("fgfg",code)
-            let Body = {code: code, ReturnUrl:`${process.evn.BASE_API_URL}/user-dashboard`}
+            let Body = {code: code, ReturnUrl:`${process.env.BASE_API_URL}/user-dashboard`}
             Body = JSON.stringify(Body);
             try {
                 const resp = await axios.post(`${process.env.VUE_APP_API_URL}/Users/ExternalLogin`, Body, {
@@ -37,7 +37,7 @@ export default {
          await localStorage.setItem('userType', userType)
          
          if(localStorage.getItem('token')){
-              window.location.href = `${process.evn.BASE_API_URL}/user-dashboard`
+              window.location.href = `${process.env.BASE_API_URL}/user-dashboard`
             // this.$router.push("/user-dashboard")
          }
            
