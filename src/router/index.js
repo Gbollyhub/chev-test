@@ -3,29 +3,31 @@ import VueRouter from "vue-router";
 // import Home from "../views/Home.vue";
 import Overview from "../views/dashboard/dashboard.vue";
 import Dashboard from "../views/dashboard/userDashboard.vue";
-import Transfer from "../views/tranfer/transfer.vue";
-import Transfer_ from "../views/tranfer/transfer_.vue";
-import Withdrawal from "../views/withdrawal/withdrawal.vue";
-import Members from "../views/registration/members.vue";
-import Loan from "../views/loans/loans.vue";
+// import Transfer from "../views/tranfer/transfer.vue";
+// import Transfer_ from "../views/tranfer/transfer_.vue";
+// import Withdrawal from "../views/withdrawal/withdrawal.vue";
+// import Members from "../views/registration/members.vue";
+// import Loan from "../views/loans/loans.vue";
 import Plan from "../views/loan/repaymentPlan.vue";
 import Setup from "../views/loanSetUp/setup.vue";
 import Config from "../views/loanSetUp/config.vue";
-import PriCon from "../views/loanSetUp/pry_con_setup.vue";
+// import PriCon from "../views/loanSetUp/pry_con_setup.vue";
 import Register from "../views/auth/Register2.vue";
-import Cash_addition from "../views/cash/cashAddition.vue";
-import Dec_Inc from "../views/cash/decrease_increase.vue";
-import Register1 from "../views/registration/reg.vue";
+// import Cash_addition from "../views/cash/cashAddition.vue";
+// import Dec_Inc from "../views/cash/decrease_increase.vue";
+// import Register1 from "../views/registration/reg.vue";
 import NewAccount from "../views/auth/Register1.vue";
+import ForgotPassword from "../views/auth/resetLink.vue";
+import ResetPassword from "../views/auth/passwordReset.vue";
 import Guarantor from "../views/guarantorPage.vue";
 import Payment from "../views/payment.vue";
 import Login from "../views/auth/Login.vue";
 import store from "../store";
 import Confirmation from "../views/confirmation.vue";
 import Employee from "../views/settings/employeeReg.vue";
-import mEmployee from "../views/registration/viewEmployee.vue";
-import mApproval from "../views/settings/viewApproval.vue";
-import Approvals from "../views/registration/approvals.vue";
+// import mEmployee from "../views/registration/viewEmployee.vue";
+// import mApproval from "../views/settings/viewApproval.vue";
+// import Approvals from "../views/registration/approvals.vue";
 
 
 import Transactions from "../views/transactions/transactions.vue";
@@ -97,6 +99,11 @@ const routes = [
     component: Confirmation,
   },
   {
+    path: "/forgot_password",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+  },
+  {
     path: "/overview",
     name: "Overview",
     component: Overview,    
@@ -126,37 +133,37 @@ const routes = [
     component: Dashboard,    
     meta: {requiresAuth: true},
   },
-  {
-    path: "/transfer",
-    name: "Transfer",
-    component: Transfer
-  },
-  {
-    path: "/transfer_",
-    name: "Transfer_",
-    component: Transfer_
-  },
-  {
-    path: "/withdrawal",
-    name: "withdrawal",
-    component: Withdrawal
-  },
-  {
-    path: "/cash_addition",
-    name: "cash_addition",
-    component: Cash_addition,
-    meta: {requiresAuth: true},
-  },
-  {
-    path: "/decrease_increase",
-    name: "decrease_increase",
-    component: Dec_Inc
-  },
-  {
-    path: "/members",
-    name: "members",
-    component: Members
-  },
+  // {
+  //   path: "/transfer",
+  //   name: "Transfer",
+  //   component: Transfer
+  // },
+  // {
+  //   path: "/transfer_",
+  //   name: "Transfer_",
+  //   component: Transfer_
+  // },
+  // {
+  //   path: "/withdrawal",
+  //   name: "withdrawal",
+  //   component: Withdrawal
+  // },
+  // {
+  //   path: "/cash_addition",
+  //   name: "cash_addition",
+  //   component: Cash_addition,
+  //   meta: {requiresAuth: true},
+  // },
+  // {
+  //   path: "/decrease_increase",
+  //   name: "decrease_increase",
+  //   component: Dec_Inc
+  // },
+  // {
+  //   path: "/members",
+  //   name: "members",
+  //   component: Members
+  // },
   {    
     path: "/register",
     name: "register",
@@ -165,25 +172,20 @@ const routes = [
     meta: {requiresAuth: true},
   },
   {
-    path: "/reg",
-    name: "reg",
-    component: Register1
-  },
-  {
     path: "/employee",
     name: "employee",
     component: Employee,
   },
-  {
-    path: "/view",
-    name: "view",
-    component: mEmployee,
-  },
-  {
-    path: "/view_approval",
-    name: "viewApproval",
-    component: mApproval,
-  },
+  // {
+  //   path: "/view",
+  //   name: "view",
+  //   component: mEmployee,
+  // },
+  // {
+  //   path: "/view_approval",
+  //   name: "viewApproval",
+  //   component: mApproval,
+  // },
   {
     path: "/setup",
     name: "setup",
@@ -193,26 +195,29 @@ const routes = [
     path: "/config",
     name: "config",
     component: Config,
-  },{
-    path: "/loan2",
-    name: "loan2",
-    component: PriCon
   },
-  {
-    path: "/approvals",
-    name: "approvals",
-    component: Approvals
-  },
-  {
-    path: "/loan",
-    name: "Loan",
-    component: Loan,
-    meta: {requiresAuth: true},
-  },
+  // {
+  //   path: "/loan2",
+  //   name: "loan2",
+  //   component: PriCon
+  // },
+  // {
+  //   path: "/approvals",
+  //   name: "approvals",
+  //   component: Approvals
+  // },
+  // {
+  //   path: "/loan",
+  //   name: "Loan",
+  //   component: Loan,
+  //   meta: {requiresAuth: true},
+  // },
   {
     path: "/repayment_plan",
     name: "Plan",
-    component: Plan
+    component: Plan,
+    meta: {requiresAuth: true},
+
   },
   {
     path: "/new-account",
@@ -220,15 +225,22 @@ const routes = [
     component: NewAccount
   },
   {
+    path: "/resetPassword",
+    name: "ResetPassword",
+    component: ResetPassword
+  },
+  {
     path: "/guarantor",
     name: "Gurantor",
     component: Guarantor,
-    meta: {requiresAuth: true},
+    // meta: {requiresAuth: true},
   },
   {
     path: "/payment",
     name: "payment",
-    component: Payment
+    component: Payment,
+    meta: {requiresAuth: true},
+
   },
 ];
 

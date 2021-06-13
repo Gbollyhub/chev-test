@@ -37,7 +37,7 @@ computed: {
   }
 },
 created() {
-  this.$store.dispatch('memberDetails');
+  // this.$store.dispatch('memberDetails');
 },
     
 };

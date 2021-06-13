@@ -13,11 +13,11 @@
                             label-for="input-sm"
                           >
                             {{
-                              user.data.person.lastName +
+                              memberLogin.person.lastName +
                                 ', ' +
-                                user.data.person.firstName +
+                                memberLogin.person.firstName +
                                 ' ' +
-                                user.data.person.middleName
+                                memberLogin.person.middleName
                             }}
                             <!-- <b-form-input
                                   id="name-input"
@@ -35,7 +35,7 @@
                           >
                             <b-form-input
                               id="number-input"
-                              v-model="user.data.employeeNumber"
+                              v-model="memberLogin.employeeNumber"
                               disabled
                               required
                             ></b-form-input>

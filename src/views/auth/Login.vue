@@ -25,8 +25,10 @@
               <input type="password" class="app-login-text-field w-input" v-model="user.Password" placeholder="Password" required />
               </div>
       </div>
-      <button type="submit" class="app-login-button">Login into Account</button>
+        <button type="submit" class="app-login-button">Login into Account</button>
       </form>
+      <br>
+       <router-link to="/forgot_password"> <div style="text-align:center;text-decoration:underline;">Forgot Password?</div> </router-link>
       <br>
        <router-link to="/new-account"> <div style="text-align:center;text-decoration:underline;">Don't have an account? Register for an account</div> </router-link>
       <div class="app-login-divider"></div>

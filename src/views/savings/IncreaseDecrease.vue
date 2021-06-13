@@ -13,8 +13,8 @@
                                 label-for="input-sm"
                               >
 
-                              {{user.data.person.lastName+", " +user.data.person.firstName+" " 
-                              +user.data.person.middleName}}
+                              {{memberLogin.person.lastName+", " +memberLogin.person.firstName+" " 
+                              +memberLogin.person.middleName}}
                                 <!-- <b-form-input
                                   id="name-input"
                                   v-model="user.data.person.firstName"
@@ -31,25 +31,13 @@
                               >
                                 <b-form-input
                                   id="number-input"
-                                  v-model="user.data.employeeNumber"
+                                  v-model="memberLogin.employeeNumber"
                                   disabled
                                   required
                                 ></b-form-input>
                               </b-form-group>
                               
-                               <!-- <b-form-group
-                                label-cols="2"
-                                label-cols-lg="3"
-                                label-size="sm"
-                                label="Effective Date"
-                                label-for="example-datepicker"
-                              >
-                                <b-form-datepicker
-                                  id="example-datepicker"
-                                  v-model="effectiveDate"
-                                  required
-                                ></b-form-datepicker
-                                ></b-form-group> -->
+                               
                                 <b-form-group
                             label-cols="2"
                             label-cols-lg="3"

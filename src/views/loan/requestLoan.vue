@@ -240,8 +240,8 @@
                   <b-col sm="8">
                       <b-form-input
                       :readonly="togglePastGuarantors"
-                      v-model.lazy.trim="guarantor.guarantorNumber"
-                      @blur="getGuarantorInfo(guarantor.guarantorNumber, index)"
+                      v-model.lazy.trim="guarantor.employeeNumber"
+                      @blur="getGuarantorInfo(guarantor.employeeNumber, index)"
                       type="number"
                       ></b-form-input>
                   </b-col>

@@ -97,8 +97,9 @@ export default {
         Email: this.form.email,
         UserTypeCategory: parseInt(this.form.UserTypeCategory),
         UserType: 2,
-        ReturnUrl: `${process.evn.BASE_API_URL}/confirmation`    
+        ReturnUrl: "confirmation"   
       };
+      rawData=JSON.stringify(rawData)
       this.$store.dispatch('createAccout', rawData)
       .then(() =>{  
         this.loader = false;

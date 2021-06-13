@@ -15,7 +15,6 @@ export default {
           showClose: true,
         },
       nameState:null,
-      state:null,
       selectedLoan: "",
       show: true,
       notify: 0,
@@ -64,13 +63,7 @@ export default {
         { text: "Lagos", value: "Lagos" },
         { text: "Escravos", value: "Escravos" },
       ],
-      states: [
-        { text: "Select State", value: null },
-        { text: "Lagos", value: 1 },
-        { text: "FCT", value: 2 },
-        { text: "Ondo", value: 3 },
-        { text: "Imo", value: 4 }
-      ],
+      states: [],
       countrys: [
         { text: "Select Country", value: null },
         { text: "Nigeria", value: "Nigeria" },
@@ -85,6 +78,7 @@ export default {
   async created() {
     await this.loginDetails();
     await this.initMinSavings();
+    await this.initState();
   },
   methods: {
 
@@ -92,6 +86,13 @@ export default {
         this.points = Number(value.replace(/\D/g, ''))
         return value =='0.00' ? '' : this.points.toLocaleString();
       },
+      
+      async initState() {        
+        await axios
+           .get(`${process.env.VUE_APP_API_URL}/States/All`,{
+             headers: { "Content-Type": "application/json;charset=utf-8" }
+           }).then(response => { this.states = response.data; })
+         },
     
     async loginDetails() {        
      await axios
@@ -113,7 +114,6 @@ export default {
             })
         });
     },
-
     makeToast(variant = null) {
       this.notify++;
       this.$bvToast.toast(`Member Added`, {

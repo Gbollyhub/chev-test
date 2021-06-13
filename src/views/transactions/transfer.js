@@ -50,12 +50,12 @@ export default {
       currentMode: 1
     };
   },
-  async mounted() {
-    await this.initUser();
-  },
   computed: {
     memberBalance() {
       return this.$store.state.balance
+    },
+    memberLogin() {
+      return this.$store.state.member
     }
   },
   created() {
@@ -64,9 +64,10 @@ export default {
   methods: {
    async getGuarantorInfo(){
      this.loader = true
-   let guarantor = {            
-      EmployeeNumber: this.employeeNumber
-    };    
+     
+      let guarantor = {            
+          EmployeeNumber: this.employeeNumber
+        };   
 await axios
   .post(`${process.env.VUE_APP_API_URL}/Members/EmpNumber`, guarantor, {
     headers: {
@@ -138,7 +139,7 @@ await axios
       event.preventDefault()
          this.loader = true;
       let rawData = {
-        MemberId: this.user.data.id,
+        MemberId: this.memberLogin.id,
         SourceSavingsType: this.sourceAccount,
         DestinationSavingsType: this.destAccount,
         EffectiveDate: this.effectiveDate,
@@ -164,7 +165,6 @@ await axios
             this.clearForm();
          let memberType = localStorage.getItem('userType')
          this.rawData = response.data;
-         this.makeToast(`success`);
          if (memberType != 2) {
              this.$router.push(`/payment}`);
          }
@@ -190,17 +190,6 @@ await axios
                 autoHideDelay: 5000
             });
         });
-    },
-
-    async initUser() {
-     const user= await axios.get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-          this.user = user.data;
-
     },
   },
 };

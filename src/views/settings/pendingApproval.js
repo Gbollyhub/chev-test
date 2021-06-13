@@ -19,11 +19,14 @@ export default {
       EmpNo:"",
       Name:"",
       LoanAmount:0,
+      Amount:0,
       dateSubmitted:"",
       effectiveDate:"",
       interest:0,
       principal:0,
       repayment:0,
+      transactionDate:"",
+      transactionTypeName:"",
       fileDownload:"",
       Paid:Boolean,
       moduleApproverId:0,
@@ -35,8 +38,9 @@ export default {
       selectedOpt: null,  
       fields: [
         {key: 'index', label: 'S/N'},
+        { key: 'employeeNum', label: 'Employee No.' },
         { key: 'name', label: 'Full Name' },
-        { key: 'employeeNumber', label: 'Employee No.' },
+        { key: 'loanAmount', label: 'Amount' },
         { key: 'active', label: 'Status' },        
         { key: 'memberType', label: 'Member Type' },
         {key:'show_details', label: 'Action '}
@@ -48,13 +52,8 @@ export default {
       ]
     };
   },
-  async created() {    
-    await this.getAll();
+  async created() {
     await this.initModules();
-    // await this.initLoan();
-    // await this.initMember()
-
-
   },
   methods: {
     Details(detail,index) {
@@ -69,8 +68,7 @@ export default {
         }
         if (this.selectedModule == 3){
           this.EmpNo = detail[index].itemData.member.employeeNumber
-          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName
-          this.Paid = detail[index].itemData.isPaid
+          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName          
           this.id = detail[index].id
           this.moduleApproverId = detail[index].moduleApproverId
           this.itemId = detail[index].itemId
@@ -85,7 +83,19 @@ export default {
 
           this.show=true
         }
+        if (this.selectedModule == 4){
+          this.EmpNo = detail[index].itemData.member.employeeNumber
+          this.Name = detail[index].itemData.member.person.lastName.toUpperCase() +", " + detail[index].itemData.member.person.firstName          
+          this.id = detail[index].id
+          this.moduleApproverId = detail[index].moduleApproverId
+          this.itemId = detail[index].itemId
+          this.Amount = detail[index].itemData.depositAmount
+          this.transactionDate = detail[index].itemData.transactionDate
+          this.transactionTypeName = detail[index].itemData.transactionType.name
+          this.show=true
+        }
       },
+
       download(fileDownload) {
         // new Blob(['{"name": "test"}'])
         var file = (window.URL || window.webkitURL).createObjectURL(new Blob([fileDownload], {type: "image/png"}));
@@ -96,21 +106,6 @@ export default {
         // document.body.appendChild(fileLink);
         fileLink.click();
       },
-    async getAll() {        
-     await axios
-        .get( `${process.env.VUE_APP_API_URL}/Members/All`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.approve = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    }, 
 
     async initModules() {        
      await axios
@@ -131,6 +126,7 @@ export default {
             });
           });
     },
+    // Member Approval Pending Request
     async initMember() {
      await axios
         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Members`,{
@@ -154,8 +150,12 @@ export default {
       if (selectedModule == 3) {
         return await this.initLoan();        
       }
+      if (selectedModule == 4) {
+        return await this.SavingDepositTransactions();
+      }
     },
 
+    // Loan Approval Pending Request
     async initLoan() {
       await axios
          .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Loan`, {          
@@ -172,37 +172,30 @@ export default {
            alert(error);
          });
      },
-
-    async ApproveModuleRequest(Id,ModuleApproverId,itemId) { 
-      let rawData = {
-        Id: Id,
-        ModuleApproverId:ModuleApproverId,
-        itemId:itemId,
-        Approved : true
-      };
-      rawData = JSON.stringify(rawData);       
-     await axios
-        .post( `${process.env.VUE_APP_API_URL}/PendingApproval/Approve`, rawData,{
+     // SavingDepositTransactions Approval Pending Request
+    async SavingDepositTransactions() {
+      await axios
+         .get( `${process.env.VUE_APP_API_URL}/PendingApproval/Savings-Increase-Decrease`, {          
           headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-            this.approve = response.data;
-            this.init(this.selectedModule)       
-            this.show=false
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    },
-    async RejectModuleRequest(Id,ModuleApproverId,itemId) { 
+             "Content-Type": "application/json;charset=utf-8",
+             Authorization: `Bearer ${localStorage.getItem('token')}`
+           }
+         })
+         .then(response => {
+           this.approve = response.data;
+         })
+         .catch(error => {
+           alert(error);
+         });
+     },
+
+   
+    async RejectModuleRequest(Id,ModuleApproverId,itemId,approve) { 
       let rawData = {
         Id: Id,
         ModuleApproverId:ModuleApproverId,
         itemId:itemId,
-        Approved : false
+        Approved : approve
       };
       rawData = JSON.stringify(rawData);       
      await axios

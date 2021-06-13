@@ -49,9 +49,6 @@ export default {
         document.title = "Chevron CEMCS Corporative"
 		document.images = "../../../assets/images/chevron-cemcs.png"
     },
-	// computed : {
-    //   isLoggedIn : function(){ return this.$store.getters.isAuthenticated}
-    // },
 	methods: {
         async logout (){
         await this.$store.dispatch('logout')

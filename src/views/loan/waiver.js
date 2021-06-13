@@ -18,7 +18,8 @@ export default {
                 amount: "",
                 fee: ""
             },
-           waiverDetails: []
+           waiverDetails: [],
+           modeOfPay:[]
         };
     },
     async mounted() {
