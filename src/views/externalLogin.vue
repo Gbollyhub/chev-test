@@ -23,7 +23,7 @@ export default {
        async externalLogin() {
             let code = this.$route.query.ext
             console.log("fgfg",code)
-            let Body = {code: code, ReturnUrl:`${process.env.BASE_API_URL}/user-dashboard`}
+            let Body = {code: code, ReturnUrl:`user-dashboard`}
             Body = JSON.stringify(Body);
             try {
                 const resp = await axios.post(`${process.env.VUE_APP_API_URL}/Users/ExternalLogin`, Body, {

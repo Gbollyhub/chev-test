@@ -1,30 +1,10 @@
 <template>
 <div>
   <Status :state="state" :closeModal = "closeModal" :message = "message" :resetState="resetState" v-if="status"/>
-    <div class="content-header">Approval Details Test</div>
+    <div class="content-header">Internal Approval </div>
     <div>
       <div style="margin-top:50px;" class="button-group">
-        <div>
-          <!-- <b-row class="my-1 form-row mb-3 ">
-            <b-col sm="4">
-              <b-form-select
-                :id="`modules`"
-                v-model="selectedModule"
-                @change="init(selectedModule)"
-                required >
-                <b-form-select-option :value="null" disabled>
-                  -- Select Module --
-                </b-form-select-option>
-                <b-form-select-option
-                  v-for="item in modules.data"
-                  :value="item.id"
-                  :key="item.id"
-                >
-                  {{ item.name }}
-                </b-form-select-option>
-              </b-form-select>
-            </b-col>
-          </b-row> -->
+        <div>         
         </div>
       </div>
       <b-table
@@ -178,12 +158,10 @@
               max-rows="6"
             ></b-form-textarea>
             </b-col>
-          </b-row>
-          
+          </b-row>         
 
        
       </b-container>
-
       <template #modal-footer>
         <div class="w-100">
           <b-button
@@ -193,7 +171,6 @@
             @click="ApproveModuleRequest(id,0)"
             >Reject</b-button
           >
-
           <b-button
             variant="primary"
             size="sm"

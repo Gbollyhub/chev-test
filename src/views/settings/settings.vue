@@ -8,10 +8,10 @@
         <div class="admin-top-bar-left">
           <div @click="goBack" class="settings-icon"></div>
           <div v-if="userType== 3 && memberLogin.department.description == 'INTERNAL CONTROL'" >
-             <div @click = "switchView('InternalControl')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Internal Control Pending Approvals</div>
+             <div @click = "switchView('InternalControl')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Internal Control Pending Approvals</div>
           </div>
-          <div v-if="userType== 3 && memberLogin.department.description == 'ACCOUNTS'" >
-             <div @click = "switchView('Payments')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Payments</div>
+          <div v-else-if="userType== 3 && memberLogin.department.description == 'ACCOUNTS'" >
+             <div @click = "switchView('Payments')" class="admin-top-barlinks" :class="[currentTab == 5 ? currentClass : '']">Payments</div>
           </div>
           <div v-else>
           <!-- <div @click = "switchView('Members')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Members</div> -->
@@ -96,6 +96,7 @@ export default {
         LoanConfig:false,
         ViewPending:false,
         Payments:false,
+        InternalControl:false,
         currentTab: 1,
         currentClass: 'admin-active-top-link',
 		  	userType: localStorage.getItem('userType')
@@ -128,6 +129,7 @@ methods:{
            this.ApprovalRate = true
            this.CreateLoan = false
            this.Employees = false
+          this.InternalControl=false
            this.ViewPending = false
            this.LoanConfig = false
             this.currentTab = 2
@@ -138,6 +140,7 @@ methods:{
            this.ViewPending = true
            this.CreateLoan = false
            this.Employees = false
+          this.InternalControl=false
            this.LoanConfig = false
             this.currentTab = 3
         }
@@ -149,7 +152,7 @@ methods:{
            this.CreateLoan = false
            this.Employees = false
            this.LoanConfig = false
-            this.currentTab = 3
+            this.currentTab = 4
         }
         else if(selected == 'Payments') {
           this.Payments= true
@@ -158,9 +161,10 @@ methods:{
            this.ApprovalRate = false
            this.ViewPending = false
            this.CreateLoan = false
+          this.InternalControl=false
            this.Employees = false
            this.LoanConfig = false
-            this.currentTab = 3
+            this.currentTab = 5
         }
          else if(selected == 'CreateLoan') {
            this.Members = false
@@ -168,26 +172,29 @@ methods:{
            this.CreateLoan = true
            this.Employees = false
            this.ViewPending = false
+          this.InternalControl=false
            this.LoanConfig = false
-            this.currentTab = 4
+            this.currentTab = 6
         }
          else if(selected == 'Employees') {
            this.Members = false
            this.ApprovalRate = false
            this.CreateLoan = false
            this.Employees = true
+          this.InternalControl=false
            this.ViewPending = false
            this.LoanConfig = false
-            this.currentTab = 5
+            this.currentTab = 7
         }
          else if(selected == 'LoanConfig') {
            this.Members = false
            this.ApprovalRate = false
            this.CreateLoan = false
            this.Employees = false
+          this.InternalControl=false
            this.ViewPending = false
            this.LoanConfig = true
-            this.currentTab = 6
+            this.currentTab = 8
         }
 
     },

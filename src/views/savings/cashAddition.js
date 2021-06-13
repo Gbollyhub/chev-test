@@ -55,12 +55,16 @@ export default {
     };
   },
   async mounted() {
-    await this.initUser();
+    this.$store.dispatch('memberDetails');
     this.effectDate();
   },
+  computed:{
+    memberLogin() {
+      return this.$store.state.member
+    }
+  },
+
   methods: {
-
-
     effectDate () {
       const current = new Date();
       const currentDate = current.getDate();
@@ -104,7 +108,7 @@ export default {
 
       let rawData = {
         TransactionDate: this.effectiveDate,
-        MemberId: this.user.data.id,
+        MemberId: this.memberLogin.id,
         DepositAmount: parseInt(this.form.amount.replace(/,/g, '')),
         SavingsType: this.form.account,
         TransactionTypeId: 3,
@@ -124,10 +128,6 @@ export default {
         .then((response) => {
           this.rawData = response.data;
           this.makeToast(`success`);
-          if (this.form.MemberType != 2) {
-            window.history.length >
-              this.$router.push(`/payment}`);
-          }
         })
         .catch(error => {
           this.$bvToast.toast(error.message, {
@@ -137,19 +137,6 @@ export default {
                 autoHideDelay: 5000
             });
         });
-    },
-
-    async initUser() {
-      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((response) => {
-          this.user = response.data;
-        })
-    },
+    },    
   },
 };

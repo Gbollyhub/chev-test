@@ -6,8 +6,6 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    // Header,
-    // NavBar,
     Menu,
     RightSidebar,
     Footer
@@ -44,8 +42,10 @@ export default {
 
     };
   },
-  async created() {
-      await this.initUser();
+  computed:{
+    memberLogin() {
+      return this.$store.state.member
+    }
   },
   methods: {
 
@@ -83,7 +83,7 @@ export default {
       let rawData = {
 
         TransactionDate: this.effectiveDate,
-        MemberId: this.user.data.id,
+        MemberId: this.memberLogin.id,
         DepositAmount: parseInt(this.form.amount.replace(/,/g, '')),
         SavingsType: this.form.account,        
         TransactionTypeId: this.form.inc_dec
@@ -99,11 +99,11 @@ export default {
         .then((response) => {
           this.rawData = response.data;
           this.makeToast(`success`);
-          if (this.form.MemberType != 2){       
-            window.history.length > this.$router.
-            push(`/payment/${this.form.fname}&${this.form.lname}&
-              ${this.form.email}&${this.form.mobileNo}`);
-          }
+          // if (this.form.MemberType != 2){       
+          //   window.history.length > this.$router.
+          //   push(`/payment/${this.form.fname}&${this.form.lname}&
+          //     ${this.form.email}&${this.form.mobileNo}`);
+          // }
         })
         .catch(error => {
           this.$bvToast.toast(error.Message, {
@@ -113,22 +113,6 @@ export default {
                 autoHideDelay: 5000
             });
         });
-     },
-
-    async initUser() {        
-     await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.user = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-      } 
+     },    
   }
 };

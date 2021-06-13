@@ -57,17 +57,13 @@ export default {
         nameState: true,
         show: true,  
         notify: 0,
-        has_number: false,
-        has_lowercsae: false,
-        has_uppercase: false,
-        has_special: false,
+        queryString:"",
+        ReturnUrl:"",
+        UserId:"",
+        code:"",
         form: {
             password: "",
-            checkPassword:'',
-            EmployeeNo: "",
-            email: "",
-            UserType: null,
-            UserTypeCategory: 0
+            checkPassword:''
         },
         rules: [
           { message:'One lowercase letter required.', regex:/[a-z]+/ },
@@ -77,14 +73,21 @@ export default {
         ],
         passwordVisible:false,
         submitted:false,
-        reg: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/ 
-        
       };
-  },    
+  },
+  
+  created() {
+    console.log("Urlcode:",this.$route.query.code)
+    this.queryString = decodeURIComponent(escape(window.atob(this.$route.query.code)));    
+            console.log("queryString:",this.queryString)
+    this.code = this.queryString.split(':')[0];
+    console.log("code:",this.code)
+    this.UserId = this.queryString.split(':')[1];    
+    console.log("userId:",this.UserId)
+  },
   computed: {
 		notSamePasswords () {
-			if (this.passwordsFilled) {
-        
+			if (this.passwordsFilled) {        
         console.log(true)
 				return (this.form.password !== this.form.checkPassword)
 			} else {
@@ -108,8 +111,7 @@ export default {
 			}
 		}
 	},
-    methods: {
-      
+    methods: {      
       resetPasswords () {
         this.password = ''
         this.checkPassword = ''
@@ -130,9 +132,6 @@ export default {
                 autoHideDelay: 5000
             });
         },
-        isEmailValid() {
-      return (this.form.email == "")? "" : (this.reg.test(this.form.email)) ? 'has-success' : 'has-error';
-    }, 
         
     async onSubmit(event) {
       event.preventDefault();
@@ -140,11 +139,12 @@ export default {
       this.loader = true  
 
       let rawData = {
-        Code: this.form.code,
-        UserId: this.form.userId,
+        Code: this.code,
+        UserId: this.UserId,
         Password: this.form.password,
-        ReturnUrl: `${process.evn.BASE_API_URL}`    
+        ReturnUrl: `/`    
       };
+      rawData=JSON.stringify(rawData);
       await axios
           .post(`${process.env.VUE_APP_API_URL}/Users/ResetPassword`,rawData,{
             headers: {

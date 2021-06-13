@@ -67,7 +67,7 @@ export default {
       this.loader = true
       let rawData = {
         Email: this.form.email,
-        ReturnUrl: `${process.env.BASE_API_URL}/resetPassword`    
+        ReturnUrl: `resetPassword`    
       };     
       await axios
           .post(`${process.env.VUE_APP_API_URL}/Users/ForgotPassword`,rawData,{

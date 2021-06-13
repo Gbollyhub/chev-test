@@ -38,28 +38,33 @@
                 <template #cell(index)="data">
                     {{ data.index + 1 }}
                 </template>
-                <template #cell(name)="data">
-                    <b class="text-info">{{ data.item.itemData.member.person.lastName.toUpperCase() }}</b>,
-                    <b>{{ data.item.itemData.member.person.firstName}}</b>
-                </template>
-                <template #cell(employeeNumber)="data">
+                <template #cell(employeeNum)="data">
                   <a type="button" @click="Details(approve.data, data.index)" variant="primary">
                   <b class="text-info">{{ data.item.itemData.member.employeeNumber }}</b></a>                    
                 </template>
+                <template #cell(name)="data">
+                    <b class="text-info">{{ data.item.itemData.member.person.lastName.toUpperCase() }}</b>,
+                    <b>{{ data.item.itemData.member.person.firstName}}</b>
+                </template>                
                 <template #cell(loanAmount)="data">
                 <a
                   type="button"
                   @click="Details(approve.data, data.index)"
                   variant="primary"
-                >
+                ><span v-if="selectedModule ==3">
                   <b class="text-info">{{
                     data.item.itemData.loanAmount | price
-                  }}</b></a
+                  }}</b></span>
+                  <span v-if="selectedModule ==4">
+                  <b class="text-info">{{
+                    data.item.itemData.depositAmount | price
+                  }}</b></span>
+                  
+                  </a
                 >
               </template>
                 <template #cell(active)="data">
-                    <span v-if="data.item.approved == null">Not-Approved</span>
-                    <span v-if="data.item.approved == false">Rejected</span>
+                    <span v-if="data.item.approved == null">Pending</span>
                     <span v-if="data.item.approved == true">Approved</span>
                 </template>
                 <template #cell(memberType)="data">
@@ -68,16 +73,10 @@
                     <span v-if="data.item.itemData.member.memberType === 3">Expatriate Member</span>
                 </template>
                 <template #cell(show_details)="data">
-                    <span v-if="!data.item.itemData.approved">
+                    <span v-if="!data.item.approved">
                       <b-button variant="primary" @click="ApproveModuleRequest(data.item.id, data.item.moduleApproverId, data.item.itemId,)" 
                       class="float-sm-left">Approve</b-button>                                    
                     </span>
-                    <!-- <span v-if="data.item.itemData.approved">
-                      <b-button variant="primary" @click="ApproveModuleRequest" class="float-sm-left">Pending</b-button>
-                      
-                  <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
-                  <b class="text-info">{{ data.item.loanAmount | price }}</b></a>                                 
-                    </span> -->
                     </template>
             </b-table>
       </div>

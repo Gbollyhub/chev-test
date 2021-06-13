@@ -48,16 +48,16 @@ export default {
     };
   },
   async mounted() {
-    await this.initUser();
+    this.$store.dispatch('memberDetails');
     await this.getAllBanks();
   },
   computed: {
     memberBalance() {
       return this.$store.state.balance
+    },
+    memberLogin() {
+      return this.$store.state.member
     }
-  },
-  created() {
-    this.$store.dispatch('memberBalance');
   },
   methods: {
 
@@ -143,7 +143,7 @@ export default {
       event.preventDefault()
        this.loader = true;
       let rawData = {
-         MemberId: this.user.data.id,
+         MemberId: this.memberLogin.id,
          DebitAccountType: this.account,
          MethodOfCollectionId: 1,
          CollectionLocation: this.location,
@@ -173,11 +173,11 @@ export default {
             this.state = 'success';
             this.status = true;
             this.clearForm();
-         let memberType = localStorage.getItem('userType')
+        //  let memberType = localStorage.getItem('userType')
          this.rawData = response.data;
-         if (memberType != 2) {
-             this.$router.push(`/payment}`);
-         }
+        //  if (memberType != 2) {
+        //      this.$router.push(`/payment}`);
+        //  }
          }
          else{
           this.clearForm();
@@ -200,19 +200,6 @@ export default {
                 autoHideDelay: 5000
             });
         });
-    },
-
-    async initUser() {
-      await axios
-        .get(`${process.env.VUE_APP_API_URL}/Members/Usertype`, {
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((response) => {
-          this.user = response.data;
-        })
     },
   },
 };

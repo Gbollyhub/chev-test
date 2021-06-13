@@ -38,7 +38,7 @@ export default {
       selectedOpt: null,  
       fields: [
         {key: 'index', label: 'S/N'},
-        { key: 'employeeNumber', label: 'Employee No.' },
+        { key: 'employeeNum', label: 'Employee No.' },
         { key: 'name', label: 'Full Name' },
         { key: 'loanAmount', label: 'Amount' },
         { key: 'active', label: 'Status' },        
@@ -52,13 +52,8 @@ export default {
       ]
     };
   },
-  async created() {    
-    await this.getAll();
+  async created() {
     await this.initModules();
-    // await this.initLoan();
-    // await this.initMember()
-
-
   },
   methods: {
     Details(detail,index) {
@@ -111,21 +106,6 @@ export default {
         // document.body.appendChild(fileLink);
         fileLink.click();
       },
-    async getAll() {        
-     await axios
-        .get( `${process.env.VUE_APP_API_URL}/Members/All`,{
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then(response => {
-          this.approve = response.data;
-        })
-        .catch(error => {
-          error.alert("Error");
-        });
-    }, 
 
     async initModules() {        
      await axios
@@ -209,30 +189,7 @@ export default {
          });
      },
 
-    // async ApproveModuleRequest(Id,ModuleApproverId,itemId) { 
-    //   let rawData = {
-    //     Id: Id,
-    //     ModuleApproverId:ModuleApproverId,
-    //     itemId:itemId,
-    //     Approved : true
-    //   };
-    //   rawData = JSON.stringify(rawData);       
-    //  await axios
-    //     .post( `${process.env.VUE_APP_API_URL}/PendingApproval/Approve`, rawData,{
-    //       headers: {
-    //         "Content-Type": "application/json;charset=utf-8",
-    //         Authorization: `Bearer ${localStorage.getItem('token')}`
-    //       }
-    //     })
-    //     .then(response => {
-    //         this.approve = response.data;
-    //         this.init(this.selectedModule)       
-    //         this.show=false
-    //     })
-    //     .catch(error => {
-    //       error.alert("Error");
-    //     });
-    // },
+   
     async RejectModuleRequest(Id,ModuleApproverId,itemId,approve) { 
       let rawData = {
         Id: Id,

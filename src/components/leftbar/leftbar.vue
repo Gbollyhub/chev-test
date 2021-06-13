@@ -64,16 +64,10 @@ export default {
         document.title = "Chevron CEMCS Corporative"
 		document.images = "../../../assets/images/chevron-cemcs.png"
     },
-	// computed : {
-    //   isLoggedIn : function(){ return this.$store.getters.isAuthenticated}
-    // },
   computed: {
     memberLogin() {
     return this.$store.state.member
   }
-},
-created() {
-  this.$store.dispatch('memberDetails');
 },
 	methods: {
         async logout (){

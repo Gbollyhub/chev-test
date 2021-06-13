@@ -579,24 +579,8 @@ export default {
       formData.append('MethodOfCollection', 2);
       formData.append('AccountNumber', this.form.accountNumber);
       formData.append('AccountName', this.name.data);
-      formData.append('Guarantors',JSON.stringify(this.guarantorArray));     
-      // formData.append('LoanGuarantors', this.guarantorArray);     
-      // for (let index = 0; index < this.guarantorArray; index++) {
-      //   this.LoanGuarantors.push({
-      //     LoanGuarantors: this.guarantorArray[index]
-      // });
-      // }
-    //   for (let i = 0; i < this.guarantorArray.length; i++) {
-    //     // let LoanGuarantors= (this.guarantorArray[i]);
-    //     formData.append(`${this.LoanGuarantors}[]` ,this.guarantorArray[i]);
-    // }
+      formData.append('Guarantors',JSON.stringify(this.guarantorArray)); 
       formData.append('FormFile', this.$refs.file.files[0]);
-      
-      // }
-      // rawData = JSON.stringify(rawData);
-      /* Add the form data we need to submit */
-      // formData.append('FormFile', this.file);
-      // formData.append('rawData',rawData)
       await axios
         .post(
           `${process.env.VUE_APP_API_URL}/Loans/submit`,
@@ -625,10 +609,6 @@ export default {
             this.status = true;
             this.state = 'failed';
             this.clearForm(); 
-            // this.result = response.data;
-            // this.$emit("setParamResp", this.result);
-            // localStorage.setItem("LoanPlan",JSON.stringify(this.result));
-            // this.$router.push('/repayment_plan');
           }
         })
         .catch(error => {
@@ -641,12 +621,6 @@ export default {
             this.loader = false;
             this.status = true;
             this.state = 'failed';
-            // this.$bvToast.toast(error, {
-            //     title: "Error",
-            //     variant: "danger",
-            //     solid: true,
-            //     autoHideDelay: 5000
-            // });
           });
     },
 
