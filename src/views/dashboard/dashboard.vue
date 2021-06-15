@@ -2,8 +2,9 @@
             <div class="app-admin-section">
             <div class="app-admin-col-1">
             <Leftbar/>
-            </div>
-            <div class="app-admin-col-2">
+            </div>            
+            <div class="app-admin-col-2">              
+              <div v-if="userType"><Auto-logout/></div>
             <div class="admin-top-bar">
         <div class="admin-top-bar-left">
           <div class="settings-icon"></div>

@@ -1,5 +1,6 @@
 import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
+import AutoLogout from '../../components/layout/AutoLogout.vue'
 // import axios from 'axios';
 
 
@@ -7,7 +8,8 @@ export default {
   name: "Home",
   components: {
     Leftbar,
-    Rightbar
+    Rightbar,
+    AutoLogout
   },
   data() {
     return {

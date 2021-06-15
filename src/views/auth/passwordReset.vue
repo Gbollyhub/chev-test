@@ -33,9 +33,10 @@
               </div>
             <div class="app-login-form-group">
               <label class="login-label">Confirm Password</label>
-              <input type="password" class="app-login-text-field w-input" v-model.lazy="form.checkpassword" placeholder="Password" required />             
+              <input type="password" class="app-login-text-field w-input" v-model="form.checkPassword" placeholder="Password" required />             
+             <div class="matches" v-if="notSamePasswords && form.checkPassword.length !== form.password && form.checkPassword !==''">
+               <p style="color:red;font-size:14px;">Passwords don't match.</p></div>            
             </div>
-             <div class="matches" v-if="notSamePasswords"><p><code>Passwords don't match.</code></p></div>            
       </div>
       <button type="submit" class="app-login-button">Reset Password</button>
       </form>
@@ -57,7 +58,6 @@ export default {
         nameState: true,
         show: true,  
         notify: 0,
-        queryString:"",
         ReturnUrl:"",
         UserId:"",
         code:"",
@@ -77,13 +77,8 @@ export default {
   },
   
   created() {
-    console.log("Urlcode:",this.$route.query.code)
-    this.queryString = decodeURIComponent(escape(window.atob(this.$route.query.code)));    
-            console.log("queryString:",this.queryString)
-    this.code = this.queryString.split(':')[0];
-    console.log("code:",this.code)
-    this.UserId = this.queryString.split(':')[1];    
-    console.log("userId:",this.UserId)
+    this.code = decodeURIComponent(escape(window.atob(this.$route.query.code)));
+    this.UserId = this.$route.query.user;
   },
   computed: {
 		notSamePasswords () {
@@ -136,7 +131,18 @@ export default {
     async onSubmit(event) {
       event.preventDefault();
       // Exit when the form isn't valid
-      this.loader = true  
+      if (this.passwordValidation.errors.length !=0) {
+       return this.$bvToast.toast("Invaild password string", {
+                title: "Warning",
+                variant: "danger",
+                solid: true,
+                autoHideDelay: 5000})
+      }
+      if (this.notSamePasswords) {
+        return false
+      }
+      this.loader = true 
+      
 
       let rawData = {
         Code: this.code,
@@ -156,27 +162,15 @@ export default {
         this.form.password = ''
         this.makeToast(`success`);
         })
-        .catch(err => { if (err.response.status == 400)
-            this.$bvToast.toast("Kindly Fill-Up the Form", {
-                title: "Warning",
-                variant: "warning",
-                solid: true,
-                autoHideDelay: 5000
-            });
-            if (err.response.status == 401)
-            this.$bvToast.toast(err, {
-                title: "Warning",
-                variant: "warning",
-                solid: true,
-                autoHideDelay: 5000
-            });
-            if (err.response.status == 500)
+        .catch(err => { 
+            this.loader = false;
             this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
-                variant: "danger",
+                variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-        })}
+            });
+          }
         )
     },
   },
