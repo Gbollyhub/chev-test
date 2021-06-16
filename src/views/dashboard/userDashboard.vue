@@ -40,6 +40,75 @@
                 <div class="mt-5"></div>
             </section>
             <section class="container">
+                <div v-if="memberLogin.approved == false">
+                    <div>
+                        <b-alert show><p style="color:red;font-size:20px;"> 
+                            Your Membership Registration is awaiting approval
+                        </p></b-alert>                        
+                    </div>
+                <div class=" icons-grids">
+                    <div class="row no-gutters">
+                        <div class="col-md-6">
+                            <div class="row no-gutters">
+                                <div class="col-4">
+                                <router-link to="#">
+                                 <div class="icons-grid orange-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/loans.svg" alt="CEMCS Co-oprative">
+                                        <p>LOANS</p>
+                                    </div>
+                                </router-link> 
+                                </div>
+                                <div class="col-4">
+                                    <router-link to="#">
+                                    <div class="icons-grid green-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/ecommerce.svg" alt="CEMCS Co-oprative">
+                                        <p>E-COMMERCE</p>
+                                    </div>
+                                    </router-link>
+                                </div>
+                                <div class="col-4">
+                                    <router-link to="#">
+                                    <div class="icons-grid green2-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/insurance.svg" alt="CEMCS Co-oprative">
+                                        <p>INSURANCE</p>
+                                    </div>
+                                    </router-link>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row no-gutters">
+                                <div class="col-4">
+                                    <router-link to="#">
+                                    <div class="icons-grid blue-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/deals.svg" alt="CEMCS Co-oprative">
+                                        <p>DEALS</p>
+                                    </div>
+                                    </router-link>
+                                </div>
+                                <div class="col-4">
+                                    <router-link to="#">
+                                    <div class="icons-grid blue2-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/travels.svg" alt="CEMCS Co-oprative">
+                                        <p>TRAVELS</p>
+                                    </div>
+                                    </router-link>
+                                </div>
+                                <div class="col-4">
+                                    <router-link to="#">
+                                    <div class="icons-grid blue3-bg hvr-bob">
+                                        <img style="margin-bottom: 25px;" src="../../assets/images/icons/banking.svg" alt="CEMCS Co-oprative">
+                                        <p>BANKING</p>
+                                    </div>
+                                    </router-link>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div></div>
+                <div v-else>
                 <div class=" icons-grids">
                     <div class="row no-gutters">
                         <div class="col-md-6">
@@ -100,6 +169,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </section>
             <!-- <div class="arrow-down text-center">

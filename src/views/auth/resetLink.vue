@@ -16,7 +16,7 @@
       <div class="w-form">
          <div class="app-login-form-group">
           <label class="login-label">Email Address</label>
-          <input type="email" class="app-login-text-field w-input"  v-model="form.email" required placeholder="Email Address" />
+          <input type="text" class="app-login-text-field w-input"  v-model="form.email" required placeholder="Email Address" />
         </div>         
     </div><div style="text-align:center;text-decoration:underline;">
       <button type="submit" class="app-login-button">Send Link</button></div>

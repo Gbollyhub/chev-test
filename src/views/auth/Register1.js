@@ -99,7 +99,7 @@ export default {
         UserType: 2,
         ReturnUrl: "confirmation"   
       };
-      rawData=JSON.stringify(rawData)
+      // rawData=JSON.stringify(rawData)
       this.$store.dispatch('createAccout', rawData)
       .then(() =>{  
         this.loader = false;
@@ -112,27 +112,15 @@ export default {
                     // alert(this.$bvModal.msgBoxOk('Action completed'))
                     // this.$router.push('/register')
                     })
-        .catch(err => { if (err.response.status == 400)
-            this.$bvToast.toast("Kindly Fill-Up the Form", {
-                title: "Warning",
-                variant: "warning",
-                solid: true,
-                autoHideDelay: 5000
-            });
-            if (err.response.status == 401)
-            this.$bvToast.toast(err, {
-                title: "Warning",
-                variant: "warning",
-                solid: true,
-                autoHideDelay: 5000
-            });
-            if (err.response.status == 500)
+        .catch(err => { 
+            this.loader = false;
             this.$bvToast.toast(err.response.data.message, {
                 title: "Warning",
-                variant: "danger",
+                variant: "warning",
                 solid: true,
                 autoHideDelay: 5000
-        })}
+            });
+          }
         )
     },
   },

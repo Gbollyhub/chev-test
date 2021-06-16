@@ -206,7 +206,7 @@ export default {
             this.loader = true     
           this.rawData = response.data;
           this.makeToast(`success`);
-          if (this.form.MemberType != 2){       
+          if (parseInt(this.login.userTypeCategory) != 2){       
             window.history.length > this.$router.
             push(`/payment`);
           }

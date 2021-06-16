@@ -34,7 +34,8 @@
                 </b-row>
               </div>
             </div>
-            <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
+            <div v-if="selectedModule >= 3">
+              <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
                 <template #cell(index)="data">
                     {{ data.index + 1 }}
                 </template>
@@ -68,9 +69,9 @@
                     <span v-if="data.item.approved == true">Approved</span>
                 </template>
                 <template #cell(memberType)="data">
-                    <span v-if="data.item.itemData.member.memberType === 1">Regular Member</span>
-                    <span v-if="data.item.itemData.member.memberType === 2">Retiree Member</span>
-                    <span v-if="data.item.itemData.member.memberType === 3">Expatriate Member</span>
+                    <span v-if="data.item.itemData.member.memberType === 1">Regular</span>
+                    <span v-if="data.item.itemData.member.memberType === 2">Retiree</span>
+                    <span v-if="data.item.itemData.member.memberType === 3">Expatriate</span>
                 </template>
                 <template #cell(show_details)="data">
                     <span v-if="!data.item.approved">
@@ -79,11 +80,55 @@
                     </span>
                     </template>
             </b-table>
+              
+            </div>
+            <div v-if="selectedModule == 2">
+            <b-table striped hover small :fields="fields" :items="approve.data" responsive="sm">                              
+                <template #cell(index)="data">
+                    {{ data.index + 1 }}
+                </template>
+                <template #cell(employeeNum)="data">
+                  <a type="button" @click="Details(approve.data, data.index)" variant="primary">
+                  <b class="text-info">{{ data.item.itemData.employeeNumber }}</b></a>                    
+                </template>
+                <template #cell(name)="data">
+                    <b class="text-info">{{ data.item.itemData.person.lastName.toUpperCase() }}</b>,
+                    <b>{{ data.item.itemData.person.firstName}}</b>
+                </template>                
+                <template #cell(loanAmount)="data">
+                <a
+                  type="button"
+                  @click="Details(approve.data, data.index)"
+                  variant="primary"
+                >
+                  <span v-if="data.item.itemData.memberType === 1">{{50000 | price}}</span>
+                  <span v-if="data.item.itemData.memberType === 2">{{10000 | price}}</span>
+                  <span v-if="data.item.itemData.memberType === 3">{{10000 | price}}</span>                  
+                  </a
+                >
+              </template>
+                <template #cell(active)="data">
+                    <span v-if="data.item.approved == null">Pending</span>
+                    <span v-if="data.item.approved == true">Approved</span>
+                </template>
+                <template #cell(memberType)="data">
+                    <span v-if="data.item.itemData.memberType === 1">Regular</span>
+                    <span v-if="data.item.itemData.memberType === 2">Retiree</span>
+                    <span v-if="data.item.itemData.memberType === 3">Expatriate</span>
+                </template>
+                <template #cell(show_details)="data">
+                    <span v-if="!data.item.approved">
+                      <b-button variant="primary" @click="ApproveModuleRequest(data.item.id, data.item.moduleApproverId, data.item.itemId,)" 
+                      class="float-sm-left">Approve</b-button>                                    
+                    </span>
+                    </template>
+            </b-table>
+            </div>
       </div>
   
         <b-modal
             v-model="show"
-            title="Approval"
+            title= "Approval"
             :header-bg-variant="headerBgVariant"
             :header-text-variant="headerTextVariant"
             :body-bg-variant="bodyBgVariant"
