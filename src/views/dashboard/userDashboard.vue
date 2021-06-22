@@ -109,6 +109,7 @@
 
                 </div></div>
                 <div v-else>
+                    <div v-if="userType"><Auto-logout/></div>
                 <div class=" icons-grids">
                     <div class="row no-gutters">
                         <div class="col-md-6">
@@ -214,20 +215,25 @@
 </template>
 
 <script>
+import AutoLogout from '../../components/layout/AutoLogout.vue'
 import carousel from 'vue-owl-carousel'
 export default {
-    components: { carousel },
+    components: { carousel, AutoLogout },
     data () {
       return {
         items: 1,
         firstName:"",
         lastName:"",
+        userType: localStorage.getItem('userType'),
       }
     },
     computed: {
   memberLogin() {
     return this.$store.state.member
   }
+},
+mounted() {
+    // window.addEventListener('beforeunload', this.$store.dispatch('logout'))
 },
 created() {
   this.$store.dispatch('memberDetails');

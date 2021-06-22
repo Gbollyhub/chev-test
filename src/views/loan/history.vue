@@ -8,7 +8,7 @@
             id="my-table"
         :per-page="perPage"
         :current-page="currentPage"
-        small
+        small head-variant="dark" bordered="bordered"
         striped hover :fields="fields" :items="users" responsive="sm">
         <template #cell(index)="data">
                   {{ data.index + 1 }}
@@ -21,9 +21,9 @@
                   <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
                   <b class="text-info">{{ data.item.loanAmount | price }}</b></a>
               </template>
-              <template #cell(repaymentPeriod)="data">
+              <template #cell(repaymentPeriod)="data"><div class="text-center">
                   <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
-                 <b class="text-info"> {{ data.item.repaymentPeriod }}</b></a>
+                 <b class="text-info"> {{ data.item.repaymentPeriod }}</b></a></div>
               </template>
               
               <template #cell(dateSubmitted)="data">

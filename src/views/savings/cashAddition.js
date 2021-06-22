@@ -14,6 +14,8 @@ export default {
   },
   data() {
     return {
+      perPage: 10,
+      currentPage: 1,
       show: true,
       notify: 0,
       options: {
@@ -23,6 +25,7 @@ export default {
           showClose: true,
         },
       user: {},
+      userSavings:{},
       employeeNumber: '',
       name: '',
       form: {
@@ -36,6 +39,13 @@ export default {
         { text: "---Select Account Type---", value: null, disabled: true },
         { value: 1, text: "Savings " },
         { value: 2, text: "Special Deposit " }
+      ],
+      fields: [
+        {key: 'index', label: 'S/N',class: 'text-center'},
+        { key: 'savingsType', label: 'Saving Type',class: 'text-center' },
+        { key: 'savingAmount', label: 'Amount',class: 'text-center' },
+        { key: 'transactionDate', label: 'Date',class: 'text-center' },
+        { key: 'active', label: 'Status',class: 'text-center' },
       ],
 
       Months: [
@@ -57,10 +67,14 @@ export default {
   async mounted() {
     this.$store.dispatch('memberDetails');
     this.effectDate();
+    this.getSavingList();
   },
   computed:{
     memberLogin() {
       return this.$store.state.member
+    },
+    totalRows() {
+      return this.userSavings.length
     }
   },
 
@@ -103,6 +117,17 @@ export default {
       })
     },
 
+    async getSavingList() {
+      await axios.get(`${process.env.VUE_APP_API_URL}/SavingDepositTransactions/User/CashAddition`,{
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }).then((response) => {
+        this.userSavings = response.data;
+      })
+    },
+
     async onSubmit(event) {
       event.preventDefault()
 
@@ -128,6 +153,8 @@ export default {
         .then((response) => {
           this.rawData = response.data;
           this.makeToast(`success`);
+          this.getSavingList();
+
         })
         .catch(error => {
           this.$bvToast.toast(error.message, {

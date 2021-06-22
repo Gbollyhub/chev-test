@@ -12,6 +12,7 @@ export default new Vuex.Store({
     user : {},
     member: {},
     balance:{},
+    loanType:{},
   },  
   actions: {
     login({commit}, user){
@@ -30,6 +31,24 @@ export default new Vuex.Store({
         })
         .catch(err => {
           commit('auth_error')
+          localStorage.removeItem('token')
+          reject(err)
+        })
+        
+      })
+    },
+
+    refreshToken(commit){
+      return new Promise((resolve,reject) => {
+        axios({url: `${process.env.VUE_APP_API_URL}/Users/refresh-token`, method: 'POST' })
+        .then(resp => {
+          const token = resp.data.token
+          localStorage.setItem('token', token)
+          axios.defaults.headers.common['Authorization'] = token
+          commit('tokenRefresh', token)
+          resolve(resp)
+        })
+        .catch(err => {
           localStorage.removeItem('token')
           reject(err)
         })
@@ -120,6 +139,23 @@ export default new Vuex.Store({
       })
     },
 
+    getLoanType(){
+      return new Promise((resolve, reject) => {
+        axios({url: `${process.env.VUE_APP_API_URL}/LoanCongfig/Member/Type`, method: 'GET',headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then(response => {
+        const loanType = response.data
+        this.commit("loanType", loanType)
+        resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+
     states(){
       return new Promise((resolve, reject) => {
         axios({url: `${process.env.VUE_APP_API_URL}/States/All`, method: 'GET'})
@@ -147,6 +183,9 @@ export default new Vuex.Store({
     auth_error(state){
       state.status = 'error'
     },
+    tokenRefresh(state, token) {
+      state.refreshToken =  token;
+    },
     logout(state){
       state.status = ''
       state.token = ''
@@ -156,6 +195,9 @@ export default new Vuex.Store({
     },
     balance(state,balance) {
       state.balance = balance;
+    },
+    loanType(state, loanType) {
+      state.loanType = loanType;
     },
     AppLoanId(state, appLoan){
       state.appLoan = appLoan.data
@@ -169,7 +211,8 @@ export default new Vuex.Store({
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     balance:state => state.balance,
-    member:state => state.member
+    member:state => state.member,
+    loanType:state => state.loanType
     // variant: state => state.variant,
     // message: state => state.message,
     // showAlert: state => state.showAlert,

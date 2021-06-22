@@ -12,6 +12,8 @@ export default {
   },
   data() {
     return {
+      perPage: 10,
+      currentPage: 1,
       show: true,
       notify:0,
       options: {
@@ -24,6 +26,7 @@ export default {
         employeeNumber: "",
         name: "",
         effectiveDate: new Date(),
+        userSavings:{},
         form:{
           account: null,
           amount:"",
@@ -39,15 +42,33 @@ export default {
         { value: 1, text: "Savings Increase" },
         { value: 2, text: "Savings Decrease" }
       ],
+      fields: [
+        {key: 'index', label: 'S/N'},
+        { key: 'savingsType', label: 'Saving Type',class: 'text-center' },
+        { key: 'savingAmount', label: 'Amount',class: 'text-center' },
+        { key: 'transactionType', label: 'Transaction Type',class: 'text-center' },
+        { key: 'transactionDate', label: 'Date',class: 'text-center' },
+        { key: 'active', label: 'Status',class: 'text-center' },
+      ],
 
     };
+  },
+  mounted() {
+    this.getIncreaseDecreaseList()
   },
   computed:{
     memberLogin() {
       return this.$store.state.member
+    },
+    totalRows() {
+      return this.userSavings.length
     }
   },
   methods: {
+    rowClass(item, type) {
+      if (!item || type !== 'row') return
+      if (item.status === 'awesome') return 'table-success'
+    },
 
     numberFormat(value) {
         this.points = Number(value.replace(/\D/g, ''))
@@ -77,6 +98,16 @@ export default {
         this.show = true
       })
     },
+    async getIncreaseDecreaseList() {
+      await axios.get(`${process.env.VUE_APP_API_URL}/SavingDepositTransactions/User/SavingsIncrease-Decrease`,{
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }).then((response) => {
+        this.userSavings = response.data;
+      })
+    },
 
     async onSubmit(event) {
       event.preventDefault()
@@ -104,6 +135,7 @@ export default {
           //   push(`/payment/${this.form.fname}&${this.form.lname}&
           //     ${this.form.email}&${this.form.mobileNo}`);
           // }
+          this.getIncreaseDecreaseList()
         })
         .catch(error => {
           this.$bvToast.toast(error.Message, {

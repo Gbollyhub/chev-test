@@ -17,11 +17,11 @@ export default {
         footerBgVariant: 'danger',
         footerTextVariant: 'light',
         fields: [
-            {key: 'index', label: 'S/N'},
-            { key: 'id', label: 'Loan ID' },
-            { key: 'loanAmount', label: 'Loan Amount' },
-            { key: 'repaymentPeriod', label: 'Repayment Period' },
-            { key: 'dateSubmitted', label: 'Loan Application Date' },
+            {key: 'index', label: 'S/N',class: 'text-center'},
+            { key: 'id', label: 'Loan ID',class: 'text-center' },
+            { key: 'loanAmount', label: 'Loan Amount',class: 'text-center' },
+            { key: 'repaymentPeriod', label: 'Repayment Period',class: 'text-center' },
+            { key: 'dateSubmitted', label: 'Loan Application Date',class: 'text-center' },
           ],  
       };
     },

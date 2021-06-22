@@ -11,6 +11,7 @@
           <div @click = "switchView('History')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">History</div>
            <div @click = "switchView('Waiver')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Waiver Form</div>
             <div @click = "switchView('Offset')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Loan Offset</div>
+            <div @click = "switchView('NewOffset')" class="admin-top-barlinks" :class="[currentTab == 5 ? currentClass : '']">New Loan Offset</div>
         </div>
         <div class="admin-top-bar-right">
           <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
@@ -28,6 +29,9 @@
              <div v-show="Offset">
            <Offset/>       
             </div>
+             <div v-show="NewOffset">
+           <NewOffset/>       
+            </div>
     </div>
       <div class="app-admin-col-3">
               <Rightbar />
@@ -43,6 +47,7 @@ import LoanRequest from './requestLoan.vue'
 import History from './history.vue'
 import Waiver from './waiver.vue'
 import Offset from './offset.vue'
+import NewOffset from './Newoffset.vue'
 
 export default {
   name: "Home",
@@ -52,7 +57,8 @@ export default {
     LoanRequest,
     History,
     Waiver,
-    Offset
+    Offset,
+    NewOffset
 
   },
   data(){
@@ -62,6 +68,7 @@ export default {
         History: false,
         Waiver: false,
         Offset: false,
+        NewOffset: false,
         currentTab: 1,
         currentClass: 'admin-active-top-link',
       }
@@ -77,6 +84,7 @@ methods:{
          this.History = false
           this.Waiver = false
            this.Offset = false
+           this.NewOffset = false
            this.currentTab = 1
         }
         else if(selected == 'History') {
@@ -84,6 +92,7 @@ methods:{
          this.History = true
            this.Waiver = false
            this.Offset = false
+           this.NewOffset = false
             this.currentTab = 2
         }
          else if(selected == 'Waiver') {
@@ -91,6 +100,7 @@ methods:{
          this.History = false
            this.Waiver = true
            this.Offset = false
+           this.NewOffset = false
             this.currentTab = 3
         }
          else if(selected == 'Offset') {
@@ -98,7 +108,15 @@ methods:{
          this.History = false
            this.Waiver = false
            this.Offset = true
+           this.NewOffset = false
             this.currentTab = 4
+        }else if(selected == 'NewOffset') {
+             this.LoanRequest = false
+         this.History = false
+           this.Waiver = false
+           this.Offset = false
+           this.NewOffset = true
+            this.currentTab = 5
         }
 
     },
