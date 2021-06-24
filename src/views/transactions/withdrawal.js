@@ -94,8 +94,13 @@ export default {
                });
            });
        },
-       async verifyAcc() {    
-        this.loader = true; 
+       async verifyAcc() { 
+         if (this.accountNumber == '') {
+           this.loader = false
+          }else {
+            this.loader = true;
+          }
+         
         let verifyData = {            
           destbankcode: this.bankcode,
           recipientaccount: this.accountNumber,

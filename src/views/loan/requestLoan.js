@@ -447,7 +447,11 @@ export default {
 
     //..........................................End Guarantor Info.............................
     async verifyAcc() {
-          this.loader = true;
+      if (this.accountNumber == '') {
+        this.loader = false
+       }else {
+         this.loader = true;
+       }
           let verifyData = {            
             destbankcode: this.form.bankcode,
             recipientaccount: this.form.accountNumber,

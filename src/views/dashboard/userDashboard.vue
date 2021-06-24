@@ -215,6 +215,7 @@
 </template>
 
 <script>
+import jwt_decode from "jwt-decode";
 import AutoLogout from '../../components/layout/AutoLogout.vue'
 import carousel from 'vue-owl-carousel'
 export default {
@@ -225,6 +226,8 @@ export default {
         firstName:"",
         lastName:"",
         userType: localStorage.getItem('userType'),
+        token: localStorage.getItem('token'),
+        // memberLogin:{}
       }
     },
     computed: {
@@ -233,7 +236,7 @@ export default {
   }
 },
 mounted() {
-    // window.addEventListener('beforeunload', this.$store.dispatch('logout'))
+    this.expTime();
 },
 created() {
   this.$store.dispatch('memberDetails');
@@ -242,7 +245,19 @@ methods: {
         async logout (){
         await this.$store.dispatch('logout')
 		.then(() => this.$router.push('/'))        
-      }        
+      },
+    
+        expTime() {
+            const { exp } = jwt_decode(this.token) // expiration time of the token
+            console.log("Token expTime:", exp )
+            const now = Date.now() / 1000
+            console.log("Now time:", now )
+            if (now > exp) {
+                localStorage.removeItem('token')
+                localStorage.removeItem('userType')
+                this.$router.push('/')
+            }
+        }
     }
   }
 </script>
