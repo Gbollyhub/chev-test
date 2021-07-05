@@ -3,7 +3,7 @@
          <div class="app-admin-brand" style="text-align:center"><img height="60px" src="../../assets/images/chevron-cemcs-logo.png" /></div>
       <nav>       
       <router-link class= "active-link" to="/user-dashboard"> 
- <div class="admin-col-link-div">
+      <div class="admin-col-link-div">
       <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Dashboard </div>
       </div>
@@ -27,8 +27,8 @@
         <div class="admin-col-link-text">Loan Planner</div>
       </div>
       </router-link>
-<router-link class= "active-link" to="/savings"> 
- <div class="admin-col-link-div">
+  <router-link class= "active-link" to="/savings"> 
+    <div class="admin-col-link-div">
         <div class="admin-col-1-links"></div>
         <div class="admin-col-link-text">Savings</div>
       </div>
@@ -39,13 +39,31 @@
         <div class="admin-col-link-text">Transactions</div>
       </div>
       </router-link> </div>
-          <div v-if="userType== 3 || memberLogin.isCreditCommittee == true" >
-      <router-link class= "active-link" to="/settings"> 
-      <div class="admin-col-link-div">
-        <div class="admin-col-1-links"></div>
-        <div class="admin-col-link-text">Settings</div>
+      <div v-if="userType== 3 || memberLogin.isCreditCommittee == true" >
+        <div v-if="memberLogin.department.id == 6" >
+          <router-link class= "active-link" to="/payments"> 
+            <div class="admin-col-link-div">
+            <div class="admin-col-1-links"></div>
+            <div class="admin-col-link-text">Payments</div>
+            </div>
+          </router-link>
         </div>
-      </router-link>
+        <div v-else-if="memberLogin.department.id == 4" >
+          <router-link class= "active-link" to="/schedules"> 
+            <div class="admin-col-link-div">
+            <div class="admin-col-1-links"></div>
+            <div class="admin-col-link-text">Schedule</div>
+            </div>
+          </router-link>
+        </div>
+        <div v-else>
+          <router-link class= "active-link" to="/settings"> 
+            <div class="admin-col-link-div">
+            <div class="admin-col-1-links"></div>
+            <div class="admin-col-link-text">Settings</div>
+            </div>
+          </router-link>
+        </div>
       </div>
       </nav>
       <div @click="logout" class="admin-col-logout" style="cursor:pointer"><span class="text-span-3"></span> Logout</div>

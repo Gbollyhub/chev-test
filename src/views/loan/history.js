@@ -5,7 +5,7 @@ export default {
       return {
         perPage: 10,
         currentPage: 1,
-        users: [],
+        users: {},
         loanDetails:{},
         loanAmount:"",
         show: false,
@@ -19,6 +19,7 @@ export default {
         fields: [
             {key: 'index', label: 'S/N',class: 'text-center'},
             { key: 'id', label: 'Loan ID',class: 'text-center' },
+            { key: 'loanType', label: 'Loan Type',class: 'text-center' },
             { key: 'loanAmount', label: 'Loan Amount',class: 'text-center' },
             { key: 'repaymentPeriod', label: 'Repayment Period',class: 'text-center' },
             { key: 'dateSubmitted', label: 'Loan Application Date',class: 'text-center' },
@@ -50,7 +51,7 @@ export default {
             },
           })
           .then((response) => {
-            this.users = response.data.data;
+            this.users = response.data;
           })
           .catch((error) => {
             if (error.response.status == 401) {

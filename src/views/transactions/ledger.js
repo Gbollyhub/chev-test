@@ -46,13 +46,14 @@ export default {
 
 
     async getLedgerList() {
-      await axios.get(`${process.env.VUE_APP_API_URL}/SavingDepositLedger/Member`,{
+      // await axios.get(`${process.env.VUE_APP_API_URL}/SavingDepositLedger/Member`,{
+        await axios.get(`${process.env.VUE_APP_API_URL}/SavingDepositLedger/ledger/${1}`,{
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       }).then((response) => {
-        this.ledgerList = response.data;
+        this.ledgerList = response.data.data;
       })
     },    
   },

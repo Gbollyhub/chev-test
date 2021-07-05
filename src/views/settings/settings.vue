@@ -10,9 +10,9 @@
           <div v-if="userType== 3 && memberLogin.department.description == 'INTERNAL CONTROL'" >
              <div @click = "switchView('InternalControl')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Internal Control Pending Approvals</div>
           </div>
-          <div v-else-if="userType== 3 && memberLogin.department.description == 'ACCOUNTS'" >
+          <!-- <div v-else-if="userType== 3 && memberLogin.department.description == 'ACCOUNTS'" >
              <div @click = "switchView('Payments')" class="admin-top-barlinks" :class="[currentTab == 5 ? currentClass : '']">Payments</div>
-          </div>
+          </div> -->
           <div v-else>
           <!-- <div @click = "switchView('Members')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Members</div> -->
           <!-- <div @click = "switchView('ApprovalRate')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Approval Route</div> -->
@@ -68,8 +68,7 @@ import InternalControl from './internalControlPage'
 import CreateLoan from './createLoan.vue'
 import Employees from './employees.vue'
 import LoanConfig from './loanConfig.vue'
-import Payments from './memberPayments.vue'
-// import Payment from '../payment.vue'
+// import Payments from './memberPayments.vue'
 
 export default {
   name: "Home",
@@ -80,7 +79,7 @@ export default {
     ApprovalRate,
     ViewPending,
     InternalControl,
-    Payments,
+    // Payments,
     CreateLoan,
     Employees,
     LoanConfig,
@@ -95,7 +94,7 @@ export default {
         Employees: false,
         LoanConfig:false,
         ViewPending:false,
-        Payments:false,
+        // Payments:false,
         InternalControl:false,
         currentTab: 1,
         currentClass: 'admin-active-top-link',
@@ -154,18 +153,18 @@ methods:{
            this.LoanConfig = false
             this.currentTab = 4
         }
-        else if(selected == 'Payments') {
-          this.Payments= true
-          this.InternalControl=false
-           this.Members = false
-           this.ApprovalRate = false
-           this.ViewPending = false
-           this.CreateLoan = false
-          this.InternalControl=false
-           this.Employees = false
-           this.LoanConfig = false
-            this.currentTab = 5
-        }
+        // else if(selected == 'Payments') {
+        //   this.Payments= true
+        //   this.InternalControl=false
+        //    this.Members = false
+        //    this.ApprovalRate = false
+        //    this.ViewPending = false
+        //    this.CreateLoan = false
+        //   this.InternalControl=false
+        //    this.Employees = false
+        //    this.LoanConfig = false
+        //     this.currentTab = 5
+        // }
          else if(selected == 'CreateLoan') {
            this.Members = false
            this.ApprovalRate = false

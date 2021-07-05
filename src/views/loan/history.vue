@@ -9,13 +9,18 @@
         :per-page="perPage"
         :current-page="currentPage"
         small head-variant="dark" bordered="bordered"
-        striped hover :fields="fields" :items="users" responsive="sm">
-        <template #cell(index)="data">
+        striped hover :fields="fields" :items="users.data" responsive="sm">
+            <template #cell(index)="data">
                   {{ data.index + 1 }}
               </template>
               <template #cell(id)="data">
                   <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
                   <b class="text-info">{{ data.item.id }}</b></a>
+              </template>
+              <template #cell(loanType)="data">
+                  <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">
+                  <b class="text-info">{{ data.item.loan.name }}</b>
+                  </a>
               </template>
               <template #cell(loanAmount)="data">
                   <a type="button" @click="getLoanDetails(data.item.id)" variant="primary">

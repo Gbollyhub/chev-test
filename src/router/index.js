@@ -34,6 +34,8 @@ import Transactions from "../views/transactions/transactions.vue";
 import Savings from "../views/savings/savings.vue";
 import LoanOption from "../views/loan/loan.vue";
 import Settings from "../views/settings/settings.vue";
+import Schedules from "../views/schedules/schedules.vue";
+import Payments from "../views/payments/payments.vue";
 import LoanPlanner from "../views/LoanPlanner/loanplanner.vue";
 import LoanGuidelines from "../views/loanGuidelines/loanGuidelines.vue";
 import ExternalLogin from "../views/externalLogin.vue";
@@ -61,6 +63,18 @@ const routes = [
     path: "/settings",
     name: "Settings",
     component: Settings,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/schedules",
+    name: "Schedules",
+    component: Schedules,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: "/payments",
+    name: "Payments",
+    component: Payments,
     meta: {requiresAuth: true},
   },
   {

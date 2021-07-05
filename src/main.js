@@ -25,8 +25,14 @@ Vue.use(FlashMessage);
 Vue.use(Vuelidate);
 // Vue.use(window.vuelidate.default);
 
+import VueExcelEditor from 'vue-excel-editor'
+Vue.use(VueExcelEditor)
+
 import VueAutosuggest from "vue-autosuggest";
 Vue.use(VueAutosuggest);
+
+import XLSX from 'xlsx';
+Vue.use(XLSX)
 
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
@@ -68,6 +74,8 @@ Vue.filter('price', function (number) {
 Vue.filter("humanize", date => moment(date).format("MMMM Do YYYY, h:mm a"));
 
 Vue.filter("hum", date => moment(date).format("Do MMMM, YYYY"));
+
+Vue.filter("dayMon", date => moment(date).format("MMMM, YYYY"));
 
 
 Vue.filter("Month", date => moment(date).format("M"));

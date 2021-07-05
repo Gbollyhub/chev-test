@@ -9,7 +9,8 @@
           <div @click="goBack" class="settings-icon"></div>
           <div @click = "switchView('transfer')" class="admin-top-barlinks" :class="[currentTab == 1 ? currentClass : '']">Transfer</div>
           <div @click = "switchView('withdrawal')" class="admin-top-barlinks" :class="[currentTab == 2 ? currentClass : '']">Withdrawal</div>
-          <div @click = "switchView('ledger')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Ledgers</div>
+          <div @click = "switchView('ledger')" class="admin-top-barlinks" :class="[currentTab == 3 ? currentClass : '']">Saving Ledgers</div>
+          <div @click = "switchView('loanLedger')" class="admin-top-barlinks" :class="[currentTab == 4 ? currentClass : '']">Loan Ledgers</div>
         </div>
         <div class="admin-top-bar-right">
           <div class="admin-topbar-date">{{new Date().toLocaleString() | humanize}}</div>
@@ -24,6 +25,9 @@
             <div v-show="ledgerView">
            <Ledger/>       
             </div>
+            <div v-show="loanLedgerView">
+           <LoanLedger/>       
+            </div>
     </div>
       <div class="app-admin-col-3">
               <Rightbar />
@@ -36,6 +40,7 @@ import Leftbar from '../../components/leftbar/leftbar'
 import Rightbar from '../../components/rightbar/rightbar'
 import Transfer from './transfer.vue'
 import Withdrawal from './withdrawal.vue'
+import LoanLedger from './loanLedger.vue'
 import Ledger from './ledger.vue'
 export default {
   name: "Home",
@@ -44,7 +49,8 @@ export default {
     Rightbar,
     Transfer,
     Withdrawal,
-    Ledger
+    Ledger,
+    LoanLedger
   },
   data(){
       return{
@@ -52,6 +58,7 @@ export default {
         transferView: true,
         withdrawalView: false,
         ledgerView: false,
+        loanLedgerView:false,
         currentTab: 1,
         currentClass: 'admin-active-top-link'
       }
@@ -78,7 +85,15 @@ methods:{
              this.transferView = false
          this.withdrawalView = false
          this.ledgerView = true
+         this.loanLedgerView = false
          this.currentTab = 3
+        }
+        else if(selected == 'loanLedger') {
+             this.transferView = false
+         this.withdrawalView = false
+         this.loanLedgerView = true
+         this.ledgerView = false
+         this.currentTab = 4
         }
 
     },
