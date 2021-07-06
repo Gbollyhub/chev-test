@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-show="loader">
+         <Loader/>
+      </div>
     <div class="content-header">Deductions</div>
       <div class="content-sub">Upload file</div>
       <div class="form-flex">
@@ -65,11 +68,16 @@
 import XLSX from "xlsx"
 import moment from 'moment'
 import axios from 'axios'
+import Loader from '../../components/ui/loader/loader.vue'
 
 export default {
   name: "Home",
+  components: {
+    Loader
+},
   data(){
       return{
+          loader: false,
           mData:{},
           dataArr: [], // Table content data array
           excellist:{},          // countArr: {}, // Analyze the table data and header to get a cross reference array for user-defined consolidation. For the time being, this article only writes the basis, and does not introduce the automatic consolidation of cells~~My other articles have custom merge implementation methods~
@@ -188,9 +196,9 @@ export default {
     },
 
     async onSubmit() {
-      // let formData = new FormData();
-      let Deduct = [];
-      for( var i = 0; i < this.excellist.length; i++ ){
+        this.loader = true;
+        let Deduct = [];
+        for( var i = 0; i < this.excellist.length; i++ ){
             // this.Deduct.push(excellist[i]);
             Deduct.push(
               {
@@ -203,17 +211,6 @@ export default {
               }
             )
       }
-
-      // let Deduct =[
-      //   {
-      //     EmployeeNumber:this.excellist.EmployeeNumber,
-      //     EmployeeName:"",
-      //     Savings:100000,
-      //     SpecialDeposit:120000,
-      //     LongTerm:137500,
-      //     ShortTerm:0
-      //   }
-      // ]
       let rawData = {
         TransactionMonth: this.transactionMonth,
         TransactionYear: parseInt(this.transactionYear),
@@ -233,17 +230,23 @@ export default {
         )
         .then((response) => {
           this.rawData = response.data;
-          this.makeToast(`success`);
-          
-        })
-        .catch(error => {
-          this.$bvToast.toast(error.message, {
-                title: "Error",
-                variant: "danger",
+          this.loader = false;
+          this.$bvToast.toast("File successfully uploaded", {
+                title: "Deduction upload",
+                variant: "success",
                 solid: true,
                 autoHideDelay: 5000
             });
-        });
+          
+        })
+        // .catch(error => {
+        //   this.$bvToast.toast(error.message, {
+        //         title: "Error",
+        //         variant: "danger",
+        //         solid: true,
+        //         autoHideDelay: 5000
+        //     });
+        // });
     },
 
     
